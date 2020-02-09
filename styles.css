@@ -1,0 +1,82 @@
+.red {
+    background: red;
+}
+
+.uploader {
+    height: 500px;
+    width: 500px;
+    border: 1px solid black;
+    position: relative;
+}
+
+
+.uploader .upload-active {
+    height: 200px;
+    width: 200px;
+    margin: auto;
+    position: absolute;
+    border-radius: 50%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+.pulsar {
+    background: rgba(59, 179, 113, 1);
+    animation-name: pulse;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    border-radius: 50%;
+    animation-fill-mode: both;
+    border: 2px solid mediumseagreen;
+}
+
+.pulsar:nth-child(1){
+    animation-delay: .4s;
+}
+
+.uploader.hover .upload-active,
+.uploader.loading .upload-active {
+    display: flex;
+}
+
+
+.blue {
+    background: blue;
+}
+
+.temp-status {
+    width: 40%;
+    height: 40%;
+    border-radius: 50%;
+    background: mediumseagreen;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: sans-serif;
+}
+
+.uploader .dropper { display: none }
+.uploader .loader { display: none }
+
+.uploader.hover .dropper { display: flex }
+.uploader.loading .loader { display: flex }
+
+@keyframes pulse {
+    0% {
+        transform: scale(.4);
+    }
+    100% {
+        background: rgba(59, 179, 113, 0);
+        opacity: 0;
+    }
+}
