@@ -19,6 +19,7 @@ function setup(){
     });
 
     uploader.addEventListener('dragenter',(e)=>{
+        uploader.classList.remove('loading', 'loaded');
         uploader.classList.add('hover');
     });
 
@@ -45,10 +46,18 @@ function setup(){
 
 
 function setSpinner(on){
-   if (on) {
+    const pulsars = Array.from(document.getElementsByClassName('pulsar'));
+    if (on) {
+       pulsars.forEach(el=>{
+            el.addEventListener('animationiteration',()=>{
+                el.classList.add('killed');
+            },{once: true})
+       })
        uploader.classList.add('loading')
    } else {
-       uploader.classList.remove('loading') 
+       uploader.classList.remove('loading');
+       uploader.classList.add('loaded');
+       pulsars.forEach(el=>{el.classList.remove('killed')})
    }
 }
 
