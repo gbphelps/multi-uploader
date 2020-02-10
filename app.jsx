@@ -1,5 +1,7 @@
 import React from 'react';
 import Sonar from './sonar';
+import File from './file';
+import Directory from './directory';
 import 'regenerator-runtime';
 
 export default class extends React.Component {
@@ -20,16 +22,34 @@ export default class extends React.Component {
 
     getTree(item){
         if (item.isFile){
-            return Promise.resolve(item);
+            return Promise.resolve({item});
         } else {
             return new Promise(resolve => {
                 const r = item.createReader();
                 r.readEntries(
-                    entries => resolve(Promise.all(entries.map(this.getTree)))
+                    entries => Promise.all(entries.map(this.getTree)).then(result => {
+                        resolve({
+                            item,
+                            children: result
+                        })
+                    })
                 )
             })
         }
     }
+
+
+    renderTree(){
+        if (!this.state.tree) return false;
+        return this.state.tree.map(entry => {
+            if (entry.item.isFile){
+                return <File data={entry}/>
+            } else {
+                return <Directory data={entry}/>
+            }
+        })
+    }
+
 
     render(){
         return (
@@ -71,30 +91,32 @@ export default class extends React.Component {
                 }}
 
             >
-            <div className="upload-active">
-                <Sonar 
-                    killed={this.state.status !== 'hover'} 
-                    interval={.3}
-                    pulseNum={2}
-                />
 
                 <div id="files">
                 </div>
 
-                <div className="temp-status">
-                    <svg className="dropper" viewBox="-30 -30 60 60" height="30" stroke="white" stroke-width="10">
-                        <line stroke-linecap="round" y1="-25" y2="25"/>
-                        <line stroke-linecap="round" x1="-25" x2="25"/>
-                    </svg>
-                    <div className="loader">
-                        <div></div>
-                        <div></div>
-                        <div></div>
+                <div className="overlay"> 
+                    <Sonar 
+                        killed={this.state.status !== 'hover'} 
+                        interval={.3}
+                        pulseNum={2}
+                    />
+                    <div className="temp-status">
+                        <svg className="dropper" viewBox="-30 -30 60 60" height="30" stroke="white" stroke-width="10">
+                            <line stroke-linecap="round" y1="-25" y2="25"/>
+                            <line stroke-linecap="round" x1="-25" x2="25"/>
+                        </svg>
+                        <div className="loader">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
                     </div>
                 </div>
 
+                { this.renderTree() }
+
             </div>
-        </div>
         )
     }
 }

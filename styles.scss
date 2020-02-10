@@ -2,10 +2,6 @@
     box-sizing: border-box;
 }
 
-.red {
-    background: red;
-}
-
 .uploader {
     height: 500px;
     width: 500px;
@@ -16,9 +12,12 @@
 }
 
 
-.uploader .upload-active {
+.overlay{
     height: 200px;
     width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin: auto;
     position: absolute;
     border-radius: 50%;
@@ -26,9 +25,6 @@
     bottom: 0;
     left: 0;
     right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     transform: scale(0);
     display: flex;
     transition: .3s;
@@ -66,8 +62,8 @@
     animation-delay: .3s;
 }
 
-.hover .upload-active,
-.loading .upload-active {
+.hover .overlay,
+.loading .overlay {
     transform: none;
 }
 
@@ -138,4 +134,27 @@
     50%{
         transform: scale(1.08);
     }
+}
+
+
+
+
+.entry {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #eee;
+}
+
+* {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.dir {
+    transition: 5s;
+    overflow: hidden;
+}
+
+.dir.closed {
+    display: none;
 }
