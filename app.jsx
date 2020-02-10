@@ -41,7 +41,8 @@ export default class extends React.Component {
                     resolve({
                         item,
                         children: result,
-                        idxs
+                        idxs,
+                        expanded: false,
                     })
                 })
             })

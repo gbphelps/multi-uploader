@@ -12,22 +12,29 @@ export default class Entry extends React.Component {
         }
 
         this.state = {
-            open: false,
+            open: this.entry.expanded,
         }
 
         this.renderChild = this.renderChild.bind(this);
-
-        console.log('constructed')
+        store.subscribe(this, props.idxs);
     }
 
-
     renderSelf(){
-        if (this.entry.item.isFile) return <div className="entry">{this.entry.item.name}</div>
+        const padding = 12 + (this.props.idxs.length-1) * 24;
+        
+        if (this.entry.item.isFile) return (
+            <div 
+                className="entry" 
+                style={{paddingLeft: padding }}
+            >
+                {this.entry.item.name}
+            </div>)
         return (
             <div 
                 className="entry"
+                style={{paddingLeft: padding }}
                 onClick={()=>{
-                    this.setState(s => ({open: !s.open}))
+                    store.toggle(this.props.idxs)
                 }}
             >
                 {this.entry.item.name}
@@ -45,7 +52,7 @@ export default class Entry extends React.Component {
         return (
             <>
                 { this.renderSelf() }
-                { (!this.entry.isFile && this.state.open) && 
+                { (!this.entry.item.isFile && this.entry.expanded) && 
                     this.entry.children.map(this.renderChild) 
                 }
             </>
