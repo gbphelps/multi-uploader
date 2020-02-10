@@ -1,8 +1,11 @@
 import React from 'react';
 import Sonar from './sonar';
-import File from './file';
-import Directory from './directory';
+// import File from './file';
+// import Directory from './directory';
 import 'regenerator-runtime';
+import Entry from './entry';
+
+import store from './treeStore';
 
 export default class extends React.Component {
     constructor(props){
@@ -10,7 +13,7 @@ export default class extends React.Component {
         this.counter = 0;
         this.state = {
             status: 'inactive',
-            tree: null,
+            tree: false,
         }
         this.getTree = this.getTree.bind(this)
     }
@@ -20,34 +23,35 @@ export default class extends React.Component {
         e.stopPropagation();
     }
 
-    getTree(item){
-        if (item.isFile){
-            return Promise.resolve({item});
-        } else {
-            return new Promise(resolve => {
-                const r = item.createReader();
-                r.readEntries(
-                    entries => Promise.all(entries.map(this.getTree)).then(result => {
-                        resolve({
-                            item,
-                            children: result
-                        })
+
+    getTree(item, idxs=[]){
+        if (item.isFile) return Promise.resolve({
+            item,
+            idxs,
+        });
+        
+        return new Promise(resolve => {
+            const r = item.createReader();
+            r.readEntries(entries => {
+                const promises = entries
+                    .map((item,i) => {
+                        return this.getTree(item, idxs.concat([i]))
                     })
-                )
+                Promise.all(promises).then(result => {
+                    resolve({
+                        item,
+                        children: result,
+                        idxs
+                    })
+                })
             })
-        }
+        })
     }
 
 
     renderTree(){
         if (!this.state.tree) return false;
-        return this.state.tree.map(entry => {
-            if (entry.item.isFile){
-                return <File data={entry}/>
-            } else {
-                return <Directory data={entry}/>
-            }
-        })
+        return store.getState().map((_,idx) => <Entry idxs={[idx]}/>)
     }
 
 
@@ -83,10 +87,12 @@ export default class extends React.Component {
                         status: 'loading'
                     });
                     const items = Array.from(e.dataTransfer.items).map(item => item.webkitGetAsEntry())
-                    const struct = await Promise.all(items.map(this.getTree));
+                    const struct = await Promise.all(items.map(item => this.getTree(item)));
+                    store.initialize(struct);
+
                     this.setState({
                         status: 'loaded',
-                        tree: struct
+                        tree: true,
                     })
                 }}
 
