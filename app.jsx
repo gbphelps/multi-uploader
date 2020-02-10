@@ -28,11 +28,12 @@ export default class extends React.Component {
         if (item.isFile) return Promise.resolve({
             item,
             idxs,
+            lines: 1,
         });
         
         return new Promise(resolve => {
             const r = item.createReader();
-            r.readEntries(entries => {
+            r.readEntries((entries) => {
                 const promises = entries
                     .map((item,i) => {
                         return this.getTree(item, idxs.concat([i]))
@@ -43,8 +44,11 @@ export default class extends React.Component {
                         children: result,
                         idxs,
                         expanded: false,
+                        lines: 1,
                     })
                 })
+            }, () => {
+                console.error("This repo does not work locally. It must be served on localhost using `npm run serve`.")
             })
         })
     }
