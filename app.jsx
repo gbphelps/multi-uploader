@@ -28,7 +28,7 @@ export default class extends React.Component {
         if (item.isFile) return Promise.resolve({
             item,
             idxs,
-            lines: 1,
+            visibleRows: 1,
         });
         
         return new Promise(resolve => {
@@ -44,7 +44,7 @@ export default class extends React.Component {
                         children: result,
                         idxs,
                         expanded: false,
-                        lines: 1,
+                        visibleRows: 1,
                     })
                 })
             }, () => {

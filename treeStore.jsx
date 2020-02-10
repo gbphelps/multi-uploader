@@ -12,35 +12,56 @@ function createStore(){
         return state;
     }
     
+    function getSize(entry){
+        // let frontier = [entry];
+        // let size = 0;
+        // while (frontier.length) {
+        //     entry = frontier.shift();
+        //     size++;
+        //     if (!entry.item.isFile && entry.expanded) {
+        //         frontier = frontier.concat(entry.children);
+        //     }
+        // }
+        // return size;
+        let size = 1;
+        if (!entry.expanded) return size;
+
+        entry.children.forEach(child => {
+            size += child.visibleRows;
+        })
+        return size;
+    }
+
     function toggle(idxs){
-        let item = state[idxs[0]];
-        const parents = [];
+        let entry = state[idxs[0]];
+        const parents = [entry];
 
         for (let i=1; i<idxs.length; i++){
-            parents.push(item)
-            item = item.children[idxs[i]];
+            entry = entry.children[idxs[i]];
+            parents.unshift(entry);
         }
-        
-        //TODO: iterate item to get length based on expanded children.
-        // then, publish this child's new length to all parents in the `parents` array.
-        console.log(parents);
 
-         //TODO - not quite this simple - need to check expanded state of all children.
-        // parents.forEach((p,i) => { 
-        //     p.lines += item.children.length;
-        //     const parentIdxs = JSON.stringify(idxs.slice(0,i+1));
-        //     subscriptions[parentIdxs].setState({
-        //         lines: p.lines,
-        //     })
-        // });
+        //TODO: for some reason this bugs out unless I set twice? ook at the visibleRows console log, that seems to be part of the problem rather than React maybe?
 
-        item.expanded = !item.expanded;
+        const oldSize = getSize(entry);
+        entry.expanded = !entry.expanded;
+        const newSize = getSize(entry);
+
         subscriptions[JSON.stringify(idxs)].setState({
-            open: item.expanded,
-
+            open: entry.expanded,
+            visibleRows: newSize,
         })
 
+        for (let i=0; i<parents.length; i++){
+            parents[i].visibleRows += newSize - oldSize;
+            console.log(parents[i].visibleRows);
+            
+            const indexes = [idxs[0]].concat(parents[i].idxs);
 
+            subscriptions[JSON.stringify(indexes)].setState({
+                visibleRows: parents[i].visibleRows,
+            })
+        }
     }
 
     function subscribe(self, idxs){
@@ -50,4 +71,7 @@ function createStore(){
     return { getState, initialize, toggle, subscribe }
 }
 
-export default createStore();
+
+const store = createStore();
+window.store = store;
+export default store;
