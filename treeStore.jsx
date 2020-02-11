@@ -61,8 +61,6 @@ function createStore(){
         entry.visibleRows = newSize;
         //TODO clean this up
 
-        console.log(parents.map(p => p.visibleRows));
-
         //set parents' visibleRows
         for (let i=0; i<parents.length; i++){
             parents[i].visibleRows += newSize - oldSize;
@@ -75,8 +73,7 @@ function createStore(){
         let runningTally = entry.rootHeight + 1;
         for (let i=0; i<entry.children.length; i++){
             entry.children[i].rootHeight = runningTally;
-            console.log(entry.children[i].idxs)
-            //don't need to publish bc these items don't exist yet.
+            //NOTE: don't need to publish bc these items don't exist yet.
             runningTally += entry.children[i].visibleRows;
         }
 

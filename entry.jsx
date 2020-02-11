@@ -62,7 +62,6 @@ export default class Entry extends React.Component {
                 onTransitionEnd={()=>{
                     this.setState({shrinking: false})
                 }}
-                onTransitionEndCapture
             >
                 { this.renderSelf() }
                 { (!this.entry.item.isFile && (this.state.open || this.state.shrinking)) && 
