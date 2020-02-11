@@ -67,11 +67,6 @@
     transform: none;
 }
 
-
-.blue {
-    background: blue;
-}
-
 .temp-status {
     width: 40%;
     height: 40%;
@@ -140,10 +135,11 @@
 
 
 .entry {
-    height: 40px;
     display: flex;
     align-items: center;
-    border: 1px solid #eee;
+    &.odd {
+        background: #f6f6f6;
+    }
 }
 
 * {
@@ -157,4 +153,10 @@
 
 .dir.closed {
     display: none;
+}
+
+.clip {
+    overflow: hidden;
+    transition: .3s;
+    transition-timing-function: linear;
 }

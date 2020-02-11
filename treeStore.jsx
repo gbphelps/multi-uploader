@@ -23,20 +23,25 @@ function createStore(){
     }
 
     function setAllChildrenBelow(idxs,delta){
+        //Set heights for visible nodes OUTSIDE OF (i.e. BELOW) the expansion event.
         let collector = [];
         let entryChildren = state;
         for (let i=0; i<idxs.length; i++){
             const idx = idxs[i];
-            collector = collector.concat(entryChildren.slice(idx+1))
-            entryChildren = entryChildren[idx].children;
+            collector = collector.concat(entryChildren.slice(idx+1)) //get every node at this level that comes after the expanded element
+            entryChildren = entryChildren[idx].children; //dig into the affected node
         }
         while (collector.length){
+            // examine first node in the collector; edit rootHeight and publish.
             const entry = collector.shift();
             entry.rootHeight += delta;
             subscriptions[JSON.stringify(entry.idxs)].setState({
                 rootHeight: entry.rootHeight
             })
 
+            // if this node is expanded, it means we're painting its children and need to edit their root height.
+            // Add them to the queue, but ONLY if expanded (saves unnecessary computation for hidden elements).
+            // if an element is currently hidden, its nodes will be updated WITHIN the expansion event.
             if (entry.children && entry.expanded) collector = collector.concat(entry.children);
         }
     }

@@ -1,6 +1,9 @@
 import React from 'react';
 import store from './treeStore';
 
+
+const HEIGHT = 40;
+
 export default class Entry extends React.Component {
     constructor(props){
         super(props);
@@ -26,15 +29,15 @@ export default class Entry extends React.Component {
         
         if (this.entry.item.isFile) return (
             <div 
-                className="entry" 
-                style={{paddingLeft: padding }}
+                className={`entry ${this.state.rootHeight%2 ? 'even' : 'odd'}`}
+                style={{paddingLeft: padding, height: HEIGHT }}
             >
                 {this.entry.item.name}
             </div>)
         return (
             <div 
-                className="entry"
-                style={{paddingLeft: padding }}
+                className={`entry ${this.state.rootHeight%2 ? 'even' : 'odd'}`}
+                style={{paddingLeft: padding, height: HEIGHT }}
                 onClick={()=>{
                     store.toggle(this.props.idxs)
                 }}
@@ -52,12 +55,15 @@ export default class Entry extends React.Component {
 
     render(){      
         return (
-            <>
+            <div 
+                className="clip" 
+                style={{height: HEIGHT*this.state.visibleRows }}
+            >
                 { this.renderSelf() }
                 { (!this.entry.item.isFile && this.entry.expanded) && 
                     this.entry.children.map(this.renderChild) 
                 }
-            </>
+            </div>
         )
     }
 }
