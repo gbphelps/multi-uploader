@@ -14,6 +14,7 @@ export default class Entry extends React.Component {
         this.state = {
             open: this.entry.expanded,
             visibleRows: this.entry.visibleRows,
+            rootHeight: this.entry.rootHeight,
         }
 
         this.renderChild = this.renderChild.bind(this);
@@ -38,7 +39,7 @@ export default class Entry extends React.Component {
                     store.toggle(this.props.idxs)
                 }}
             >
-                {this.entry.item.name} { this.state.visibleRows }
+                {this.entry.item.name} vis{ this.state.visibleRows } h{this.state.rootHeight}
             </div>
         )
     }

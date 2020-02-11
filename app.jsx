@@ -95,6 +95,7 @@ export default class extends React.Component {
                     });
                     const items = Array.from(e.dataTransfer.items).map(item => item.webkitGetAsEntry())
                     const struct = await Promise.all(items.map((item,i)=>this.getTree(item,[i])));
+                    struct.forEach((item,i) => {item.rootHeight = i});
                     store.initialize(struct);
 
                     this.setState({
