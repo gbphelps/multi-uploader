@@ -1,8 +1,8 @@
 import React from 'react';
 import store from './treeStore';
+import configs from './styleConfigs';
 
 
-const HEIGHT = 40;
 
 export default class Entry extends React.Component {
     constructor(props){
@@ -26,7 +26,9 @@ export default class Entry extends React.Component {
     }
 
     componentDidUpdate(_,prevState){
-        if (prevState.expanded && !this.state.expanded) this.setState({shrinking: true})
+        if (this.state.shrinking && !prevState.shrinking) setTimeout(()=>{
+            this.setState({shrinking: false})
+        }, configs.ANIMATION_DURATION)
     }
 
     renderSelf(){
@@ -35,14 +37,14 @@ export default class Entry extends React.Component {
         if (this.entry.item.isFile) return (
             <div 
                 className={`entry ${this.state.rootHeight%2 ? 'even' : 'odd'}`}
-                style={{paddingLeft: padding, height: HEIGHT }}
+                style={{paddingLeft: padding, height: configs.ROW_HEIGHT }}
             >
                 {this.entry.item.name}
             </div>)
         return (
             <div 
                 className={`entry ${this.state.rootHeight%2 ? 'even' : 'odd'}`}
-                style={{paddingLeft: padding, height: HEIGHT }}
+                style={{paddingLeft: padding, height: configs.ROW_HEIGHT }}
                 onClick={()=>{
                     store.toggle(this.props.idxs)
                 }}
@@ -63,9 +65,9 @@ export default class Entry extends React.Component {
         return (
             <div 
                 className="dir-contents" 
-                style={{height: HEIGHT*this.state.visibleRows }}
-                onTransitionEnd={()=>{
-                    this.setState({shrinking: false})
+                style={{
+                    height: configs.ROW_HEIGHT*this.state.visibleRows,
+                    transitionDuration: `${configs.ANIMATION_DURATION}ms`
                 }}
             >
                 { this.renderSelf() }

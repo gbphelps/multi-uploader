@@ -12,7 +12,15 @@ function createStore(){
 
     function initialize(tree){
         state = tree;
-        totalHeight = state.length;
+        setTotalHeight(state.length)
+    }
+
+    function setTotalHeight(height){
+        container.setState({ 
+            prevHeight: totalHeight,
+            height 
+        })
+        totalHeight = height;
     }
 
     function getState(){
@@ -29,8 +37,12 @@ function createStore(){
 
 
     function setStore(entry, partial){
-        Object.assign(entry, partial);
         subscriptions[JSON.stringify(entry.idxs)].setState(partial);
+        
+        const update = Object.assign({},partial);
+        delete update.shrinking; //TODO make this less ad hoc.
+
+        Object.assign(entry, update);
     }
 
     function setAllChildrenBelow(idxs,delta){
@@ -67,19 +79,19 @@ function createStore(){
         const expandedSize = getExpandedSize(entry);
         const newSize = entry.expanded ? 1 : expandedSize;
         const delta = entry.expanded ? 1 - expandedSize : expandedSize - 1;
-        console.log('hi mom')
   
         //set self
         setStore(entry,{
             visibleRows: newSize,
             expanded: !entry.expanded,
+            shrinking: entry.expanded,
         })
 
         //set parents' visibleRows
         for (let i=0; i<parents.length; i++){
-            parents[i].visibleRows += delta;
-            subscriptions[JSON.stringify(parents[i].idxs)].setState({
-                visibleRows: parents[i].visibleRows,
+            let p = parents[i]
+            setStore(p, {
+                visibleRows: p.visibleRows + delta
             })
         }
 
@@ -92,11 +104,7 @@ function createStore(){
         }
 
         setAllChildrenBelow(idxs, delta);
-
-        totalHeight += delta;
-        container.setState({
-            height: totalHeight
-        })
+        setTotalHeight(totalHeight + delta);
     }
 
     function registerNode(self, idxs){

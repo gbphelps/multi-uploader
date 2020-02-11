@@ -1,11 +1,10 @@
 import React from 'react';
 import Sonar from './sonar';
-// import File from './file';
-// import Directory from './directory';
 import 'regenerator-runtime';
 import Entry from './entry';
 
 import store from './treeStore';
+import configs from './styleConfigs';
 
 export default class extends React.Component {
     constructor(props){
@@ -15,6 +14,7 @@ export default class extends React.Component {
             status: 'inactive',
             tree: false,
             height: 0,
+            prevHeight: null,
         }
         this.getTree = this.getTree.bind(this);
         store.registerContainer(this);
@@ -25,6 +25,12 @@ export default class extends React.Component {
         e.stopPropagation();
     }
 
+    componentDidUpdate(_, prevState){
+        if (this.state.prevHeight !== null && prevState.prevHeight === null) setTimeout(()=>{
+            console.log('reset')
+            this.setState({prevHeight: null})
+        }, configs.ANIMATION_DURATION)
+    }
 
     getTree(item, idxs=[]){
         if (item.isFile) return Promise.resolve({
@@ -63,10 +69,27 @@ export default class extends React.Component {
         return store.getState().map((_,idx) => <Entry idxs={[idx]}/>)
     }
 
+    renderFiller(){
+        const { height, prevHeight } = this.state;
+        const sub = prevHeight != null && prevHeight < height ? prevHeight : height;
+        const numRows = configs.NUM_ROWS - sub;
+        console.log({prevHeight, numRows});
+
+        const rows = [];
+        for (let i=0; i<numRows; i++) rows.push(
+            <div 
+                className={`entry ${(height+i)%2 ? 'even' : 'odd'}`}
+                style={{ height: configs.ROW_HEIGHT }}
+            />
+        );
+        return rows;
+    }
+
 
     render(){
         return (
             <div 
+                style={{ height: configs.ROW_HEIGHT * configs.NUM_ROWS }}
                 className={`uploader ${this.state.status}`}
                 onDrag={this.disable}
                 onDragStart={this.disable}
@@ -108,8 +131,8 @@ export default class extends React.Component {
 
             >
 
-                <div id="files">
-                </div>
+                { this.renderTree() }
+                { this.renderFiller() }
 
                 <div className="overlay"> 
                     <Sonar 
@@ -129,8 +152,6 @@ export default class extends React.Component {
                         </div>
                     </div>
                 </div>
-
-                { this.renderTree() }
 
             </div>
         )
