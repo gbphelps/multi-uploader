@@ -135,6 +135,7 @@
 
 
 .entry {
+    transition: background-color .3s;
     display: flex;
     align-items: center;
     &.odd {
@@ -155,8 +156,8 @@
     display: none;
 }
 
-.clip {
+.dir-contents {
     overflow: hidden;
-    transition: .3s;
+    transition: height .3s;
     transition-timing-function: linear;
 }

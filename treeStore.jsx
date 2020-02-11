@@ -85,6 +85,7 @@ function createStore(){
         //set self
         subscriptions[JSON.stringify(idxs)].setState({
             open: entry.expanded,
+            shrinking: !entry.expanded,
             visibleRows: newSize,
         })
     }

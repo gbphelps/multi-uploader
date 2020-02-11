@@ -18,6 +18,7 @@ export default class Entry extends React.Component {
             open: this.entry.expanded,
             visibleRows: this.entry.visibleRows,
             rootHeight: this.entry.rootHeight,
+            shrinking: false,
         }
 
         this.renderChild = this.renderChild.bind(this);
@@ -56,11 +57,15 @@ export default class Entry extends React.Component {
     render(){      
         return (
             <div 
-                className="clip" 
+                className="dir-contents" 
                 style={{height: HEIGHT*this.state.visibleRows }}
+                onTransitionEnd={()=>{
+                    this.setState({shrinking: false})
+                }}
+                onTransitionEndCapture
             >
                 { this.renderSelf() }
-                { (!this.entry.item.isFile && this.entry.expanded) && 
+                { (!this.entry.item.isFile && (this.state.open || this.state.shrinking)) && 
                     this.entry.children.map(this.renderChild) 
                 }
             </div>
