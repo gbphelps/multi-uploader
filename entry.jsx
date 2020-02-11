@@ -15,14 +15,18 @@ export default class Entry extends React.Component {
         }
 
         this.state = {
-            open: this.entry.expanded,
+            expanded: this.entry.expanded,
             visibleRows: this.entry.visibleRows,
             rootHeight: this.entry.rootHeight,
             shrinking: false,
         }
 
         this.renderChild = this.renderChild.bind(this);
-        store.subscribe(this, props.idxs);
+        store.registerNode(this, props.idxs);
+    }
+
+    componentDidUpdate(_,prevState){
+        if (prevState.expanded && !this.state.expanded) this.setState({shrinking: true})
     }
 
     renderSelf(){
@@ -65,7 +69,7 @@ export default class Entry extends React.Component {
                 }}
             >
                 { this.renderSelf() }
-                { (!this.entry.item.isFile && (this.state.open || this.state.shrinking)) && 
+                { (!this.entry.item.isFile && (this.state.expanded || this.state.shrinking)) && 
                     this.entry.children.map(this.renderChild) 
                 }
             </div>

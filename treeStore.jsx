@@ -1,25 +1,36 @@
 
 function createStore(){
     let state = null;
+    let totalHeight = 0;
 
     let subscriptions = [];
+    let container = null;
+
+    function registerContainer(me){
+        container = me
+    }
 
     function initialize(tree){
         state = tree;
+        totalHeight = state.length;
     }
 
     function getState(){
         return state;
     }
     
-    function getSize(entry){
+    function getExpandedSize(entry){
         let size = 1;
-        if (!entry.expanded) return size;
-
         entry.children.forEach(child => {
             size += child.visibleRows;
         })
         return size;
+    }
+
+
+    function setStore(entry, partial){
+        Object.assign(entry, partial);
+        subscriptions[JSON.stringify(entry.idxs)].setState(partial);
     }
 
     function setAllChildrenBelow(idxs,delta){
@@ -34,10 +45,8 @@ function createStore(){
         while (collector.length){
             // examine first node in the collector; edit rootHeight and publish.
             const entry = collector.shift();
-            entry.rootHeight += delta;
-            subscriptions[JSON.stringify(entry.idxs)].setState({
-                rootHeight: entry.rootHeight
-            })
+            const rootHeight = entry.rootHeight + delta;
+            setStore(entry, { rootHeight });
 
             // if this node is expanded, it means we're painting its children and need to edit their root height.
             // Add them to the queue, but ONLY if expanded (saves unnecessary computation for hidden elements).
@@ -55,21 +64,26 @@ function createStore(){
             entry = entry.children[idxs[i]];
         }
 
-        const oldSize = getSize(entry);
-        entry.expanded = !entry.expanded;
-        const newSize = getSize(entry);
-        entry.visibleRows = newSize;
-        //TODO clean this up
+        const expandedSize = getExpandedSize(entry);
+        const newSize = entry.expanded ? 1 : expandedSize;
+        const delta = entry.expanded ? 1 - expandedSize : expandedSize - 1;
+        console.log('hi mom')
+  
+        //set self
+        setStore(entry,{
+            visibleRows: newSize,
+            expanded: !entry.expanded,
+        })
 
         //set parents' visibleRows
         for (let i=0; i<parents.length; i++){
-            parents[i].visibleRows += newSize - oldSize;
+            parents[i].visibleRows += delta;
             subscriptions[JSON.stringify(parents[i].idxs)].setState({
                 visibleRows: parents[i].visibleRows,
             })
         }
 
-        //set rootHeight for children: myheight + index + width
+        //set rootHeight for children
         let runningTally = entry.rootHeight + 1;
         for (let i=0; i<entry.children.length; i++){
             entry.children[i].rootHeight = runningTally;
@@ -77,21 +91,19 @@ function createStore(){
             runningTally += entry.children[i].visibleRows;
         }
 
-        setAllChildrenBelow(idxs, newSize - oldSize);
+        setAllChildrenBelow(idxs, delta);
 
-        //set self
-        subscriptions[JSON.stringify(idxs)].setState({
-            open: entry.expanded,
-            shrinking: !entry.expanded,
-            visibleRows: newSize,
+        totalHeight += delta;
+        container.setState({
+            height: totalHeight
         })
     }
 
-    function subscribe(self, idxs){
+    function registerNode(self, idxs){
         subscriptions[JSON.stringify(idxs)] = self;
     }
 
-    return { getState, initialize, toggle, subscribe }
+    return { getState, initialize, toggle, registerNode, registerContainer }
 }
 
 

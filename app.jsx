@@ -14,8 +14,10 @@ export default class extends React.Component {
         this.state = {
             status: 'inactive',
             tree: false,
+            height: 0,
         }
-        this.getTree = this.getTree.bind(this)
+        this.getTree = this.getTree.bind(this);
+        store.registerContainer(this);
     }
     
     disable(e){
