@@ -29,6 +29,7 @@ export default class extends React.Component {
             item,
             idxs,
             visibleRows: 1,
+            rootHeight: -1,
         });
         
         return new Promise(resolve => {
@@ -45,6 +46,7 @@ export default class extends React.Component {
                         idxs,
                         expanded: false,
                         visibleRows: 1,
+                        rootHeight: -1,
                     })
                 })
             }, () => {
@@ -92,7 +94,7 @@ export default class extends React.Component {
                         status: 'loading'
                     });
                     const items = Array.from(e.dataTransfer.items).map(item => item.webkitGetAsEntry())
-                    const struct = await Promise.all(items.map(item => this.getTree(item)));
+                    const struct = await Promise.all(items.map((item)=> this.getTree(item)));
                     store.initialize(struct);
 
                     this.setState({

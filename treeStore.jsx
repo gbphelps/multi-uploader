@@ -13,16 +13,6 @@ function createStore(){
     }
     
     function getSize(entry){
-        // let frontier = [entry];
-        // let size = 0;
-        // while (frontier.length) {
-        //     entry = frontier.shift();
-        //     size++;
-        //     if (!entry.item.isFile && entry.expanded) {
-        //         frontier = frontier.concat(entry.children);
-        //     }
-        // }
-        // return size;
         let size = 1;
         if (!entry.expanded) return size;
 
@@ -49,6 +39,7 @@ function createStore(){
 
         console.log(parents.map(p => p.visibleRows));
 
+        //set parents' visibleRows
         for (let i=0; i<parents.length; i++){
             parents[i].visibleRows += newSize - oldSize;
             const indexes = [idxs[0]].concat(parents[i].idxs);
@@ -57,6 +48,9 @@ function createStore(){
             })
         }
 
+        //set root
+
+        //set self
         subscriptions[JSON.stringify(idxs)].setState({
             open: entry.expanded,
             visibleRows: newSize,
