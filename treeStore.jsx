@@ -42,8 +42,7 @@ function createStore(){
         //set parents' visibleRows
         for (let i=0; i<parents.length; i++){
             parents[i].visibleRows += newSize - oldSize;
-            const indexes = [idxs[0]].concat(parents[i].idxs);
-            subscriptions[JSON.stringify(indexes)].setState({
+            subscriptions[JSON.stringify(parents[i].idxs)].setState({
                 visibleRows: parents[i].visibleRows,
             })
         }

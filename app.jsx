@@ -94,7 +94,7 @@ export default class extends React.Component {
                         status: 'loading'
                     });
                     const items = Array.from(e.dataTransfer.items).map(item => item.webkitGetAsEntry())
-                    const struct = await Promise.all(items.map((item)=> this.getTree(item)));
+                    const struct = await Promise.all(items.map((item,i)=>this.getTree(item,[i])));
                     store.initialize(struct);
 
                     this.setState({
