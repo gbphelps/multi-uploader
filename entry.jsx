@@ -25,7 +25,7 @@ export default class Entry extends React.Component {
     }
 
     renderSelf(){
-        const padding = 12 + (this.props.idxs.length-1) * 24;
+        const padding = 12 + (this.props.idxs.length-1) * configs.INDENT;
         
         if (this.entry.item.isFile) return (
             <div 
@@ -42,7 +42,7 @@ export default class Entry extends React.Component {
                     store.toggle(this.props.idxs)
                 }}
             >
-                {this.entry.item.name} vis{ this.state.visibleRows } h{this.state.rootHeight}
+                {this.entry.item.name}
             </div>
         )
     }
