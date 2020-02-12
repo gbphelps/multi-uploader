@@ -1,10 +1,10 @@
 import React from 'react';
-import Sonar from './sonar';
 import 'regenerator-runtime';
 import Entry from './entry';
 
 import store from './treeStore';
 import configs from './styleConfigs';
+import Overlay from './overlay'
 
 export default class extends React.Component {
     constructor(props){
@@ -27,7 +27,6 @@ export default class extends React.Component {
 
     componentDidUpdate(_, prevState){
         if (this.state.prevHeight !== null && prevState.prevHeight === null) setTimeout(()=>{
-            console.log('reset')
             this.setState({prevHeight: null})
         }, configs.ANIMATION_DURATION)
     }
@@ -73,7 +72,6 @@ export default class extends React.Component {
         const { height, prevHeight } = this.state;
         const sub = prevHeight != null && prevHeight < height ? prevHeight : height;
         const numRows = configs.NUM_ROWS - sub;
-        console.log({prevHeight, numRows});
 
         const rows = [];
         for (let i=0; i<numRows; i++) rows.push(
@@ -100,7 +98,7 @@ export default class extends React.Component {
                 onDragEnter={(e)=>{
                     e.preventDefault();
                     this.counter++;
-                    this.setState({
+                    if (this.counter === 1) this.setState({
                         status: 'hover'
                     })
                 }}
@@ -133,26 +131,7 @@ export default class extends React.Component {
 
                 { this.renderTree() }
                 { this.renderFiller() }
-
-                <div className="overlay"> 
-                    <Sonar 
-                        killed={this.state.status !== 'hover'} 
-                        interval={.3}
-                        pulseNum={2}
-                    />
-                    <div className="temp-status">
-                        <svg className="dropper" viewBox="-30 -30 60 60" height="30" stroke="white" stroke-width="10">
-                            <line stroke-linecap="round" y1="-25" y2="25"/>
-                            <line stroke-linecap="round" x1="-25" x2="25"/>
-                        </svg>
-                        <div className="loader">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
-                    </div>
-                </div>
-
+                <Overlay status={this.state.status}/>      
             </div>
         )
     }
