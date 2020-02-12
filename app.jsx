@@ -82,54 +82,56 @@ export default class extends React.Component {
 
     render(){
         return (
-            <div 
-                style={{ height: configs.ROW_HEIGHT * configs.NUM_ROWS }}
-                className={`uploader ${this.state.status}`}
-                onDrag={this.disable}
-                onDragStart={this.disable}
-                onDragOver={this.disable}
-                onDragEnd={this.disable}
-                onDragEnter={this.disable}
-                onDragExit={this.disable}
-                onDragEnter={(e)=>{
-                    e.preventDefault();
-                    this.counter++;
-                    if (this.counter === 1) this.setState({
-                        status: 'hover'
-                    })
-                }}
-                onDragLeave={(e)=>{
-                    e.preventDefault();
-                    this.counter--;
-                    if (!this.counter) this.setState({
-                        status: 'inactive'
-                    })
-                }}
-                onDrop={async (e)=>{
-                    this.counter = 0;
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.setState({
-                        status: 'loading'
-                    });
-                    const items = Array.from(e.dataTransfer.items).map(item => item.webkitGetAsEntry())
-                    const struct = await Promise.all(items.map((item,i)=>this.getTree(item,[i])));
-                    struct.forEach((item,i) => {item.rootHeight = i});
-                    store.initialize(struct);
+            <div className="site-container">
+                <div 
+                    style={{ height: configs.ROW_HEIGHT * configs.NUM_ROWS }}
+                    className={`uploader ${this.state.status}`}
+                    onDrag={this.disable}
+                    onDragStart={this.disable}
+                    onDragOver={this.disable}
+                    onDragEnd={this.disable}
+                    onDragEnter={this.disable}
+                    onDragExit={this.disable}
+                    onDragEnter={(e)=>{
+                        e.preventDefault();
+                        this.counter++;
+                        if (this.counter === 1) this.setState({
+                            status: 'hover'
+                        })
+                    }}
+                    onDragLeave={(e)=>{
+                        e.preventDefault();
+                        this.counter--;
+                        if (!this.counter) this.setState({
+                            status: 'inactive'
+                        })
+                    }}
+                    onDrop={async (e)=>{
+                        this.counter = 0;
+                        e.preventDefault();
+                        e.stopPropagation();
+                        this.setState({
+                            status: 'loading'
+                        });
+                        const items = Array.from(e.dataTransfer.items).map(item => item.webkitGetAsEntry())
+                        const struct = await Promise.all(items.map((item,i)=>this.getTree(item,[i])));
+                        struct.forEach((item,i) => {item.rootHeight = i});
+                        store.initialize(struct);
 
-                    this.setState({
-                        status: 'loaded',
-                        tree: true,
-                    })
-                }}
+                        this.setState({
+                            status: 'loaded',
+                            tree: true,
+                        })
+                    }}
 
-            >
+                >
 
-                { this.renderTree() }
-                <TransitionGroup component={null}>
-                    { this.renderFiller() }
-                </TransitionGroup>
-                <Overlay status={this.state.status}/>      
+                    { this.renderTree() }
+                    <TransitionGroup component={null}>
+                        { this.renderFiller() }
+                    </TransitionGroup>
+                    <Overlay status={this.state.status}/>      
+                </div>
             </div>
         )
     }

@@ -1,5 +1,6 @@
 import React from 'react';
 import Sonar from './sonar';
+import { Transition } from 'react-transition-group';
 
 export default class Overlay extends React.Component {
     constructor(props){
@@ -15,21 +16,9 @@ export default class Overlay extends React.Component {
         } 
     }
 
-    render(){
+    renderOverlay(state){
         return (
-            <>
-                <Sonar 
-                    killed={this.props.status !== 'hover'} 
-                    pulseNum={2}
-                />
-
-            <div 
-                className={`overlay ${this.props.status} ${this.state.open}`}
-                onTransitionEnd={()=>{
-                    if (this.props.status === 'hover') return;
-                    this.setState({open: false})
-                }}
-            > 
+            <div className={`overlay ${state ==='entering' || state ==='exiting' ? 'shrunk' : ''}`}> 
                 <div className="temp-status">
                     <svg className="dropper" viewBox="-30 -30 60 60" height="30" stroke="white" strokeWidth="10">
                         <line strokeLinecap="round" y1="-25" y2="25"/>
@@ -42,6 +31,24 @@ export default class Overlay extends React.Component {
                     </div>
                 </div>
             </div>
+        )
+    }
+
+    render(){
+        return (
+            <>
+                <Sonar 
+                    killed={this.props.status !== 'hover'} 
+                    pulseNum={2}
+                />
+            <Transition 
+                timeout={200} 
+                in={ this.props.status === 'hover' || this.props.status === 'loading' }
+                unmountOnExit
+                mountOnEnter
+            >
+                {this.renderOverlay}
+            </Transition>
             </>
         )
     }

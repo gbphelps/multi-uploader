@@ -1,7 +1,12 @@
 import React from 'react';
 import store from './treeStore';
 import configs from './styleConfigs';
-import { Transition } from 'react-transition-group'
+import { Transition } from 'react-transition-group';
+import Folder from './icons/folder';
+import FolderOpen from './icons/folderOpen';
+import File from './icons/imgDoc';
+import Doc from './icons/doc';
+import Pic from './icons/picture';
 
 
 export default class Entry extends React.Component {
@@ -32,7 +37,7 @@ export default class Entry extends React.Component {
                 className={`entry ${this.state.rootHeight%2 ? 'even' : 'odd'}`}
                 style={{paddingLeft: padding, height: configs.ROW_HEIGHT }}
             >
-                {this.entry.item.name}
+                <Doc /> {this.entry.item.name}
             </div>)
         return (
             <div 
@@ -42,7 +47,7 @@ export default class Entry extends React.Component {
                     store.toggle(this.props.idxs)
                 }}
             >
-                {this.entry.item.name}
+                <Folder /> {this.entry.item.name}
             </div>
         )
     }
@@ -64,15 +69,18 @@ export default class Entry extends React.Component {
                 }}
             >
                 { this.renderSelf() }
-                {
-                    !this.entry.item.isFile && (
-                        <Transition in={this.state.expanded} timeout={configs.ANIMATION_DURATION} mountOnEnter unmountOnExit>
-                            {
-                                () => this.entry.children.map(this.renderChild)
-                            }
-                        </Transition>
-                    )
-                }
+                { !this.entry.item.isFile && (
+                    <Transition 
+                        in={this.state.expanded} 
+                        timeout={configs.ANIMATION_DURATION} 
+                        mountOnEnter 
+                        unmountOnExit
+                    >
+                        <>
+                            { this.entry.children.map(this.renderChild) }
+                        </>
+                    </Transition>
+                )}
             </div>
         )
     }
