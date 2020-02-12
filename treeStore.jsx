@@ -16,11 +16,8 @@ function createStore(){
     }
 
     function setTotalHeight(height){
-        container.setState({ 
-            prevHeight: totalHeight,
-            height 
-        })
         totalHeight = height;
+        container.setState({ height });    
     }
 
     function getState(){
@@ -38,11 +35,7 @@ function createStore(){
 
     function setStore(entry, partial){
         subscriptions[JSON.stringify(entry.idxs)].setState(partial);
-        
-        const update = Object.assign({},partial);
-        delete update.shrinking; //TODO make this less ad hoc.
-
-        Object.assign(entry, update);
+        Object.assign(entry, partial);
     }
 
     function setAllChildrenBelow(idxs,delta){
@@ -84,7 +77,6 @@ function createStore(){
         setStore(entry,{
             visibleRows: newSize,
             expanded: !entry.expanded,
-            shrinking: entry.expanded,
         })
 
         //set parents' visibleRows

@@ -4,7 +4,9 @@ import Entry from './entry';
 
 import store from './treeStore';
 import configs from './styleConfigs';
-import Overlay from './overlay'
+import Overlay from './overlay';
+
+import { TransitionGroup, Transition } from 'react-transition-group';
 
 export default class extends React.Component {
     constructor(props){
@@ -14,7 +16,6 @@ export default class extends React.Component {
             status: 'inactive',
             tree: false,
             height: 0,
-            prevHeight: null,
         }
         this.getTree = this.getTree.bind(this);
         store.registerContainer(this);
@@ -23,12 +24,6 @@ export default class extends React.Component {
     disable(e){
         e.preventDefault();
         e.stopPropagation();
-    }
-
-    componentDidUpdate(_, prevState){
-        if (this.state.prevHeight !== null && prevState.prevHeight === null) setTimeout(()=>{
-            this.setState({prevHeight: null})
-        }, configs.ANIMATION_DURATION)
     }
 
     getTree(item, idxs=[]){
@@ -69,17 +64,17 @@ export default class extends React.Component {
     }
 
     renderFiller(){
-        const { height, prevHeight } = this.state;
-        const sub = prevHeight != null && prevHeight < height ? prevHeight : height;
-        const numRows = configs.NUM_ROWS - sub;
+        const { height } = this.state;
+        const numRows = configs.NUM_ROWS - height;
 
         const rows = [];
         for (let i=0; i<numRows; i++) rows.push(
-            <div 
-                key={i}
-                className={`entry ${(height+i)%2 ? 'even' : 'odd'}`}
-                style={{ height: configs.ROW_HEIGHT }}
-            />
+            <Transition key={i} timeout={configs.ANIMATION_DURATION}>
+                <div 
+                    className={`entry ${(height+i)%2 ? 'even' : 'odd'}`}
+                    style={{ height: configs.ROW_HEIGHT }}
+                />
+            </Transition>
         );
         return rows;
     }
@@ -131,7 +126,9 @@ export default class extends React.Component {
             >
 
                 { this.renderTree() }
-                { this.renderFiller() }
+                <TransitionGroup component={null}>
+                    { this.renderFiller() }
+                </TransitionGroup>
                 <Overlay status={this.state.status}/>      
             </div>
         )

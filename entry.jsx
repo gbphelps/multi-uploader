@@ -1,6 +1,7 @@
 import React from 'react';
 import store from './treeStore';
 import configs from './styleConfigs';
+import { Transition } from 'react-transition-group'
 
 
 export default class Entry extends React.Component {
@@ -17,17 +18,10 @@ export default class Entry extends React.Component {
             expanded: this.entry.expanded,
             visibleRows: this.entry.visibleRows,
             rootHeight: this.entry.rootHeight,
-            shrinking: false,
         }
 
         this.renderChild = this.renderChild.bind(this);
         store.registerNode(this, props.idxs);
-    }
-
-    componentDidUpdate(_,prevState){
-        if (this.state.shrinking && !prevState.shrinking) setTimeout(()=>{
-            this.setState({shrinking: false})
-        }, configs.ANIMATION_DURATION)
     }
 
     renderSelf(){
@@ -70,8 +64,14 @@ export default class Entry extends React.Component {
                 }}
             >
                 { this.renderSelf() }
-                { (!this.entry.item.isFile && (this.state.expanded || this.state.shrinking)) && 
-                    this.entry.children.map(this.renderChild) 
+                {
+                    !this.entry.item.isFile && (
+                        <Transition in={this.state.expanded} timeout={configs.ANIMATION_DURATION} mountOnEnter unmountOnExit>
+                            {
+                                () => this.entry.children.map(this.renderChild)
+                            }
+                        </Transition>
+                    )
                 }
             </div>
         )
