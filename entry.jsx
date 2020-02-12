@@ -3,7 +3,6 @@ import store from './treeStore';
 import configs from './styleConfigs';
 
 
-
 export default class Entry extends React.Component {
     constructor(props){
         super(props);
@@ -57,7 +56,7 @@ export default class Entry extends React.Component {
     renderChild(_, i){
         const idxs = this.props.idxs.slice();
         idxs.push(i);
-        return <Entry idxs={idxs}/>
+        return <Entry key={i} idxs={idxs}/>
     }
 
     render(){  

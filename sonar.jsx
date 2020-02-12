@@ -11,7 +11,6 @@ export default class Sonar extends React.Component {
     
     componentDidUpdate(oldProps){
         if (oldProps.killed && !this.props.killed){
-            console.log('whpo')
             this.setState(s=>({
                 pulses: s.pulses.map(()=>'active')
             }))

@@ -31,9 +31,9 @@ export default class Overlay extends React.Component {
                 }}
             > 
                 <div className="temp-status">
-                    <svg className="dropper" viewBox="-30 -30 60 60" height="30" stroke="white" stroke-width="10">
-                        <line stroke-linecap="round" y1="-25" y2="25"/>
-                        <line stroke-linecap="round" x1="-25" x2="25"/>
+                    <svg className="dropper" viewBox="-30 -30 60 60" height="30" stroke="white" strokeWidth="10">
+                        <line strokeLinecap="round" y1="-25" y2="25"/>
+                        <line strokeLinecap="round" x1="-25" x2="25"/>
                     </svg>
                     <div className="loader">
                         <div></div>

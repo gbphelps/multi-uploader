@@ -65,7 +65,7 @@ export default class extends React.Component {
 
     renderTree(){
         if (!this.state.tree) return false;
-        return store.getState().map((_,idx) => <Entry idxs={[idx]}/>)
+        return store.getState().map((_,idx) => <Entry key={idx} idxs={[idx]}/>)
     }
 
     renderFiller(){
@@ -76,6 +76,7 @@ export default class extends React.Component {
         const rows = [];
         for (let i=0; i<numRows; i++) rows.push(
             <div 
+                key={i}
                 className={`entry ${(height+i)%2 ? 'even' : 'odd'}`}
                 style={{ height: configs.ROW_HEIGHT }}
             />
