@@ -11,24 +11,26 @@ export default class Branches extends React.Component {
         const finalChild = finalIdxs[finalIdxs.length - 1];
 
         return (
-            <>
-                 <div 
-                    style={{
-                        position: 'absolute',
-                        bottom: '50%',
-                        borderLeft: '1px solid black',
-                        borderBottom: '1px solid black',
-                        width: configs.INDENT - configs.ICON_SIZE/2,
-                        left: configs.INDENT * (this.props.depth-2) + configs.LEFT_MARGIN + configs.ICON_SIZE/2,
-                        height: '50%'
-                    }}
+            <>  
+                { !!finalIdxs.length &&
+                    <div 
+                        style={{
+                            position: 'absolute',
+                            bottom: '50%',
+                            borderLeft: configs.TREE_LINES,
+                            borderBottom: configs.TREE_LINES,
+                            width: configs.INDENT - configs.ICON_SIZE/2,
+                            left: configs.INDENT * (this.props.depth-2) + configs.LEFT_MARGIN + configs.ICON_SIZE/2,
+                            height: '50%'
+                        }}
                 />
+                }
                 { !finalChild && (
                     <div 
                         style={{
                             position: 'absolute',
                             bottom: '0%',
-                            borderLeft: '1px solid black',
+                            borderLeft: configs.TREE_LINES,
                             width: configs.INDENT - configs.ICON_SIZE/2,
                             left: configs.INDENT * (this.props.depth-2) + configs.LEFT_MARGIN + configs.ICON_SIZE/2,
                             height: '50%'
@@ -47,7 +49,7 @@ export default class Branches extends React.Component {
                     height: '100%', 
                     width: 5,
                     position: 'absolute',
-                    borderLeft: '1px solid black',
+                    borderLeft: configs.TREE_LINES,
                     top: 0,
                     left: configs.LEFT_MARGIN + configs.ICON_SIZE/2 + configs.INDENT * i,
                 }}/>
