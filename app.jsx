@@ -26,12 +26,13 @@ export default class extends React.Component {
         e.stopPropagation();
     }
 
-    getTree(item, idxs=[]){
+    getTree(item, idxs=[], finalIdxs=[]){
         if (item.isFile) return Promise.resolve({
             item,
             idxs,
             visibleRows: 1,
             rootHeight: -1,
+            finalIdxs,
         });
         
         return new Promise(resolve => {
@@ -39,7 +40,11 @@ export default class extends React.Component {
             r.readEntries((entries) => {
                 const promises = entries
                     .map((item,i) => {
-                        return this.getTree(item, idxs.concat([i]))
+                        return this.getTree(
+                            item, 
+                            idxs.concat([i]), 
+                            finalIdxs.concat([i === entries.length - 1])
+                        )
                     })
                 Promise.all(promises).then(result => {
                     resolve({
@@ -49,6 +54,7 @@ export default class extends React.Component {
                         expanded: false,
                         visibleRows: 1,
                         rootHeight: -1,
+                        finalIdxs,
                     })
                 })
             }, () => {

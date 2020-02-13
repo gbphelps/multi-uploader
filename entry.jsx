@@ -8,6 +8,8 @@ import File from './icons/imgDoc';
 import Doc from './icons/doc';
 import Pic from './icons/picture';
 
+import Branches from './branches';
+
 
 export default class Entry extends React.Component {
     constructor(props){
@@ -30,14 +32,17 @@ export default class Entry extends React.Component {
     }
 
     renderSelf(){
-        const padding = 12 + (this.props.idxs.length-1) * configs.INDENT;
+        const padding = configs.LEFT_MARGIN + (this.props.idxs.length-1) * configs.INDENT;
         
         if (this.entry.item.isFile) return (
             <div 
                 className={`entry ${this.state.rootHeight%2 ? 'even' : 'odd'}`}
                 style={{paddingLeft: padding, height: configs.ROW_HEIGHT }}
             >
-                <Doc /> {this.entry.item.name}
+                <Branches 
+                    depth={this.props.idxs.length}
+                    finalIdxs={this.entry.finalIdxs}
+                /><Doc /> {this.entry.item.name}
             </div>)
         return (
             <div 
@@ -47,7 +52,11 @@ export default class Entry extends React.Component {
                     store.toggle(this.props.idxs)
                 }}
             >
-                <Folder /> {this.entry.item.name}
+                <Branches 
+                    depth={this.props.idxs.length}
+                    finalIdxs={this.entry.finalIdxs}
+                />
+                {this.state.expanded ? <FolderOpen /> : <Folder />} {this.entry.item.name}
             </div>
         )
     }

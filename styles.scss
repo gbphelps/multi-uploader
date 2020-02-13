@@ -24,7 +24,6 @@ html, body {
     box-sizing: content-box;
 }
 
-
 .overlay{
     height: 200px;
     width: 200px;
@@ -150,11 +149,11 @@ html, body {
     align-items: center;
     color: rgba(0,0,0,.7);
     font-weight: 300;
+    position: relative;
     &.odd {
         background: #f6f6f6;
     }
     svg {
-        height: 24px;
         width: auto;
         margin-right: 8px;
     }
