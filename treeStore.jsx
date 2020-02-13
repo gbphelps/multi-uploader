@@ -34,7 +34,9 @@ function createStore(){
 
 
     function setStore(entry, partial){
-        subscriptions[JSON.stringify(entry.idxs)].setState(partial);
+        subscriptions[JSON.stringify(entry.idxs)].forEach(subscriber =>{
+            subscriber.setState(partial);
+        })
         Object.assign(entry, partial);
     }
 
@@ -100,7 +102,9 @@ function createStore(){
     }
 
     function registerNode(self, idxs){
-        subscriptions[JSON.stringify(idxs)] = self;
+        const key = JSON.stringify(idxs);
+        if (!subscriptions[key]) subscriptions[key] = [];
+        subscriptions[key].push(self);
     }
 
     return { getState, initialize, toggle, registerNode, registerContainer }

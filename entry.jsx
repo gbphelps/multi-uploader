@@ -31,6 +31,10 @@ export default class Entry extends React.Component {
         store.registerNode(this, props.idxs);
     }
 
+    componentDidMount(){
+        console.log(this.entry)
+    }
+
     renderFolderState(){
         return (
             <Transition 
@@ -74,7 +78,7 @@ export default class Entry extends React.Component {
                     finalIdxs={this.entry.finalIdxs}
                     expanded={this.state.expanded}
                 />
-                {this.renderFolderState()} {this.entry.item.name}
+                {this.renderFolderState()} {this.entry.item.name}  
             </div>
         )
     }

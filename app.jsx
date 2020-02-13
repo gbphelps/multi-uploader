@@ -5,6 +5,8 @@ import Entry from './entry';
 import store from './treeStore';
 import configs from './styleConfigs';
 import Overlay from './overlay';
+import SideCar from './sideCar';
+
 
 import { TransitionGroup, Transition } from 'react-transition-group';
 
@@ -27,40 +29,65 @@ export default class extends React.Component {
     }
 
     getTree(item, idxs=[], finalIdxs=[]){
-        if (item.isFile) return Promise.resolve({
-            item,
-            idxs,
-            visibleRows: 1,
-            rootHeight: -1,
-            finalIdxs,
-        });
-        
-        return new Promise(resolve => {
-            const r = item.createReader();
-            r.readEntries((entries) => {
-                const promises = entries
-                    .map((item,i) => {
-                        return this.getTree(
-                            item, 
-                            idxs.concat([i]), 
-                            finalIdxs.concat([i === entries.length - 1])
-                        )
-                    })
-                Promise.all(promises).then(result => {
-                    resolve({
-                        item,
-                        children: result,
-                        idxs,
-                        expanded: false,
-                        visibleRows: 1,
-                        rootHeight: -1,
-                        finalIdxs,
-                    })
-                })
-            }, () => {
-                console.error("This repo does not work locally. It must be served on localhost using `npm run serve`.")
-            })
+
+        const metadata = new Promise(r => {
+            item.getMetadata(
+                m => { r(m) }, 
+                err => { 
+                    console.log(err);
+                    r({})
+                }
+            );
         })
+
+        let treeData;
+
+        if (item.isFile) {
+            treeData = Promise.resolve({
+                item,
+                idxs,
+                visibleRows: 1,
+                rootHeight: -1,
+                finalIdxs,
+            });
+        } else {
+            treeData = new Promise(resolve => {
+                const r = item.createReader();
+                r.readEntries((entries) => {
+                    const promises = entries
+                        .map((item,i) => {
+                            return this.getTree(
+                                item, 
+                                idxs.concat([i]), 
+                                finalIdxs.concat([i === entries.length - 1])
+                            )
+                        })
+                    Promise.all(promises).then(result => {
+                        resolve({
+                            item,
+                            children: result,
+                            idxs,
+                            expanded: false,
+                            visibleRows: 1,
+                            rootHeight: -1,
+                            finalIdxs,
+                        })
+                    })
+                }, () => {
+                    console.error("This repo does not work locally. It must be served on localhost using `npm run serve`.")
+                })
+            })
+        }
+        
+        return Promise.all([metadata, treeData])
+            .then(([metadata, treeData]) => (
+                Promise.resolve ({
+                    modificationTime: metadata.modificationTime,
+                    bytes: metadata.size,
+                    ...treeData
+                })
+            )
+        )
     }
 
 
@@ -83,6 +110,11 @@ export default class extends React.Component {
             </Transition>
         );
         return rows;
+    }
+
+    renderSidePanel(){
+        if (!this.state.tree) return false;
+        return store.getState().map((_,idx) => <SideCar key={idx} idxs={[idx]}/>)
     }
 
 
@@ -138,6 +170,11 @@ export default class extends React.Component {
                     </TransitionGroup>
                     <Overlay status={this.state.status}/>      
                 </div>
+                
+                <div className="twin">
+                    { this.renderSidePanel() }    
+                </div>
+
             </div>
         )
     }
