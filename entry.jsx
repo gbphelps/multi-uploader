@@ -31,6 +31,21 @@ export default class Entry extends React.Component {
         store.registerNode(this, props.idxs);
     }
 
+    renderFolderState(){
+        return (
+            <Transition 
+                in={this.state.expanded} 
+                timeout={configs.ANIMATION_DURATION}
+            >
+                {
+                    state => (
+                        state === 'exited' ? <Folder /> : <FolderOpen />
+                    )
+                }
+            </Transition>
+        )
+    }
+
     renderSelf(){
         const padding = configs.LEFT_MARGIN + (this.props.idxs.length-1) * configs.INDENT;
         
@@ -41,7 +56,9 @@ export default class Entry extends React.Component {
             >
                 <Branches 
                     depth={this.props.idxs.length}
-                    finalIdxs={this.entry.finalIdxs}
+                    finalIdxs={this.entry.finalIdxs} 
+                    //should this just be calculated on the fly? or updated on in treeStore on deletions maybe.
+                    expanded={this.state.expanded}
                 /><Doc /> {this.entry.item.name}
             </div>)
         return (
@@ -55,8 +72,9 @@ export default class Entry extends React.Component {
                 <Branches 
                     depth={this.props.idxs.length}
                     finalIdxs={this.entry.finalIdxs}
+                    expanded={this.state.expanded}
                 />
-                {this.state.expanded ? <FolderOpen /> : <Folder />} {this.entry.item.name}
+                {this.renderFolderState()} {this.entry.item.name}
             </div>
         )
     }

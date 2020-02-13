@@ -1,5 +1,6 @@
 import React from 'react';
-import configs from './styleConfigs'
+import configs from './styleConfigs';
+import { Transition } from 'react-transition-group'
 
 export default class Branches extends React.Component {
     constructor(props){
@@ -12,6 +13,23 @@ export default class Branches extends React.Component {
 
         return (
             <>  
+                <Transition 
+                    in={this.props.expanded}
+                    unmountOnExit
+                    mountOnEnter
+                    timeout={configs.ANIMATION_DURATION}
+                >
+                        <div style={{
+                                height: (configs.ROW_HEIGHT - configs.ICON_SIZE)/2,
+                                position: 'absolute',
+                                left: configs.LEFT_MARGIN + configs.INDENT*(this.props.depth-1) + configs.ICON_SIZE/2,
+                                bottom: 0,
+                                width: 5,
+                                borderLeft: configs.TREE_LINES
+                            }}
+                        />
+                </Transition>
+
                 { !!finalIdxs.length &&
                     <div 
                         style={{
