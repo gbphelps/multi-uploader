@@ -31,7 +31,7 @@ export default class SideCar extends React.Component {
                 className={`entry ${this.state.rootHeight%2 ? 'even' : 'odd'}`}
                 style={{height: configs.ROW_HEIGHT }}
             >
-              {this.entry.item.name}
+              {this.entry.bytes}
             </div>
         )
     }

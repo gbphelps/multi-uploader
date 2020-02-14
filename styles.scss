@@ -22,6 +22,8 @@ html, body {
     position: relative;
     overflow-y: scroll;
     box-sizing: content-box;
+    display: flex;
+    & > * { flex-shrink: none }
 }
 
 .overlay{
@@ -150,6 +152,7 @@ html, body {
     color: rgba(0,0,0,.7);
     font-weight: 300;
     position: relative;
+    background: white;
     &.odd {
         background: #f6f6f6;
     }
@@ -166,4 +169,12 @@ html, body {
 .dir-contents {
     overflow-y: hidden;
     transition-timing-function: linear;
+}
+
+.file-tree{
+    flex-grow: 1;
+}
+
+.sidecar{
+ width: 200px;
 }

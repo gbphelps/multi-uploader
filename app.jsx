@@ -19,7 +19,6 @@ export default class extends React.Component {
             tree: false,
             height: 0,
         }
-        this.getTree = this.getTree.bind(this);
         store.registerContainer(this);
     }
     
@@ -27,69 +26,6 @@ export default class extends React.Component {
         e.preventDefault();
         e.stopPropagation();
     }
-
-    getTree(item, idxs=[], finalIdxs=[]){
-
-        const metadata = new Promise(r => {
-            item.getMetadata(
-                m => { r(m) }, 
-                err => { 
-                    console.log(err);
-                    r({})
-                }
-            );
-        })
-
-        let treeData;
-
-        if (item.isFile) {
-            treeData = Promise.resolve({
-                item,
-                idxs,
-                visibleRows: 1,
-                rootHeight: -1,
-                finalIdxs,
-            });
-        } else {
-            treeData = new Promise(resolve => {
-                const r = item.createReader();
-                r.readEntries((entries) => {
-                    const promises = entries
-                        .map((item,i) => {
-                            return this.getTree(
-                                item, 
-                                idxs.concat([i]), 
-                                finalIdxs.concat([i === entries.length - 1])
-                            )
-                        })
-                    Promise.all(promises).then(result => {
-                        resolve({
-                            item,
-                            children: result,
-                            idxs,
-                            expanded: false,
-                            visibleRows: 1,
-                            rootHeight: -1,
-                            finalIdxs,
-                        })
-                    })
-                }, () => {
-                    console.error("This repo does not work locally. It must be served on localhost using `npm run serve`.")
-                })
-            })
-        }
-        
-        return Promise.all([metadata, treeData])
-            .then(([metadata, treeData]) => (
-                Promise.resolve ({
-                    modificationTime: metadata.modificationTime,
-                    bytes: metadata.size,
-                    ...treeData
-                })
-            )
-        )
-    }
-
 
     renderTree(){
         if (!this.state.tree) return false;
@@ -122,8 +58,8 @@ export default class extends React.Component {
         return (
             <div className="site-container">
                 <div 
-                    style={{ height: configs.ROW_HEIGHT * configs.NUM_ROWS }}
                     className={`uploader ${this.state.status}`}
+                    style={{ height: configs.ROW_HEIGHT * configs.NUM_ROWS }}
                     onDrag={this.disable}
                     onDragStart={this.disable}
                     onDragOver={this.disable}
@@ -152,29 +88,29 @@ export default class extends React.Component {
                             status: 'loading'
                         });
                         const items = Array.from(e.dataTransfer.items).map(item => item.webkitGetAsEntry())
-                        const struct = await Promise.all(items.map((item,i)=>this.getTree(item,[i])));
-                        struct.forEach((item,i) => {item.rootHeight = i});
-                        store.initialize(struct);
-
+                        await (store.initialize(items));
                         this.setState({
                             status: 'loaded',
                             tree: true,
                         })
                     }}
-
                 >
+                    <div className="file-tree">
+                        { this.renderTree() }  
+                        <TransitionGroup component={null}>
+                            { this.renderFiller() }
+                        </TransitionGroup>
+                        <Overlay status={this.state.status}/>    
+                    </div>
+                    
+                    <div className="sidecar">
+                        { this.renderSidePanel() }   
+                        <TransitionGroup component={null}>
+                            { this.renderFiller() }
+                        </TransitionGroup>
+                    </div>
 
-                    { this.renderTree() }
-                    <TransitionGroup component={null}>
-                        { this.renderFiller() }
-                    </TransitionGroup>
-                    <Overlay status={this.state.status}/>      
                 </div>
-                
-                <div className="twin">
-                    { this.renderSidePanel() }    
-                </div>
-
             </div>
         )
     }

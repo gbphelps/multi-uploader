@@ -1,4 +1,68 @@
 
+
+
+function getTree(item, idxs=[], finalIdxs=[]){
+    const metadata = new Promise(r => {
+        item.getMetadata(
+            m => { r(m) }, 
+            err => { 
+                console.log(err);
+                r({})
+            }
+        );
+    })
+
+    let treeData;
+    if (item.isFile) {
+        treeData = Promise.resolve({
+            item,
+            idxs,
+            visibleRows: 1,
+            rootHeight: -1,
+            finalIdxs,
+        });
+    } else {
+        treeData = new Promise(resolve => {
+            const r = item.createReader();
+            r.readEntries((entries) => {
+                const promises = entries
+                    .map((item,i) => {
+                        return getTree(
+                            item, 
+                            idxs.concat([i]), 
+                            finalIdxs.concat([i === entries.length - 1])
+                        )
+                    })
+                Promise.all(promises).then(result => {
+                    resolve({
+                        item,
+                        children: result,
+                        idxs,
+                        expanded: false,
+                        visibleRows: 1,
+                        rootHeight: -1,
+                        finalIdxs,
+                    })
+                })
+            }, () => {
+                console.error("This repo does not work locally. It must be served on localhost using `npm run serve`.")
+            })
+        })
+    }
+    
+    return Promise.all([metadata, treeData])
+        .then(([metadata, treeData]) => (
+            Promise.resolve ({
+                modificationTime: metadata.modificationTime,
+                bytes: metadata.size,
+                ...treeData
+            })
+        )
+    )
+}
+
+
+
 function createStore(){
     let state = null;
     let totalHeight = 0;
@@ -10,9 +74,10 @@ function createStore(){
         container = me
     }
 
-    function initialize(tree){
-        state = tree;
-        setTotalHeight(state.length)
+    async function initialize(items){
+        state = await Promise.all(items.map((item,i)=>getTree(item,[i])));
+        state.forEach((item,i) => {item.rootHeight = i});
+        setTotalHeight(state.length);
     }
 
     function setTotalHeight(height){
