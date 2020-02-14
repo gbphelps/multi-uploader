@@ -2,6 +2,7 @@ import React from 'react';
 import store from './treeStore';
 import configs from './styleConfigs';
 import { Transition } from 'react-transition-group';
+import f from './formatBytes';
 
 export default class SideCar extends React.Component {
     constructor(props){
@@ -31,7 +32,7 @@ export default class SideCar extends React.Component {
                 className={`entry ${this.state.rootHeight%2 ? 'even' : 'odd'}`}
                 style={{height: configs.ROW_HEIGHT }}
             >
-              {this.entry.bytes}
+              { this.entry.item.isFile ? f(this.entry.bytes) : <>&ndash;</> }
             </div>
         )
     }
