@@ -31,10 +31,6 @@ export default class Entry extends React.Component {
         store.registerNode(this, props.idxs);
     }
 
-    componentDidMount(){
-        console.log(this.entry)
-    }
-
     renderFolderState(){
         return (
             <Transition 

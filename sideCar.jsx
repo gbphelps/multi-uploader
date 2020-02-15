@@ -9,7 +9,6 @@ export default class SideCar extends React.Component {
         super(props);
 
         const { idxs } = props;
-        console.log(idxs)
         this.entry = store.getState()[idxs[0]];
 
         for (let i=1; i<props.idxs.length; i++){
@@ -49,7 +48,9 @@ export default class SideCar extends React.Component {
                 className="dir-contents" 
                 style={{
                     height: configs.ROW_HEIGHT*this.state.visibleRows,
-                    transitionDuration: `${configs.ANIMATION_DURATION}ms`
+                    transitionDuration: `${configs.ANIMATION_DURATION}ms`,
+                    zIndex: -1,
+                    position: 'relative',
                 }}
             >
                 { this.renderSelf() }

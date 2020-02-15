@@ -68,10 +68,10 @@ function createStore(){
     let totalHeight = 0;
 
     let subscriptions = [];
-    let container = null;
+    let containerCB = null;
 
     function registerContainer(me){
-        container = me
+        containerCB = me
     }
 
     async function initialize(items){
@@ -82,7 +82,9 @@ function createStore(){
 
     function setTotalHeight(height){
         totalHeight = height;
-        container.setState({ height });    
+        containerCB({
+            height
+        });  
     }
 
     function getState(){

@@ -6,20 +6,16 @@ import store from './treeStore';
 import configs from './styleConfigs';
 import Overlay from './overlay';
 import SideCar from './sideCar';
+import withHeightDiff from './withHeightDiff';
 
-
-import { TransitionGroup, Transition } from 'react-transition-group';
-
-export default class extends React.Component {
+class Container extends React.Component {
     constructor(props){
         super(props);
         this.counter = 0;
         this.state = {
             status: 'inactive',
             tree: false,
-            height: 0,
         }
-        store.registerContainer(this);
     }
     
     disable(e){
@@ -33,17 +29,16 @@ export default class extends React.Component {
     }
 
     renderFiller(){
-        const { height } = this.state;
-        const numRows = configs.NUM_ROWS - height;
+        const { incoming, height } = this.props;
+        const numRows = configs.NUM_ROWS - Math.min(incoming.height, height);
 
         const rows = [];
         for (let i=0; i<numRows; i++) rows.push(
-            <Transition key={i} timeout={configs.ANIMATION_DURATION}>
-                <div 
-                    className={`entry ${(height+i)%2 ? 'even' : 'odd'}`}
-                    style={{ height: configs.ROW_HEIGHT }}
-                />
-            </Transition>
+            <div 
+                key={i}
+                className={`entry ${(incoming.height+i)%2 ? 'even' : 'odd'}`}
+                style={{ height: configs.ROW_HEIGHT }}
+            />
         );
         return rows;
     }
@@ -97,17 +92,13 @@ export default class extends React.Component {
                 >
                     <div className="file-tree">
                         { this.renderTree() }  
-                        <TransitionGroup component={null}>
-                            { this.renderFiller() }
-                        </TransitionGroup>
+                        { this.renderFiller() }
                         <Overlay status={this.state.status}/>    
                     </div>
                     
                     <div className="sidecar">
                         { this.renderSidePanel() }   
-                        <TransitionGroup component={null}>
-                            { this.renderFiller() }
-                        </TransitionGroup>
+                        { this.renderFiller() }
                     </div>
 
                 </div>
@@ -115,3 +106,5 @@ export default class extends React.Component {
         )
     }
 }
+
+export default withHeightDiff(Container);

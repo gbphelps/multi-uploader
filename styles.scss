@@ -23,7 +23,6 @@ html, body {
     overflow-y: scroll;
     box-sizing: content-box;
     display: flex;
-    & > * { flex-shrink: none }
 }
 
 .overlay{
@@ -177,4 +176,5 @@ html, body {
 
 .sidecar{
  width: 200px;
+ flex-shrink: 0;
 }
