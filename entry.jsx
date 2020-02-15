@@ -35,7 +35,7 @@ export default class Entry extends React.Component {
         return (
             <Transition 
                 in={this.state.expanded} 
-                timeout={configs.ANIMATION_DURATION}
+                timeout={!configs.DISABLE_ANIMATION && configs.ANIMATION_DURATION}
             >
                 {
                     state => (
@@ -57,8 +57,8 @@ export default class Entry extends React.Component {
                 <Branches 
                     depth={this.props.idxs.length}
                     finalIdxs={this.entry.finalIdxs} 
-                    //should this just be calculated on the fly? or updated on in treeStore on deletions maybe.
                     expanded={this.state.expanded}
+                    anyChildren={false}
                 /><Doc /> {this.entry.item.name}
             </div>)
         return (
@@ -73,6 +73,7 @@ export default class Entry extends React.Component {
                     depth={this.props.idxs.length}
                     finalIdxs={this.entry.finalIdxs}
                     expanded={this.state.expanded}
+                    anyChildren={!!this.entry.children.length}
                 />
                 {this.renderFolderState()} {this.entry.item.name}  
             </div>
@@ -91,7 +92,7 @@ export default class Entry extends React.Component {
         return (
             <div 
                 className="dir-contents" 
-                style={{
+                style={ configs.DISABLE_ANIMATION ? {} : {
                     height: configs.ROW_HEIGHT*this.state.visibleRows,
                     transitionDuration: `${configs.ANIMATION_DURATION}ms`
                 }}
@@ -100,7 +101,7 @@ export default class Entry extends React.Component {
                 { !this.entry.item.isFile && (
                     <Transition 
                         in={this.state.expanded} 
-                        timeout={configs.ANIMATION_DURATION} 
+                        timeout={!configs.DISABLE_ANIMATION && configs.ANIMATION_DURATION} 
                         mountOnEnter 
                         unmountOnExit
                     >

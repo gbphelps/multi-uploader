@@ -52,7 +52,7 @@ export default class SideCar extends React.Component {
         return (
             <div 
                 className="dir-contents" 
-                style={{
+                style={configs.DISABLE_ANIMATION ? {} : {
                     height: configs.ROW_HEIGHT*this.state.visibleRows,
                     transitionDuration: `${configs.ANIMATION_DURATION}ms`,
                 }}

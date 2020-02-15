@@ -14,10 +14,10 @@ export default class Branches extends React.Component {
         return (
             <>  
                 <Transition 
-                    in={this.props.expanded}
+                    in={this.props.expanded && this.props.anyChildren}
                     unmountOnExit
                     mountOnEnter
-                    timeout={configs.ANIMATION_DURATION}
+                    timeout={!configs.DISABLE_ANIMATION && configs.ANIMATION_DURATION}
                 >
                         <div style={{
                                 height: (configs.ROW_HEIGHT - configs.ICON_SIZE)/2,
