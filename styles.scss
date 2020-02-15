@@ -172,7 +172,7 @@ html, body {
         right: 100%;
         top: 0;
         content: '';
-        width: 30px;
+        width: 18px;
         height: 100%;
         z-index: 2;
     }
@@ -204,16 +204,19 @@ html, body {
  position: sticky;
  right: 0;
  z-index: 1;
+ *  {  
+        font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+        font-size: 14px;
+    }
 }
 
 .static-col{
     width: 100px;
     padding: 0 12px;
-    &.size{
-        text-align: right;
-    }
-    &.modified-1{
-        width: 150px;
+    text-align: right;
+    &.modified{
+        width: 200px;
+        color: rgba(0,0,0,.3);
     }
 }
 
@@ -237,8 +240,8 @@ html, body {
         border-left: 1px solid rgba(0,0,0,.08);
     }
     & > .name { flex-grow: 1; }
-    & > .size { width: 100px; }
-    & > .modified { width: 250px; }
+    & > .size { width: 100px; text-align: center; }
+    & > .modified { width: 200px; text-align: center; }
 }
 
 .uploader-and-header{
