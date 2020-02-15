@@ -52,6 +52,12 @@ class Container extends React.Component {
     render(){
         return (
             <div className="site-container">
+                <div className="uploader-and-header">
+                <div className="header">
+                    <div className="name">Name</div>
+                    <div className="size">Size</div>
+                    <div className="modified">Last Modified</div>
+                </div>
                 <div 
                     className={`uploader ${this.state.status}`}
                     style={{ height: configs.ROW_HEIGHT * configs.NUM_ROWS }}
@@ -92,8 +98,7 @@ class Container extends React.Component {
                 >
                     <div className="file-tree">
                         { this.renderTree() }  
-                        { this.renderFiller() }
-                        <Overlay status={this.state.status}/>    
+                        { this.renderFiller() }    
                     </div>
                     
                     <div className="sidecar">
@@ -101,6 +106,8 @@ class Container extends React.Component {
                         { this.renderFiller() }
                     </div>
 
+                    <Overlay status={this.state.status}/>
+                </div>
                 </div>
             </div>
         )

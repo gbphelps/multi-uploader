@@ -87,6 +87,7 @@ export default class Entry extends React.Component {
 
     render(){  
         //TODO you can try only enabling the transition for the parent expander for better performance.
+        
         return (
             <div 
                 className="dir-contents" 

@@ -3,6 +3,7 @@ import store from './treeStore';
 import configs from './styleConfigs';
 import { Transition } from 'react-transition-group';
 import f from './formatBytes';
+import { DateTime } from 'luxon';
 
 export default class SideCar extends React.Component {
     constructor(props){
@@ -25,13 +26,18 @@ export default class SideCar extends React.Component {
         store.registerNode(this, props.idxs);
     }
 
+    componentDidMount(){
+        console.log(this.entry)
+    }
     renderSelf(){
         return (
             <div 
                 className={`entry ${this.state.rootHeight%2 ? 'even' : 'odd'}`}
                 style={{height: configs.ROW_HEIGHT }}
             >
-              { this.entry.item.isFile ? f(this.entry.bytes) : <>&ndash;</> }
+              <div className="static-col size">{ this.entry.item.isFile ? f(this.entry.bytes) : <>&ndash;</> }</div>
+              <div className="static-col modified-1">{ DateTime.fromMillis(+this.entry.modificationTime).toFormat(`MMM d, yyyy`) }</div>
+              <div className="static-col modified-2">{ DateTime.fromMillis(+this.entry.modificationTime).toFormat(`h:mm a`) }</div>
             </div>
         )
     }
@@ -49,8 +55,6 @@ export default class SideCar extends React.Component {
                 style={{
                     height: configs.ROW_HEIGHT*this.state.visibleRows,
                     transitionDuration: `${configs.ANIMATION_DURATION}ms`,
-                    zIndex: -1,
-                    position: 'relative',
                 }}
             >
                 { this.renderSelf() }

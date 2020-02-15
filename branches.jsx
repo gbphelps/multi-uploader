@@ -63,14 +63,17 @@ export default class Branches extends React.Component {
         return this.props.finalIdxs.slice(0,-1).map((final,i) => {
             if (final) return null;
             return (
-                <div style={{
-                    height: '100%', 
-                    width: 5,
-                    position: 'absolute',
-                    borderLeft: configs.TREE_LINES,
-                    top: 0,
-                    left: configs.LEFT_MARGIN + configs.ICON_SIZE/2 + configs.INDENT * i,
-                }}/>
+                <div 
+                    key={i}
+                    style={{
+                        height: '100%', 
+                        width: 5,
+                        position: 'absolute',
+                        borderLeft: configs.TREE_LINES,
+                        top: 0,
+                        left: configs.LEFT_MARGIN + configs.ICON_SIZE/2 + configs.INDENT * i,
+                    }}
+                />
             )
         })
     }

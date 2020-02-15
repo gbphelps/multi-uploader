@@ -130,6 +130,7 @@ function createStore(){
     }
 
     function toggle(idxs){
+        //TODO - tell first parent that it's the one that needs to transition.
         let entry = state[idxs[0]];
         const parents = [];
 
