@@ -1,0 +1,162 @@
+.overlay{
+    height: 200px;
+    width: 200px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    z-index: 100;
+    border-radius: 50%;
+
+    backface-visibility: hidden;
+    animation-duration: .2s;
+}
+
+
+.dropper, .loader { display: flex; }
+
+
+.overlay.hover {
+    .overlay-bg { background: mediumseagreen; }
+    &.enter-active {
+        animation-name: grow;
+    }
+    &.exit-active { 
+        animation-name: rotb;
+        .overlay-bg{ animation: none; }
+    }
+}
+    
+.overlay.loading {
+    .overlay-bg { background: rgb(255, 138, 71); }
+    &.enter-active { 
+        .overlay-bg{ animation: none }
+        animation-name: rot;
+    }
+    &.exit-active { 
+        animation-name: grow;
+        animation-direction: reverse;
+        animation-fill-mode: forwards;
+    }    
+}
+
+
+.overlay-bg {
+    width: 40%;
+    height: 40%;
+    border-radius: 50%;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: sans-serif;
+    
+    animation-name: pitter-patter;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-duration: 1.2s;
+    box-shadow: 0px 5px 8px rgba(0,0,0,.1);
+}
+
+
+
+.pulse{
+    position: absolute;
+    height: 200px;
+    width: 200px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+.loaded .pulse { display: none }
+
+.pulsar {
+    background: rgba(59, 179, 113, 1);
+    animation-name: pulse;
+    animation-iteration-count: infinite;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    border-radius: 50%;
+    animation-fill-mode: both;
+    border: 1px solid mediumseagreen;
+    transition: background-color .3s;
+    animation-duration: 1.2s;
+    &:nth-child(1){ animation-delay: 0s; }
+    &:nth-child(2){ animation-delay: .3s }
+    &:nth-child(3){ animation-delay: .6s }
+}
+
+.loader div{
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    animation-name: ellipse;
+    animation-duration: 1.2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    background: white;
+    margin: 2px;
+}
+.loader div:nth-child(1){ animation-delay: 0s }
+.loader div:nth-child(2){ animation-delay: .4s }
+.loader div:nth-child(3){ animation-delay: .8s }
+
+
+@keyframes grow {
+    0%{
+        transform: scale(0)
+    }
+}
+
+@keyframes rot {
+    0%{
+        transform: rotateX(180deg);
+        visibility: hidden;
+    }
+}
+
+@keyframes rotb {
+    100%{
+        transform: rotateX(180deg);
+        visibility: hidden;
+    }
+}
+
+
+@keyframes ellipse {
+    50%{
+        transform: scale(.5);
+    }
+}
+
+
+
+@keyframes pulse {
+    0% {
+        transform: scale(0);
+    }
+    50%{
+        background: rgba(59, 179, 113, 1);
+    }
+    100% {
+        background: rgba(59, 179, 113, 0);
+        opacity: 0;
+    }
+}
+
+@keyframes pitter-patter {
+    50%{
+        transform: scale(1.08);
+    }
+}

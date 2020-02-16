@@ -1,6 +1,7 @@
 import React from 'react';
 import Sonar from './sonar';
-import { Transition } from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group';
+import configs from './styleConfigs';
 
 export default class Overlay extends React.Component {
     constructor(props){
@@ -16,14 +17,10 @@ export default class Overlay extends React.Component {
         } 
     }
 
-    renderOverlay(state){
+    renderLoading(){
         return (
-            <div className={`overlay ${state ==='entering' || state ==='exiting' ? 'shrunk' : ''}`}> 
-                <div className="temp-status">
-                    <svg className="dropper" viewBox="-30 -30 60 60" height="30" stroke="white" strokeWidth="10">
-                        <line strokeLinecap="round" y1="-25" y2="25"/>
-                        <line strokeLinecap="round" x1="-25" x2="25"/>
-                    </svg>
+            <div className="overlay loading"> 
+                <div className="overlay-bg">
                     <div className="loader">
                         <div></div>
                         <div></div>
@@ -34,21 +31,43 @@ export default class Overlay extends React.Component {
         )
     }
 
+    renderHover(){
+        return (
+            <div className="overlay hover"> 
+                <div className="overlay-bg">
+                    <svg className="dropper" viewBox="-30 -30 60 60" height="30" stroke="white" strokeWidth="10">
+                        <line strokeLinecap="round" y1="-25" y2="25"/>
+                        <line strokeLinecap="round" x1="-25" x2="25"/>
+                    </svg>
+                </div>
+            </div>
+        )
+    }
+
     render(){
         return (
             <>
-                <Sonar 
+                {/* <Sonar 
                     killed={this.props.status !== 'hover'} 
                     pulseNum={2}
-                />
-            <Transition 
-                timeout={200} 
-                in={ this.props.status === 'hover' || this.props.status === 'loading' }
-                unmountOnExit
-                mountOnEnter
-            >
-                {this.renderOverlay}
-            </Transition>
+                /> */}
+                <CSSTransition 
+                    timeout={200}
+                    mountOnEnter
+                    unmountOnExit
+                    in={this.props.status === "hover"}
+                >
+                    {this.renderHover()}
+                </CSSTransition>
+                
+                <CSSTransition 
+                    timeout={200}
+                    mountOnEnter
+                    unmountOnExit
+                    in={ this.props.status === "loading" }
+                >
+                    {this.renderLoading()}
+                </CSSTransition>
             </>
         )
     }

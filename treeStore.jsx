@@ -64,7 +64,7 @@ function getTree(item, idxs=[], finalIdxs=[]){
 
 
 function createStore(){
-    let state = null;
+    let state = [];
     let totalHeight = 0;
 
     let subscriptions = [];

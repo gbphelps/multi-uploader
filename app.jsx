@@ -14,7 +14,7 @@ class Container extends React.Component {
         this.counter = 0;
         this.state = {
             status: 'inactive',
-            tree: false,
+            incoming: {}
         }
     }
     
@@ -24,7 +24,6 @@ class Container extends React.Component {
     }
 
     renderTree(){
-        if (!this.state.tree) return false;
         return store.getState().map((_,idx) => <Entry key={idx} idxs={[idx]}/>)
     }
 
@@ -44,8 +43,18 @@ class Container extends React.Component {
     }
 
     renderSidePanel(){
-        if (!this.state.tree) return false;
         return store.getState().map((_,idx) => <SideCar key={idx} idxs={[idx]}/>)
+    }
+
+    setWithDiff(obj){
+        this.setState(s => {
+            const incoming = JSON.parse(JSON.stringify(s.incoming));
+            Object.assign(incoming,obj);
+            return { incoming }
+        })
+        setTimeout(()=>{
+            this.setState(obj)
+        },configs.OVERLAY_ANIMATION_DURATION)
     }
 
 
@@ -53,7 +62,7 @@ class Container extends React.Component {
         return (
             <div className="site-container">
                 <div className="uploader-and-header">
-                <div className="header">
+                <div className="header" style={{height: configs.ROW_HEIGHT}}>
                     <div className="name">Name</div>
                     <div className="size">Size</div>
                     <div className="modified">Last Modified</div>
@@ -85,15 +94,10 @@ class Container extends React.Component {
                         this.counter = 0;
                         e.preventDefault();
                         e.stopPropagation();
-                        this.setState({
-                            status: 'loading'
-                        });
+                        this.setState({ status: 'loading' });
                         const items = Array.from(e.dataTransfer.items).map(item => item.webkitGetAsEntry())
                         await (store.initialize(items));
-                        this.setState({
-                            status: 'loaded',
-                            tree: true,
-                        })
+                        this.setState({ status: 'loaded' });
                     }}
                 >
                     <div className="file-tree">

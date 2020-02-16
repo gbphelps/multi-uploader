@@ -1,6 +1,8 @@
 
 
-
+body {
+    background: #f3f1ef;
+}
 * {
     box-sizing: border-box;
     flex-shrink: 0;
@@ -18,132 +20,53 @@ html, body {
     margin: auto;
 }
 
-.uploader {
+
+.uploader-and-header{
     width: 100%;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.header {
+    box-sizing: content-box;
+    // background: linear-gradient(to bottom, #fafafa, #eee);
+    background: #fafafa;
+    width: calc(100% - 2px);
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    font-weight: 300;
+    color: rgba(0,0,0,.7);
+    font-size: 14px;
+    box-shadow: 0 2px 8px 0 rgba(0,0,0,.08);
+    position: relative;
+    z-index: 10;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    
+    & > * { 
+        padding: 0 12px; 
+    }
+    & > *:not(:nth-child(1)) {
+        border-left: 1px solid rgba(0,0,0,.08);
+    }
+    & > .name { flex-grow: 1; }
+    & > .size { width: 100px; text-align: center; }
+    & > .modified { width: 200px; text-align: center; }
+}
+
+.uploader {
+    width: calc(100% - 2px);
     position: relative;
     overflow-y: scroll;
     box-sizing: content-box;
     display: flex;
     z-index: 0;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
 }
-
-.overlay{
-    height: 200px;
-    width: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: auto;
-    position: absolute;
-    border-radius: 50%;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    transition: .2s;
-    &.shrunk {
-        transform: scale(0)
-    }
-}
-
-.pulse{
-    position: absolute;
-    height: 200px;
-    width: 200px;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-}
-.loaded .pulse { display: none }
-
-.pulsar {
-    background: rgba(59, 179, 113, 1);
-    animation-name: pulse;
-    animation-iteration-count: infinite;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    border-radius: 50%;
-    animation-fill-mode: both;
-    border: 1px solid mediumseagreen;
-    transition: background-color .3s;
-    animation-duration: 1.2s;
-    &:nth-child(1){ animation-delay: 0s; }
-    &:nth-child(2){ animation-delay: .3s }
-    &:nth-child(3){ animation-delay: .6s }
-}
-
-
-.temp-status {
-    width: 40%;
-    height: 40%;
-    border-radius: 50%;
-    background: mediumseagreen;
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: sans-serif;
-    
-    animation-name: blip;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-duration: 1.2s;
-    box-shadow: 0px 5px 8px rgba(0,0,0,.1);
-}
-
-.uploader .dropper { display: none }
-.uploader .loader { display: none }
-
-.hover .dropper { display: flex }
-.loading .loader, .loaded .loader { display: flex }
-
-
-.loader div{
-    height: 10px;
-    width: 10px;
-    border-radius: 50%;
-    animation-name: ellipse;
-    animation-duration: 1.2s;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-    background: white;
-    margin: 2px;
-}
-.loader div:nth-child(1){ animation-delay: 0s }
-.loader div:nth-child(2){ animation-delay: .4s }
-.loader div:nth-child(3){ animation-delay: .8s }
-
-@keyframes ellipse {
-    50%{
-        transform: scale(.5);
-    }
-}
-
-
-
-@keyframes pulse {
-    0% {
-        transform: scale(0);
-    }
-    50%{
-        background: rgba(59, 179, 113, 1);
-    }
-    100% {
-        background: rgba(59, 179, 113, 0);
-        opacity: 0;
-    }
-}
-
-@keyframes blip {
-    50%{
-        transform: scale(1.08);
-    }
-}
-
-
 
 .entry {
     // transition: background-color .3s;
@@ -220,34 +143,5 @@ html, body {
     }
 }
 
-.header {
-    background: #f0f0f0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(0,0,0,.08);
-    font-weight: 300;
-    color: rgba(0,0,0,.5);
-    box-shadow: 0 2px 8px 0 rgba(0,0,0,.08);
-    position: relative;
-    z-index: 10;
-    
-    & > * { 
-        padding: 0 12px; 
-    }
-    & > *:not(:nth-child(1)) {
-        border-left: 1px solid rgba(0,0,0,.08);
-    }
-    & > .name { flex-grow: 1; }
-    & > .size { width: 100px; text-align: center; }
-    & > .modified { width: 200px; text-align: center; }
-}
 
-.uploader-and-header{
-    box-shadow: 0px 5px 8px rgba(0,0,0,.1);
-    width: 100%;
-    border-radius: 3px;
-    border: 1px solid rgba(0,0,0,.1);
-    overflow: hidden;
-}
+@import './overlay.scss';

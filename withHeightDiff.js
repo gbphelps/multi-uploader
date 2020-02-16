@@ -21,17 +21,18 @@ export default function withDiff(Component) {
                 },
             } 
             store.registerContainer((incoming)=>{
-                this.setState({
-                    incoming,
+                this.setState(s => {
+                    const newIncoming = JSON.parse(JSON.stringify(s.incoming));
+                    Object.assign(newIncoming, incoming);
+                    return { incoming: newIncoming }
                 })
                 setTimeout(()=>{
-                    this.setState({
-                        ...incoming,
-                    })
+                    this.setState(incoming)
                 }, configs.ANIMATION_DURATION)
             });
         }
         render(){
+            console.log('render');
             return <Component {...this.props} {...this.state}/>
         }
     }
