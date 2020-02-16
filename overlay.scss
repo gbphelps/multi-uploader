@@ -1,4 +1,4 @@
-.overlay{
+.plus, .dot-dot, .no-folder{
     height: 200px;
     width: 200px;
 
@@ -6,52 +6,104 @@
     align-items: center;
     justify-content: center;
 
-    margin: auto;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
     z-index: 100;
     border-radius: 50%;
 
     backface-visibility: hidden;
+    transform-style: preserve-3d;
     animation-duration: .2s;
+    animation-fill-mode: forwards;
 }
 
+
+
+.note { 
+    position: absolute; 
+}
 
 .dropper, .loader { display: flex; }
 
 
-.overlay.hover {
-    .overlay-bg { background: mediumseagreen; }
-    &.enter-active {
-        animation-name: grow;
-    }
-    &.exit-active { 
-        animation-name: rotb;
-        .overlay-bg{ animation: none; }
+
+
+
+.enter-active .plus {
+    animation-name: grow
+}
+.exit-active .plus {
+    animation-name: rotb; 
+    .overlay-bg{ animation: none; }
+}
+.exit-active .plus.inactive {
+    animation-name: grow;
+    animation-direction: reverse;
+}
+.plus .overlay-bg { 
+    background: mediumseagreen; 
+} 
+
+
+
+
+
+.enter-active .dot-dot {
+    .overlay-bg{ animation: none }
+    animation-name: rot;
+}
+
+.exit-active .dot-dot {
+    animation-name: grow;
+    animation-direction: reverse;
+}
+.dot-dot {
+    .overlay-bg { background: rgb(177, 154, 140); }
+}
+
+
+.note {
+    animation-fill-mode: forwards;
+}
+
+.enter-active .note {
+    animation-name: slide-in;
+    animation-duration: .2s;
+}
+
+.exit-active .note {
+    animation-name: slide-out;
+    animation-duration: .2s;
+}
+
+
+@keyframes slide-in{
+    0%{
+        transform: translateY(-200%)scale(0);
+        opacity: 0;
     }
 }
-    
-.overlay.loading {
-    .overlay-bg { background: rgb(255, 138, 71); }
-    &.enter-active { 
-        .overlay-bg{ animation: none }
-        animation-name: rot;
+
+
+@keyframes slide-out{
+    100%{
+        transform: translateY(200%)scale(0);
+        opacity: 0;
     }
-    &.exit-active { 
-        animation-name: grow;
-        animation-direction: reverse;
-        animation-fill-mode: forwards;
-    }    
 }
+
+
+.no-folder {
+    background: rgb(255, 123, 71);//rgb(183, 221, 218);
+    box-shadow: 0 2px 10px 0 rgba(0,0,0,.1);
+    height: 100px;
+    width: 100px;
+    // border: 1px solid rgba(0,0,0,.05);
+}
+
 
 
 .overlay-bg {
-    width: 40%;
-    height: 40%;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     position: absolute;
     display: flex;
@@ -98,17 +150,18 @@
 }
 
 .loader div{
-    height: 10px;
-    width: 10px;
+    height: 14px;
+    width: 14px;
     border-radius: 50%;
     animation-name: ellipse;
     animation-duration: 1.2s;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
     background: white;
-    margin: 2px;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.2);
+    margin: 4px;
 }
-.loader div:nth-child(1){ animation-delay: 0s }
+.loader div:nth-child(1){ animation-delay: .0s }
 .loader div:nth-child(2){ animation-delay: .4s }
 .loader div:nth-child(3){ animation-delay: .8s }
 

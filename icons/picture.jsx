@@ -1,8 +1,8 @@
 import React from 'react';
 import configs from '../styleConfigs';
 
-export default () => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" style={{height: configs.ICON_SIZE}}>
+export default (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" {...props}>
         <path fill="#fff" d="M1.5 3.5H28.5V26.5H1.5z"/>
         <path fill="#788b9c" d="M28,4v22H2V4H28 M29,3H1v24h28V3L29,3z"/>
         <path fill="#b5deff" d="M5 7H25V20H5z"/>

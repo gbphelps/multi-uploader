@@ -39,7 +39,7 @@ export default class Entry extends React.Component {
             >
                 {
                     state => (
-                        state === 'exited' ? <Folder /> : <FolderOpen />
+                        state === 'exited' ? <Folder style={{height: configs.ICON_SIZE}} /> : <FolderOpen style={{height: configs.ICON_SIZE}} />
                     )
                 }
             </Transition>
@@ -59,7 +59,7 @@ export default class Entry extends React.Component {
                     finalIdxs={this.entry.finalIdxs} 
                     expanded={this.state.expanded}
                     anyChildren={false}
-                /><Doc /> {this.entry.item.name}
+                /><Doc style={{height: configs.ICON_SIZE}} /> {this.entry.item.name}
             </div>)
         return (
             <div 

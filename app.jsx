@@ -113,6 +113,13 @@ class Container extends React.Component {
                     <Overlay status={this.state.status}/>
                 </div>
                 </div>
+                <svg>
+                    <defs>
+                    <filter id="s">
+                        <feDropShadow dy="4" dx="0" stdDeviation="4" floodOpacity=".2"></feDropShadow>
+                    </filter>
+                    </defs>
+                </svg>
             </div>
         )
     }

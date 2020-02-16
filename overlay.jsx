@@ -2,6 +2,7 @@ import React from 'react';
 import Sonar from './sonar';
 import { CSSTransition } from 'react-transition-group';
 import configs from './styleConfigs';
+import Folder from './icons/folder';
 
 export default class Overlay extends React.Component {
     constructor(props){
@@ -19,13 +20,27 @@ export default class Overlay extends React.Component {
 
     renderLoading(){
         return (
-            <div className="overlay loading"> 
-                <div className="overlay-bg">
-                    <div className="loader">
-                        <div></div>
-                        <div></div>
-                        <div></div>
+            <div style={{
+                height: '100%',
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'absolute',
+            }}>
+                <div className="dot-dot"> 
+                    <div className="overlay-bg">
+                        <div className="loader">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
                     </div>
+                </div>
+                <div className="note" style={{
+                    bottom: (configs.NUM_ROWS*configs.ROW_HEIGHT - 200)/2,
+                }}>
+                        processing your files...
                 </div>
             </div>
         )
@@ -33,12 +48,54 @@ export default class Overlay extends React.Component {
 
     renderHover(){
         return (
-            <div className="overlay hover"> 
-                <div className="overlay-bg">
-                    <svg className="dropper" viewBox="-30 -30 60 60" height="30" stroke="white" strokeWidth="10">
-                        <line strokeLinecap="round" y1="-25" y2="25"/>
-                        <line strokeLinecap="round" x1="-25" x2="25"/>
-                    </svg>
+            <div style={{
+                height: '100%',
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'absolute'
+            }}>
+                <div className={`plus ${this.props.status}`}> 
+                    <div className="overlay-bg">
+                        <svg 
+                            className="dropper" 
+                            viewBox="-30 -30 60 60" 
+                            height="38" 
+                            stroke="white" 
+                            strokeWidth="12"
+                            filter="url(#s)"
+                        >
+                            <line y1="-25" y2="25"/>
+                            <line x1="-25" x2="25"/>
+                        </svg>
+                    </div>
+                </div>
+                <span className="note" style={{
+                    bottom: (configs.NUM_ROWS*configs.ROW_HEIGHT - 200)/2,
+                }}>
+                    drop to load folder
+                </span>
+            </div>
+        )
+    }
+
+    renderInactive(){
+        return (
+            <div style={{
+                height: '100%',
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'absolute'
+            }}>
+                <div className="no-folder">
+                    <Folder style={{ 
+                        height: '50%', 
+                        width: 'auto', 
+                        filter: `url(#s)` 
+                    }}/>
                 </div>
             </div>
         )
@@ -51,6 +108,18 @@ export default class Overlay extends React.Component {
                     killed={this.props.status !== 'hover'} 
                     pulseNum={2}
                 /> */}
+
+
+
+                <CSSTransition 
+                    timeout={200}
+                    mountOnEnter
+                    unmountOnExit
+                    in={this.props.status === "inactive"}
+                >
+                    {this.renderInactive()}
+                </CSSTransition>
+
                 <CSSTransition 
                     timeout={200}
                     mountOnEnter
