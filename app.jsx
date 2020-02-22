@@ -113,7 +113,14 @@ class Container extends React.Component {
                     <Overlay status={this.state.status}/>
                 </div>
                 </div>
-                <svg>
+                <div style={{display: 'flex', paddingTop: 8}}>
+                    <button onClick={()=>{
+                        store.beginLoad()
+                    }}>
+                        Upload files
+                    </button>
+                </div>
+                <svg height="0" width="0">
                     <defs>
                     <filter id="s">
                         <feDropShadow dy="4" dx="0" stdDeviation="4" floodOpacity=".2"></feDropShadow>

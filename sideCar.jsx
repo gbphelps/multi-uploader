@@ -26,9 +26,6 @@ export default class SideCar extends React.Component {
         store.registerNode(this, props.idxs);
     }
 
-    componentDidMount(){
-        console.log(this.entry)
-    }
     renderSelf(){
         return (
             <div 

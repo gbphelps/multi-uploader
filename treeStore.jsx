@@ -20,7 +20,7 @@ class FakeXMLHttpRequest{
         this.readyState = 2;
         const total = Math.random() * 100 + 10;
         let loaded = 0;
-        (function (){
+        const _step = () => {
             if (loaded === total){
                 this.readyState = 4;
                 this.listeners.loadend.forEach(l => l());
@@ -35,8 +35,9 @@ class FakeXMLHttpRequest{
                   lengthComputable: true,
                 }))
                 _step();
-            },(1-Math.random()*Math.random())*1000)
-        })();
+            },(Math.random()*Math.random())*1000)
+        };
+        _step();
     }
     open(){
         this.readyState = 1;
@@ -90,7 +91,8 @@ function createStore(){
 
 
     function setStore(entry, partial){
-        subscriptions[JSON.stringify(entry.idxs)].forEach(subscriber =>{
+        const subs = subscriptions[JSON.stringify(entry.idxs)];
+        if (subs) subs.forEach(subscriber =>{
             subscriber.setState(partial);
         })
         Object.assign(entry, partial);
@@ -177,6 +179,7 @@ function createStore(){
                 const { idxs } = flatList[idx];
                 let entry = state[idxs[0]];
                 for (let i=1; i<idxs.length; i++) entry = entry.children[idxs[i]];
+                console.log(`processing ${idx}`)
 
                 const req = new FakeXMLHttpRequest();
                 req.open('POST', '__ENDPOINT__');
@@ -186,6 +189,7 @@ function createStore(){
                     })
                 })
                 req.addEventListener('loadend', _load);
+                req.send();
             }
 
             for (let i=0; i<maxParallel; i++) _load();
@@ -241,7 +245,8 @@ function createStore(){
                             finalIdxs,
                             numFiles: result.reduce((acc,el) => acc + el.numFiles,0),
                             loadedFiles: 0,
-                            bytes: result.reduce((acc,el) => acc + el.bytes, 0)
+                            bytes: result.reduce((acc,el) => acc + el.bytes, 0),
+                            loadPercent: 0,
                         })
                     })
                 }, () => {
@@ -262,7 +267,7 @@ function createStore(){
         )
     }
     
-    return { getState, initialize, toggle, registerNode, registerContainer }
+    return { getState, initialize, toggle, registerNode, registerContainer, beginLoad }
 }
 
 
