@@ -16,9 +16,9 @@ class FakeXMLHttpRequest{
     }
 
     onreadyStateChange(){}
-    send(){
+    send(body){
         this.readyState = 2;
-        const total = Math.random() * 100 + 10;
+        const total = body.bytes;
         let loaded = 0;
         const _step = () => {
             if (loaded === total){
@@ -28,7 +28,7 @@ class FakeXMLHttpRequest{
             }
             setTimeout(()=>{
                 if (this.readyState !== 2) this.readyState = 2;
-                loaded += Math.min(total-loaded, Math.random()*5);
+                loaded += Math.min(total-loaded, Math.random()*Math.random()*total);
                 this.listeners.progress.forEach(l => l({
                   loaded,
                   total,
@@ -177,19 +177,28 @@ function createStore(){
 
                 const idx = nextIdx++;
                 const { idxs } = flatList[idx];
+                const ancestors = [];
                 let entry = state[idxs[0]];
-                for (let i=1; i<idxs.length; i++) entry = entry.children[idxs[i]];
+                ancestors.push(entry);
+                for (let i=1; i<idxs.length; i++){
+                    entry = entry.children[idxs[i]];
+                    ancestors.push(entry);
+                } 
                 console.log(`processing ${idx}`)
 
                 const req = new FakeXMLHttpRequest();
                 req.open('POST', '__ENDPOINT__');
+
                 req.addEventListener('progress', (e)=>{
-                    setStore(entry,{
-                        loadPercent: e.loaded / e.total,
+                    const delta = e.loaded - entry.loadAmt;
+                    ancestors.forEach(ancestor => {
+                        setStore(ancestor,{
+                            loadAmt: ancestor.loadAmt + delta
+                        })
                     })
                 })
                 req.addEventListener('loadend', _load);
-                req.send();
+                req.send(entry);
             }
 
             for (let i=0; i<maxParallel; i++) _load();
@@ -220,7 +229,7 @@ function createStore(){
                 rootHeight: -1,
                 finalIdxs,
                 numFiles: 1,
-                loadPercent: 0,
+                loadAmt: 0,
             });
         } else {
             treeData = new Promise(resolve => {
@@ -246,7 +255,7 @@ function createStore(){
                             numFiles: result.reduce((acc,el) => acc + el.numFiles,0),
                             loadedFiles: 0,
                             bytes: result.reduce((acc,el) => acc + el.bytes, 0),
-                            loadPercent: 0,
+                            loadAmt: 0,
                         })
                     })
                 }, () => {
