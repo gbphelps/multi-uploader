@@ -1,70 +1,59 @@
+import configs from './styleConfigs';
 
 
 
-function getTree(item, idxs=[], finalIdxs=[]){
-    const metadata = new Promise(r => {
-        item.getMetadata(
-            m => { r(m) }, 
-            err => { 
-                console.log(err);
-                r({})
-            }
-        );
-    })
 
-    let treeData;
-    if (item.isFile) {
-        treeData = Promise.resolve({
-            item,
-            idxs,
-            visibleRows: 1,
-            rootHeight: -1,
-            finalIdxs,
-        });
-    } else {
-        treeData = new Promise(resolve => {
-            const r = item.createReader();
-            r.readEntries((entries) => {
-                const promises = entries
-                    .map((item,i) => {
-                        return getTree(
-                            item, 
-                            idxs.concat([i]), 
-                            finalIdxs.concat([i === entries.length - 1])
-                        )
-                    })
-                Promise.all(promises).then(result => {
-                    resolve({
-                        item,
-                        children: result,
-                        idxs,
-                        expanded: false,
-                        visibleRows: 1,
-                        rootHeight: -1,
-                        finalIdxs,
-                    })
-                })
-            }, () => {
-                console.error("This repo does not work locally. It must be served on localhost using `npm run serve`.")
-            })
-        })
+
+class FakeXMLHttpRequest{
+    constructor(){
+        this.readyState = 0;
+        this.status = 0;
+        this.listeners = {};
     }
-    
-    return Promise.all([metadata, treeData])
-        .then(([metadata, treeData]) => (
-            Promise.resolve ({
-                modificationTime: metadata.modificationTime,
-                bytes: metadata.size,
-                ...treeData
-            })
-        )
-    )
+    addEventListener(type, cb){
+        if (!this.listeners[type]) this.listeners[type] = [];
+        this.listeners[type].push(cb);
+    }
+
+    onreadyStateChange(){}
+    send(){
+        this.readyState = 2;
+        const total = Math.random() * 100 + 10;
+        let loaded = 0;
+        (function (){
+            if (loaded === total){
+                this.readyState = 4;
+                this.listeners.loadend.forEach(l => l());
+                return;
+            }
+            setTimeout(()=>{
+                if (this.readyState !== 2) this.readyState = 2;
+                loaded += Math.min(total-loaded, Math.random()*5);
+                this.listeners.progress.forEach(l => l({
+                  loaded,
+                  total,
+                  lengthComputable: true,
+                }))
+                _step();
+            },(1-Math.random()*Math.random())*1000)
+        })();
+    }
+    open(){
+        this.readyState = 1;
+    }
 }
+
+
+
+
 
 
 
 function createStore(){
     let state = [];
+
+    let flatList = [];
+
     let totalHeight = 0;
 
     let subscriptions = [];
@@ -175,6 +164,104 @@ function createStore(){
         subscriptions[key].push(self);
     }
 
+    function beginLoad(maxParallel = 20){
+        return new Promise(r => {
+            let nextIdx = 0;
+            function _load(){
+                if (nextIdx > flatList.length - 1){
+                    r();
+                    return;
+                }
+
+                const idx = nextIdx++;
+                const { idxs } = flatList[idx];
+                let entry = state[idxs[0]];
+                for (let i=1; i<idxs.length; i++) entry = entry.children[idxs[i]];
+
+                const req = new FakeXMLHttpRequest();
+                req.open('POST', '__ENDPOINT__');
+                req.addEventListener('progress', (e)=>{
+                    setStore(entry,{
+                        loadPercent: e.loaded / e.total,
+                    })
+                })
+                req.addEventListener('loadend', _load);
+            }
+
+            for (let i=0; i<maxParallel; i++) _load();
+        })
+    }
+
+    function getTree(item, idxs=[], finalIdxs=[]){
+        const metadata = new Promise(r => {
+            item.getMetadata(
+                m => { r(m) }, 
+                err => { 
+                    console.log(err);
+                    r({})
+                }
+            );
+        })
+    
+        let treeData;
+        if (item.isFile) {
+            flatList.push({
+                item,
+                idxs
+            })
+            treeData = Promise.resolve({
+                item,
+                idxs,
+                visibleRows: 1,
+                rootHeight: -1,
+                finalIdxs,
+                numFiles: 1,
+                loadPercent: 0,
+            });
+        } else {
+            treeData = new Promise(resolve => {
+                const r = item.createReader();
+                r.readEntries((entries) => {
+                    const promises = entries
+                        .map((item,i) => {
+                            return getTree(
+                                item, 
+                                idxs.concat([i]), 
+                                finalIdxs.concat([i === entries.length - 1])
+                            )
+                        })
+                    Promise.all(promises).then(result => {
+                        resolve({
+                            item,
+                            children: result,
+                            idxs,
+                            expanded: false,
+                            visibleRows: 1,
+                            rootHeight: -1,
+                            finalIdxs,
+                            numFiles: result.reduce((acc,el) => acc + el.numFiles,0),
+                            loadedFiles: 0,
+                            bytes: result.reduce((acc,el) => acc + el.bytes, 0)
+                        })
+                    })
+                }, () => {
+                    console.error("This repo does not work locally. It must be served on localhost using `npm run serve`.")
+                })
+            })
+        }
+        
+        const animationDelay = new Promise(r => {setTimeout(r,configs.OVERLAY_ANIMATION_DURATION*3)})
+        return Promise.all([metadata, treeData, animationDelay])
+            .then(([metadata, treeData]) => (
+                Promise.resolve ({
+                    modificationTime: metadata.modificationTime,
+                    bytes: metadata.size,
+                    ...treeData
+                })
+            )
+        )
+    }
+    
     return { getState, initialize, toggle, registerNode, registerContainer }
 }
 

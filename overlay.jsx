@@ -82,20 +82,22 @@ export default class Overlay extends React.Component {
 
     renderInactive(){
         return (
-            <div style={{
-                height: '100%',
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'absolute'
-            }}>
+            <div className='no-folder-container'>
                 <div className="no-folder">
                     <Folder style={{ 
                         height: '50%', 
                         width: 'auto', 
                         filter: `url(#s)` 
                     }}/>
+                </div>
+                <div style={{
+                    position: 'absolute',
+                    bottom: (configs.NUM_ROWS*configs.ROW_HEIGHT - 200)/2,
+                    display: 'flex',
+                    alignItems: 'center',
+                    color: 'rgba(0,0,0,.7)'
+                }}>
+                    Drag to upload or&nbsp;<button>click here</button>
                 </div>
             </div>
         )

@@ -35,7 +35,7 @@ export default class SideCar extends React.Component {
                 className={`entry ${this.state.rootHeight%2 ? 'even' : 'odd'}`}
                 style={{height: configs.ROW_HEIGHT }}
             >
-              <div className="static-col size">{ this.entry.item.isFile ? f(this.entry.bytes) : <span>&ndash;</span> }</div>
+              <div className="static-col size">{f(this.entry.bytes)}</div>
               <div className="static-col modified">{ DateTime.fromMillis(+this.entry.modificationTime).toFormat(`MMM dd, yyyy  hh:mm a`) }</div>
             </div>
         )
