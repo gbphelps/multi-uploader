@@ -85,6 +85,15 @@ html, body {
     &.odd {
         background: #f6f6f6;
     }
+
+    &.load-data.even{
+        background: #555;
+        border-bottom: 1px solid #606060;
+    }
+    &.load-data.odd{
+        background: #555;
+        border-bottom: 1px solid #606060;
+    }
 }
 
 .sidecar .entry {
@@ -143,3 +152,27 @@ html, body {
 
 
 @import './overlay.scss';
+
+
+
+
+////////
+
+.load-container {
+    width: 300px;
+    padding: 12px;
+    position: relative;
+    height: 100%;
+}
+
+.load-track {
+    width: 100%;
+    border: 1px solid white;
+    border-radius: 1000px;
+    overflow: hidden;
+}
+
+.load-progress{
+    height: 100%;
+    background: lime;
+}

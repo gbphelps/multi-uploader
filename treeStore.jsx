@@ -28,14 +28,14 @@ class FakeXMLHttpRequest{
             }
             setTimeout(()=>{
                 if (this.readyState !== 2) this.readyState = 2;
-                loaded += Math.min(total-loaded, Math.random()*Math.random()*total);
+                loaded += Math.min(total-loaded, Math.random()*100000);
                 this.listeners.progress.forEach(l => l({
                   loaded,
                   total,
                   lengthComputable: true,
                 }))
                 _step();
-            },(Math.random()*Math.random())*1000)
+            },Math.random()*1000)
         };
         _step();
     }
@@ -184,7 +184,6 @@ function createStore(){
                     entry = entry.children[idxs[i]];
                     ancestors.push(entry);
                 } 
-                console.log(`processing ${idx}`)
 
                 const req = new FakeXMLHttpRequest();
                 req.open('POST', '__ENDPOINT__');
@@ -210,7 +209,6 @@ function createStore(){
             item.getMetadata(
                 m => { r(m) }, 
                 err => { 
-                    console.log(err);
                     r({})
                 }
             );

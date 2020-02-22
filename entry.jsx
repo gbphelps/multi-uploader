@@ -22,10 +22,7 @@ export default class Entry extends React.Component {
         }
 
         this.state = {
-            expanded: this.entry.expanded,
-            visibleRows: this.entry.visibleRows,
-            rootHeight: this.entry.rootHeight,
-            loadAmt: this.entry.loadAmt,
+           ...this.entry
         }
 
         this.renderChild = this.renderChild.bind(this);
@@ -60,7 +57,7 @@ export default class Entry extends React.Component {
                     finalIdxs={this.entry.finalIdxs} 
                     expanded={this.state.expanded}
                     anyChildren={false}
-                /><Doc style={{height: configs.ICON_SIZE}} /> {this.entry.item.name} {this.state.loadAmt}
+                /><Doc style={{height: configs.ICON_SIZE}} /> {this.entry.item.name}
             </div>)
         return (
             <div 
@@ -76,7 +73,7 @@ export default class Entry extends React.Component {
                     expanded={this.state.expanded}
                     anyChildren={!!this.entry.children.length}
                 />
-                {this.renderFolderState()} {this.entry.item.name} {this.state.loadAmt}
+                {this.renderFolderState()} {this.entry.item.name}
             </div>
         )
     }

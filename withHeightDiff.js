@@ -32,7 +32,6 @@ export default function withDiff(Component) {
             });
         }
         render(){
-            console.log('render');
             return <Component {...this.props} {...this.state}/>
         }
     }

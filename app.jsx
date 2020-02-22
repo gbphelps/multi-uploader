@@ -7,6 +7,7 @@ import configs from './styleConfigs';
 import Overlay from './overlay';
 import SideCar from './sideCar';
 import withHeightDiff from './withHeightDiff';
+import LoadData from './loadData';
 
 class Container extends React.Component {
     constructor(props){
@@ -27,7 +28,7 @@ class Container extends React.Component {
         return store.getState().map((_,idx) => <Entry key={idx} idxs={[idx]}/>)
     }
 
-    renderFiller(){
+    renderFiller(className){
         const { incoming, height } = this.props;
         const numRows = configs.NUM_ROWS - Math.min(incoming.height, height);
 
@@ -35,7 +36,7 @@ class Container extends React.Component {
         for (let i=0; i<numRows; i++) rows.push(
             <div 
                 key={i}
-                className={`entry ${(incoming.height+i)%2 ? 'even' : 'odd'}`}
+                className={`entry ${(incoming.height+i)%2 ? 'even' : 'odd'} ${className || ''}`}
                 style={{ height: configs.ROW_HEIGHT }}
             />
         );
@@ -44,6 +45,11 @@ class Container extends React.Component {
 
     renderSidePanel(){
         return store.getState().map((_,idx) => <SideCar key={idx} idxs={[idx]}/>)
+    }
+
+
+    renderLoadData(){
+        return store.getState().map((_,idx) => <LoadData key={idx} idxs={[idx]}/>)
     }
 
     setWithDiff(obj){
@@ -109,6 +115,12 @@ class Container extends React.Component {
                         { this.renderSidePanel() }   
                         { this.renderFiller() }
                     </div>
+
+                    {/* <div className="sidecar">
+                        { this.renderLoadData() }   
+                        { this.renderFiller('load-data') }
+                    </div> */}
+
 
                     <Overlay status={this.state.status}/>
                 </div>

@@ -5,7 +5,7 @@ import { Transition } from 'react-transition-group';
 import f from './formatBytes';
 import { DateTime } from 'luxon';
 
-export default class SideCar extends React.Component {
+export default class LoadData extends React.Component {
     constructor(props){
         super(props);
 
@@ -17,7 +17,7 @@ export default class SideCar extends React.Component {
         }
 
         this.state = {
-            ...this.entry
+           ...this.entry
         }
 
         this.renderChild = this.renderChild.bind(this);
@@ -27,12 +27,16 @@ export default class SideCar extends React.Component {
     renderSelf(){
         return (
             <div 
-                className={`entry ${this.state.rootHeight%2 ? 'even' : 'odd'}`}
+                className={`entry load-data ${this.state.rootHeight%2 ? 'even' : 'odd'}`}
                 style={{height: configs.ROW_HEIGHT }}
             >
-              <div className="static-col size">{f(this.entry.bytes)}</div>
-              <div className="static-col modified">{ DateTime.fromMillis(+this.entry.modificationTime).toFormat(`MMM dd, yyyy  hh:mm a`) }</div>
-
+                <div className="load-container">
+                    <div className="load-track">
+                        <div className="load-progress" style={{
+                            width: `${this.state.loadAmt / this.state.bytes * 100}%`
+                        }}/>
+                    </div>
+                </div>
             </div>
         )
     }
@@ -40,7 +44,7 @@ export default class SideCar extends React.Component {
     renderChild(_, i){
         const idxs = this.props.idxs.slice();
         idxs.push(i);
-        return <SideCar key={i} idxs={idxs}/>
+        return <LoadData key={i} idxs={idxs}/>
     }
 
     render(){  
