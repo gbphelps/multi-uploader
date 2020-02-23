@@ -202,6 +202,12 @@ function createStore(){
                     ancestors.push(entry);
                 } 
 
+                ancestors.forEach(ancestor => {
+                    setStore(ancestor, { 
+                        loadStarted: true 
+                    })
+                })
+
                 const req = new FakeXMLHttpRequest();
                 req.open('POST', '__ENDPOINT__');
 
@@ -209,11 +215,18 @@ function createStore(){
                     const delta = e.loaded - entry.loadAmt;
                     ancestors.forEach(ancestor => {
                         setStore(ancestor,{
-                            loadAmt: ancestor.loadAmt + delta
+                            loadAmt: ancestor.loadAmt + delta,
                         })
                     })
                 })
-                req.addEventListener('loadend', _load);
+                req.addEventListener('loadend', ()=>{
+                    ancestors.forEach(ancestor => {
+                        setStore(ancestor, {
+                            loadedFiles: ancestor.loadedFiles + 1,
+                        })
+                    })
+                    _load();
+                });
                 req.send(entry);
             }
 
@@ -245,6 +258,8 @@ function createStore(){
                 finalIdxs,
                 numFiles: 1,
                 loadAmt: 0,
+                loadStarted: false,
+                loadedFiles: 0,
             });
         } else {
             treeData = new Promise(resolve => {
@@ -271,6 +286,7 @@ function createStore(){
                             loadedFiles: 0,
                             bytes: result.reduce((acc,el) => acc + el.bytes, 0),
                             loadAmt: 0,
+                            loadStarted: false,
                         })
                     })
                 }, () => {
