@@ -1,5 +1,5 @@
 import configs from './styleConfigs';
-
+import _ from 'lodash';
 
 
 
@@ -92,8 +92,12 @@ function createStore(){
 
     function setStore(entry, partial){
         const subs = subscriptions[JSON.stringify(entry.idxs)];
-        if (subs) subs.forEach(subscriber =>{
-            subscriber.setState(partial);
+
+        const prevState = entry;
+        const nextState = Object.assign({},entry,partial);
+
+        if (subs) subs.forEach(subscriber=>{
+            subscriber(nextState, prevState)
         })
         Object.assign(entry, partial);
     }
@@ -160,10 +164,23 @@ function createStore(){
         setTotalHeight(totalHeight + delta);
     }
 
-    function registerNode(self, idxs){
+    function registerNode(self, idxs, keys){
         const key = JSON.stringify(idxs);
         if (!subscriptions[key]) subscriptions[key] = [];
-        subscriptions[key].push(self);
+        subscriptions[key].push((newState, prevState)=>{
+            let execute = false;
+            for (let i=0; i<keys.length; i++){
+                if (newState[keys[i]] !== prevState[keys[i]]){
+                    execute = true;
+                    break;
+                } else {
+                    continue;
+                }
+            }
+            if (execute) {
+                self.setState(_.pick(newState, keys))
+            }
+        });
     }
 
     function beginLoad(maxParallel = 20){
