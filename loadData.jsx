@@ -21,7 +21,7 @@ export default class LoadData extends React.Component {
         }
 
         this.renderChild = this.renderChild.bind(this);
-        store.registerNode(this, props.idxs);
+        store.registerNode(this, props.idxs, ['expanded','rootHeight','visibleRows','loadAmt']);
     }
 
     renderSelf(){

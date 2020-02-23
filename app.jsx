@@ -111,15 +111,15 @@ class Container extends React.Component {
                         { this.renderFiller() }    
                     </div>
                     
-                    <div className="sidecar">
+                    {/* <div className="sidecar">
                         { this.renderSidePanel() }   
                         { this.renderFiller() }
-                    </div>
+                    </div> */}
 
-                    {/* <div className="sidecar">
+                    <div className="sidecar">
                         { this.renderLoadData() }   
                         { this.renderFiller('load-data') }
-                    </div> */}
+                    </div>
 
 
                     <Overlay status={this.state.status}/>
