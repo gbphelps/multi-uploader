@@ -137,6 +137,9 @@ class Container extends React.Component {
                     <filter id="s">
                         <feDropShadow dy="4" dx="0" stdDeviation="4" floodOpacity=".2"></feDropShadow>
                     </filter>
+                    <filter id="s2">
+                        <feDropShadow dy="-1" dx="0" stdDeviation="0" floodOpacity=".5"></feDropShadow>
+                    </filter>
                     </defs>
                 </svg>
             </div>

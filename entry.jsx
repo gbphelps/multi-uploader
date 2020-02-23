@@ -26,7 +26,10 @@ export default class Entry extends React.Component {
         }
 
         this.renderChild = this.renderChild.bind(this);
-        store.registerNode(this, props.idxs, ['expanded', 'rootHeight', 'visibleRows']);
+        const keys = ['expanded', 'rootHeight'];
+        if (!configs.DISABLE_ANIMATION) keys.push('visibleRows');
+        
+        store.registerNode(this, props.idxs, keys);
     }
 
     renderFolderState(){

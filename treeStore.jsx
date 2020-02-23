@@ -276,6 +276,7 @@ function createStore(){
                             )
                         })
                     Promise.all(promises).then(result => {
+                        const numFiles = result.reduce((acc,el) => acc + el.numFiles,0)
                         resolve({
                             item,
                             children: result,
@@ -284,12 +285,12 @@ function createStore(){
                             visibleRows: 1,
                             rootHeight: -1,
                             finalIdxs,
-                            numFiles: result.reduce((acc,el) => acc + el.numFiles,0),
+                            numFiles,
                             loadedFiles: 0,
                             bytes: result.reduce((acc,el) => acc + el.bytes, 0),
                             loadAmt: 0,
-                            loadStarted: false,
-                            loaded: false,
+                            loadStarted: numFiles === 0,
+                            loaded: numFiles === 0,
                         })
                     })
                 }, () => {

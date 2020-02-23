@@ -21,15 +21,17 @@ export default class LoadData extends React.Component {
         }
 
         this.renderChild = this.renderChild.bind(this);
-        store.registerNode(this, props.idxs, [
+        const keys = [
             'expanded',
             'rootHeight',
-            'visibleRows',
             'loadAmt', 
             'loadStarted', 
             'loadedFiles',
             'loaded'
-        ]);
+        ];
+        if (!configs.DISABLE_ANIMATION) keys.push('visibleRows');
+
+        store.registerNode(this, props.idxs, keys);
     }
 
     renderSelf(){
@@ -42,18 +44,51 @@ export default class LoadData extends React.Component {
                     { this.state.loadStarted && (
                         <div className="load-track" style={this.state.loaded ? {
                             width: 8,
+                            animationName: 'check-grow',
+                            animationDelay: '.2s',
+                            animationDuration: '.2s',
+                            animationFillMode: 'forwards',
                             } : {}}>
                             <div className="load-progress" style={{
                                 width: `${this.state.loadAmt / this.state.bytes * 100}%`
-                            }}/>
+                            }}>
+                                <svg viewBox="-5 -5 55 50" style={{
+                                    height: 12, 
+                                    width: 'auto', 
+                                    display: 'block', 
+                                    margin: 0,
+                                    transform: this.state.loaded ? 'none' : 'scale(0)',
+                                    transition: '.2s',
+                                    transitionDelay: '.4s',
+                                    filter: "url(#s2)"
+                                }}>
+                                    <path d="M 0 20 L 15 40 L 45 0" strokeLinecap="round" strokeWidth="5" stroke="white" fill="transparent"/>
+                                </svg>
+                            </div>
                         </div>
                     )}
                 </div>
-                <div style={{ width: 150, textAlign: 'right', color: 'rgba(255,255,255,.3)'}}>
-                    { this.state.loadedFiles }/{ this.state.numFiles } files
-                </div>
-                <div style={{ width: 150, textAlign: 'right', color: 'rgba(255,255,255,.3)'}}>
+                <div style={{ 
+                    width: 40, 
+                    textAlign: 'right', 
+                    color: '#888',
+                    textShadow: '0 -1px rgba(0,0,0,.3)',
+                    fontSize: 12,
+                }}>
                     { (this.state.loadAmt/this.state.bytes * 100).toFixed(1) }%
+                </div>
+                <div style={{ 
+                    width: 100, 
+                    textAlign: 'right', 
+                    color: '#888',
+                    textShadow: '0 -1px rgba(0,0,0,.3)',
+                    fontSize: 12,
+                    paddingRight: 12
+                }}>
+                    { this.entry.item.isFile ? 
+                        null : 
+                        <>{ this.state.loadedFiles }/{ this.state.numFiles }</>
+                    }
                 </div>
             </div>
         )
