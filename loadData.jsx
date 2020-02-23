@@ -27,7 +27,8 @@ export default class LoadData extends React.Component {
             'visibleRows',
             'loadAmt', 
             'loadStarted', 
-            'loadedFiles'
+            'loadedFiles',
+            'loaded'
         ]);
     }
 
@@ -39,15 +40,20 @@ export default class LoadData extends React.Component {
             >
                 <div className="load-container">
                     { this.state.loadStarted && (
-                        <div className="load-track">
+                        <div className="load-track" style={this.state.loaded ? {
+                            width: 8,
+                            } : {}}>
                             <div className="load-progress" style={{
                                 width: `${this.state.loadAmt / this.state.bytes * 100}%`
                             }}/>
                         </div>
                     )}
                 </div>
-                <div>
-                    { this.state.loadedFiles } / { this.state.numFiles } files
+                <div style={{ width: 150, textAlign: 'right', color: 'rgba(255,255,255,.3)'}}>
+                    { this.state.loadedFiles }/{ this.state.numFiles } files
+                </div>
+                <div style={{ width: 150, textAlign: 'right', color: 'rgba(255,255,255,.3)'}}>
+                    { (this.state.loadAmt/this.state.bytes * 100).toFixed(1) }%
                 </div>
             </div>
         )

@@ -223,6 +223,7 @@ function createStore(){
                     ancestors.forEach(ancestor => {
                         setStore(ancestor, {
                             loadedFiles: ancestor.loadedFiles + 1,
+                            loaded: ancestor.loadedFiles + 1 === ancestor.numFiles,
                         })
                     })
                     _load();
@@ -232,7 +233,7 @@ function createStore(){
 
             for (let i=0; i<maxParallel; i++) _load();
         })
-    }
+    } 
 
     function getTree(item, idxs=[], finalIdxs=[]){
         const metadata = new Promise(r => {
@@ -260,6 +261,7 @@ function createStore(){
                 loadAmt: 0,
                 loadStarted: false,
                 loadedFiles: 0,
+                loaded: false,
             });
         } else {
             treeData = new Promise(resolve => {
@@ -287,6 +289,7 @@ function createStore(){
                             bytes: result.reduce((acc,el) => acc + el.bytes, 0),
                             loadAmt: 0,
                             loadStarted: false,
+                            loaded: false,
                         })
                     })
                 }, () => {
