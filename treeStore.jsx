@@ -21,15 +21,16 @@ class FakeXMLHttpRequest{
         const total = body.bytes;
         let loaded = 0;
         const _step = () => {
-            if (Math.random() < configs.FAIL_RATE){
-                this.listeners.error.forEach(l => l())
-                return;
-            }
             if (loaded === total){
                 this.readyState = 4;
                 this.listeners.loadend.forEach(l => l());
                 return;
             }
+            if (Math.random() < configs.FAIL_RATE){
+                this.listeners.error.forEach(l => l())
+                return;
+            }
+            
             setTimeout(()=>{
                 if (this.readyState !== 2) this.readyState = 2;
                 loaded += Math.min(total-loaded, Math.random()*100000);
