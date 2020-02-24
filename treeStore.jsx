@@ -21,6 +21,10 @@ class FakeXMLHttpRequest{
         const total = body.bytes;
         let loaded = 0;
         const _step = () => {
+            if (Math.random() < configs.FAIL_RATE){
+                this.listeners.error.forEach(l => l())
+                return;
+            }
             if (loaded === total){
                 this.readyState = 4;
                 this.listeners.loadend.forEach(l => l());
@@ -183,7 +187,7 @@ function createStore(){
         });
     }
 
-    function beginLoad(maxParallel = 20){
+    function beginLoad(maxParallel = 10){
         return new Promise(r => {
             let nextIdx = 0;
             function _load(){
@@ -226,8 +230,17 @@ function createStore(){
                             loaded: ancestor.loadedFiles + 1 === ancestor.numFiles,
                         })
                     })
-                    _load();
+                    _load(); //move to next
                 });
+
+                req.addEventListener('error', ()=>{
+                    ancestors.forEach(ancestor => {
+                        setStore(ancestor, {
+                            loadError: true,
+                        })
+                    })
+                    _load(); //move to next
+                })
                 req.send(entry);
             }
 
@@ -239,7 +252,7 @@ function createStore(){
         const metadata = new Promise(r => {
             item.getMetadata(
                 m => { r(m) }, 
-                err => { 
+                _err => { 
                     r({})
                 }
             );
@@ -262,6 +275,7 @@ function createStore(){
                 loadStarted: false,
                 loadedFiles: 0,
                 loaded: false,
+                loadError: false,
             });
         } else {
             treeData = new Promise(resolve => {
@@ -291,6 +305,7 @@ function createStore(){
                             loadAmt: 0,
                             loadStarted: numFiles === 0,
                             loaded: numFiles === 0,
+                            loadError: false,
                         })
                     })
                 }, () => {

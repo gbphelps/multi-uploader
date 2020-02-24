@@ -176,6 +176,9 @@ html, body {
     transition: .2s;
     border-radius: 1000px;
     box-shadow: 0 1px 0 0 rgba(255,255,255,.15), 0 -1px 0 0 rgba(0,0,0,.25);
+    &.error .load-progress {
+        background: tomato;
+    }
 }
 
 .load-progress{

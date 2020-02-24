@@ -27,7 +27,8 @@ export default class LoadData extends React.Component {
             'loadAmt', 
             'loadStarted', 
             'loadedFiles',
-            'loaded'
+            'loaded',
+            'loadError',
         ];
         if (!configs.DISABLE_ANIMATION) keys.push('visibleRows');
 
@@ -42,7 +43,7 @@ export default class LoadData extends React.Component {
             >
                 <div className="load-container">
                     { this.state.loadStarted && (
-                        <div className="load-track" style={this.state.loaded ? {
+                        <div className={`load-track ${this.state.loaded ? 'loaded' : ''} ${this.state.loadError ? 'error' : ''}`} style={this.state.loaded || this.state.loadError ? {
                             width: 8,
                             animationName: 'check-grow',
                             animationDelay: '.2s',
@@ -50,10 +51,11 @@ export default class LoadData extends React.Component {
                             animationFillMode: 'forwards',
                             } : {}}>
                             <div className="load-progress" style={{
-                                width: `${this.state.loadAmt / this.state.bytes * 100}%`
+                                width: this.state.loadError ? '100%' : `${this.state.loadAmt / this.state.bytes * 100}%`
                             }}>
                                 <svg viewBox="-5 -5 55 50" style={{
                                     height: 12, 
+                                    position: 'absolute',
                                     width: 'auto', 
                                     display: 'block', 
                                     margin: 0,
@@ -64,6 +66,20 @@ export default class LoadData extends React.Component {
                                 }}>
                                     <path d="M 0 20 L 15 40 L 45 0" strokeLinecap="round" strokeWidth="5" stroke="white" fill="transparent"/>
                                 </svg>
+
+                                <span viewBox="-5 -5 55 50" style={{
+                                    fontSize: 14,
+                                    fontWeight: 500,
+                                    position: 'absolute',
+                                    width: 'auto', 
+                                    display: 'block', 
+                                    transform: this.state.loadError ? 'none' : 'scale(0)',
+                                    transition: '.2s',
+                                    transitionDelay: '.4s',
+                                    color: 'white',
+                                    textShadow: `0 -1px rgba(0,0,0,.4)`
+                                }}>!</span>
+
                             </div>
                         </div>
                     )}
@@ -72,7 +88,7 @@ export default class LoadData extends React.Component {
                     width: 40, 
                     textAlign: 'right', 
                     color: '#888',
-                    textShadow: '0 -1px rgba(0,0,0,.3)',
+                    textShadow: '-1px -1px rgba(0,0,0,.3)',
                     fontSize: 12,
                 }}>
                     { (this.state.loadAmt/this.state.bytes * 100).toFixed(1) }%
@@ -100,7 +116,10 @@ export default class LoadData extends React.Component {
         return <LoadData key={i} idxs={idxs}/>
     }
 
-    render(){  
+    render(){ 
+        
+        //todo turn off/on animations based on scroll position? might be even less performant though.
+        
         return (
             <div 
                 className="dir-contents" 
