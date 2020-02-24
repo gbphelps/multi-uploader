@@ -736,7 +736,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n  ROW_HEIGHT: 40,\n  NUM_ROWS: 12,\n  ANIMATION_DURATION: 200,\n  INDENT: 32,\n  LEFT_MARGIN: 12,\n  ICON_SIZE: 24,\n  TREE_LINES: '1px solid rgba(0,0,0,.07)',\n  DISABLE_ANIMATION: false,\n  OVERLAY_ANIMATION_DURATION: 300,\n  FAIL_RATE: 0.1\n});\n\n//# sourceURL=webpack:///./styleConfigs.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n  ROW_HEIGHT: 40,\n  NUM_ROWS: 12,\n  ANIMATION_DURATION: 200,\n  INDENT: 32,\n  LEFT_MARGIN: 12,\n  ICON_SIZE: 24,\n  TREE_LINES: '1px solid rgba(0,0,0,.07)',\n  DISABLE_ANIMATION: false,\n  OVERLAY_ANIMATION_DURATION: 300,\n  FAIL_RATE: 0.001\n});\n\n//# sourceURL=webpack:///./styleConfigs.js?");
 
 /***/ }),
 
