@@ -99,26 +99,8 @@ export default class Overlay extends React.Component {
                     color: 'rgba(0,0,0,.7)'
                 }}>
                     Drag to upload or&nbsp;
-                    <label htmlFor="upload">
+                    <label htmlFor="upload-more">
                         <div className="button">click here</div>
-                        <input 
-                            id="upload"
-                            name="upload"
-                            style={{
-                                position: 'absolute',
-                                visibility: 'hidden'
-                            }}
-                            type="file" 
-                            multiple 
-                            directory="true"
-                            webkitdirectory="true"
-                            mozdirectory="true"
-                            msdirectory="true"
-                            odirectory="true"
-                            onChange={e => {
-                                store.initFromInput(e.target.files)
-                            }}
-                        />
                     </label>
                 </div>
             </div>
