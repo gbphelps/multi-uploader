@@ -84,7 +84,7 @@ function createStore(){
             let idxs = [];
             path.reduce((acc,el) => {
                 if (!acc[el]){
-                    idxs.push(Object.keys(acc).length)
+                    idxs.push(Object.keys(acc).length);
                     acc[el] = {
                         numFiles: 0,
                         bytes: 0,
@@ -98,13 +98,16 @@ function createStore(){
                 return acc[el].children;
             },directories);
         })
-        function arrify(obj){
-            return Object.keys(obj).map((key,i) => {
+        function arrify(obj, finalIdxs=[]){
+            return Object.keys(obj).map((key) => {
+                const nextIdxs = finalIdxs.concat([Object.keys(obj).length-1]);
                 return {
-                    name: key,
+                    item: {
+                        name: key,
+                    },
                     numFiles: obj[key].numFiles,
                     bytes: obj[key].bytes,
-                    children: arrify(obj[key].children),
+                    children: arrify(obj[key].children, nextIdxs),
                     rootHeight: -1,
                     visibleRows: 1,
                     expanded: false,
@@ -114,11 +117,11 @@ function createStore(){
                     loadStarted: obj[key].numFiles === 0,
                     loaded: obj[key].numFiles === 0,
                     idxs: obj[key].idxs,
+                    finalIdxs: nextIdxs,
                     // item,
-                    // finalIdxs,
                 }
             }).sort((a,b) => {
-                a.idxs
+                return a.idxs[a.idxs.length-1] - b.idxs[b.idxs.length-1]
             })
         }
         console.log(arrify(directories))
