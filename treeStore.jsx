@@ -76,6 +76,29 @@ function createStore(){
         setTotalHeight(state.length);
     }
 
+
+    function initFromInput(items){
+        const directories = {};
+        Array.from(items).forEach(i => {
+            const path = i.webkitRelativePath.split('/');
+            path.reduce((acc,el) => {
+                if (!acc[el]) acc[el] = {};
+                return acc[el];
+            },directories);
+        })
+        function arrify(obj){
+            const result = [];
+            Object.keys(obj).forEach(key => {
+                result.push({
+                    name: key,
+                    children: arrify(obj[key])
+                })
+            })
+            return result;
+        }
+        console.log(arrify(directories))
+    } 
+
     function setTotalHeight(height){
         totalHeight = height;
         containerCB({ loadState, height });  
@@ -328,7 +351,7 @@ function createStore(){
         )
     }
     
-    return { getState, initialize, toggle, registerNode, registerContainer, beginLoad }
+    return { getState, initialize, initFromInput, toggle, registerNode, registerContainer, beginLoad }
 }
 
 

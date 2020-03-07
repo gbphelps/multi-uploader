@@ -3,6 +3,7 @@ import Sonar from './sonar';
 import { CSSTransition } from 'react-transition-group';
 import configs from './styleConfigs';
 import Folder from './icons/folder';
+import store from './treeStore';
 
 export default class Overlay extends React.Component {
     constructor(props){
@@ -97,7 +98,22 @@ export default class Overlay extends React.Component {
                     alignItems: 'center',
                     color: 'rgba(0,0,0,.7)'
                 }}>
-                    Drag to upload or&nbsp;<button>click here</button>
+                    Drag to upload or&nbsp;
+                    <label htmlFor="upload">
+                        <button>click here</button>
+                        <input 
+                            type="file" 
+                            multiple 
+                            directory="true"
+                            webkitdirectory="true"
+                            mozdirectory="true"
+                            msdirectory="true"
+                            odirectory="true"
+                            onChange={e => {
+                                store.initFromInput(e.target.files)
+                            }}
+                        />
+                    </label>
                 </div>
             </div>
         )
