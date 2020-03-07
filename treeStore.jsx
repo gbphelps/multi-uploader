@@ -88,7 +88,7 @@ function createStore(){
         Array.from(items).forEach(i => {
             const path = i.webkitRelativePath.split('/');
             let idxs = [];
-            path.reduce((acc,el, idx) => {
+            path.reduce((acc, el, idx) => {
                 if (!acc[el]){
                     idxs.push(Object.keys(acc).length);
                     acc[el] = {
@@ -99,6 +99,12 @@ function createStore(){
                         file: idx === path.length - 1 ? i : null,
                     };
                 } 
+                if (idx === path.length - 1) {
+                    flatList.push({
+                        item: i,
+                        idxs
+                    })
+                }
                 acc[el].numFiles++;
                 acc[el].bytes += i.size;
                 idxs = acc[el].idxs.slice();

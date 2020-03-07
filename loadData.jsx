@@ -36,6 +36,12 @@ export default class LoadData extends React.Component {
     }
 
     renderSelf(){
+        let loadPct;
+        if (this.state.bytes === 0){
+            loadPct = this.state.loaded ? 100 : 0;
+        } else {
+            loadPct = this.state.loadAmt/this.state.bytes * 100;
+        }
         return (
             <div 
                 className={`entry load-data ${this.state.rootHeight%2 ? 'even' : 'odd'}`}
@@ -87,7 +93,7 @@ export default class LoadData extends React.Component {
                     )}
                 </div>
                 <div className="load-pct-cell">
-                    { (this.state.loadAmt/this.state.bytes * 100).toFixed(1) }%
+                    { loadPct.toFixed(1) }%
                 </div>
                 <div className="load-files-cell">
                     { this.entry.item.isFile ? 
