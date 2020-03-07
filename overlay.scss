@@ -245,7 +245,7 @@
     }
 }
 
-button {
+button, .button {
     border: none;
     outline: none;
     margin: 0;
@@ -256,4 +256,8 @@ button {
     padding: 6px 8px;
     font-size: 14px;
     border-radius: 500px;
+    &:active {
+        border-top: 1px solid rgba(0,0,0,.1);
+        border-bottom: 1px solid rgba(255,255,255, .8);
+    }
 }

@@ -100,8 +100,14 @@ export default class Overlay extends React.Component {
                 }}>
                     Drag to upload or&nbsp;
                     <label htmlFor="upload">
-                        <button>click here</button>
+                        <div className="button">click here</div>
                         <input 
+                            id="upload"
+                            name="upload"
+                            style={{
+                                position: 'absolute',
+                                visibility: 'hidden'
+                            }}
                             type="file" 
                             multiple 
                             directory="true"

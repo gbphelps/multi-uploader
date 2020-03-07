@@ -74,7 +74,8 @@ function createStore(){
         containerCB({
             status: 'loading'
         })
-        state = await Promise.all(items.map((item,i)=>getTree(item,[i])));
+        const newEntries = await Promise.all(items.map((item,i)=>getTree(item,[i + state.length])));
+        state = state.concat(newEntries);
         state.forEach((item,i) => {item.rootHeight = i});
         setTotalHeight(state.length);
     }
@@ -90,7 +91,7 @@ function createStore(){
             let idxs = [];
             path.reduce((acc, el, idx) => {
                 if (!acc[el]){
-                    idxs.push(Object.keys(acc).length);
+                    idxs.push(Object.keys(acc).length + (idx === 0 ? state.length : 0));
                     acc[el] = {
                         numFiles: 0,
                         bytes: 0,
@@ -141,7 +142,8 @@ function createStore(){
                 return a.idxs[a.idxs.length-1] - b.idxs[b.idxs.length-1]
             })
         }
-        state = arrify(directories);
+        const newEntries = arrify(directories);
+        state = state.concat(newEntries);
         state.forEach((item,i) => {item.rootHeight = i});
         setTotalHeight(state.length);
     } 

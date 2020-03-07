@@ -132,6 +132,29 @@ class Container extends React.Component {
                 </div>
                 </div>
                 <div style={{display: 'flex', paddingTop: 8}}>
+                    
+                <label htmlFor="upload-more">
+                    <div className="button">click here</div>
+                    <input 
+                        id="upload-more"
+                        name="upload-more"
+                        style={{
+                            position: 'absolute',
+                            visibility: 'hidden'
+                        }}
+                        type="file" 
+                        multiple 
+                        directory="true"
+                        webkitdirectory="true"
+                        mozdirectory="true"
+                        msdirectory="true"
+                        odirectory="true"
+                        onChange={e => {
+                            store.initFromInput(e.target.files)
+                        }}
+                    />
+                </label>
+                    
                     <button onClick={()=>{
                         store.beginLoad()
                     }}>
