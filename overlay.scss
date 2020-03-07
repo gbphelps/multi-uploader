@@ -20,82 +20,47 @@
 .note { 
     position: absolute; 
     z-index: 100;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
 }
 
 .dropper, .loader { display: flex; }
 
 
 
-.no-folder-container {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    position: absolute;
-    transition: .2s;
-    justify-content: center;
-    animation-duration: .2s;
-    animation-fill-mode: forwards;
+.enter-active {
+    .plus, .dot-dot, .no-folder {
+        animation-name: rot;
+    }
 }
 
-
-.enter-active.no-folder-container {
-    display: none;
-}
-
-
-.enter-done.no-folder-container {
-    animation-name: grow;
-}
-
-.exit-active.no-folder-container {
-    animation-name: grow;
-    animation-direction: reverse;
-}
-
-
-.enter-active .plus {
-    display: none;
-}
-.enter-done .plus {
-    animation-name: grow;
-}
-
-.exit-active .plus {
-    animation-name: rotb; 
-    .overlay-bg{ animation: none; }
-}
-.exit-active .plus.inactive {
-    animation-name: grow;
-    animation-direction: reverse;
-}
-.plus .overlay-bg { 
-    background: mediumseagreen; 
-} 
-
-
-
-
-
-.enter-active .dot-dot {
-    .overlay-bg{ animation: none }
-    animation-name: rot;
+.exit-active {
+    .plus, .no-folder {
+        animation-name: rotb;
+    }
 }
 
 .exit-active .dot-dot {
     animation-name: grow;
     animation-direction: reverse;
 }
-.dot-dot {
-    .overlay-bg { background: rgb(177, 154, 140); }
+
+.enter-done {
+    .plus, .dot-dot {
+        .overlay-bg { 
+            animation-name: pitter-patter;
+        }
+    }
 }
+
+.dot-dot .overlay-bg { background: rgb(177, 154, 140); }
+.no-folder .overlay-bg { background: tomato; }
+.plus .overlay-bg { background: mediumseagreen; } 
 
 
 .note {
     animation-fill-mode: forwards;
-}
-
-.enter-active .note {
     animation-name: slide-in;
     animation-duration: .2s;
 }
@@ -121,17 +86,6 @@
     }
 }
 
-
-.no-folder {
-    background: tomato;
-    box-shadow: 0 2px 10px 0 rgba(0,0,0,.1);
-    height: 100px;
-    width: 100px;
-    // border: 1px solid rgba(0,0,0,.05);
-}
-
-
-
 .overlay-bg {
     width: 100px;
     height: 100px;
@@ -141,8 +95,6 @@
     align-items: center;
     justify-content: center;
     font-family: sans-serif;
-    
-    animation-name: pitter-patter;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
     animation-duration: 1.2s;

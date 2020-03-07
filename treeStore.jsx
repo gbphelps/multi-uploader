@@ -74,6 +74,7 @@ function createStore(){
         containerCB({
             status: 'loading'
         })
+        await new Promise(r => setTimeout(r, configs.OVERLAY_ANIMATION_DURATION));
         const newEntries = await Promise.all(items.map((item,i)=>getTree(item,[i + state.length])));
         state = state.concat(newEntries);
         state.forEach((item,i) => {item.rootHeight = i});
@@ -398,12 +399,7 @@ function createStore(){
             })
         }
         
-        const animationDelay = new Promise(r => {setTimeout(r,configs.OVERLAY_ANIMATION_DURATION*3)})
-        return Promise.all([treeData, animationDelay])
-            .then(([treeData]) => (
-                Promise.resolve (treeData)
-            )
-        )
+        return treeData
     }
     
     return { getState, initialize, initFromInput, toggle, registerNode, registerContainer, beginLoad }

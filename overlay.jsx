@@ -83,26 +83,31 @@ export default class Overlay extends React.Component {
 
     renderInactive(){
         return (
-            <div className='no-folder-container'>
-                <div className="no-folder">
+            <div className='no-folder-container' style={{
+                height: '100%',
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'absolute',
+            }}>
+                <div className={`no-folder ${this.props.status}`}> 
+                <div className="overlay-bg">
                     <Folder style={{ 
                         height: '50%', 
                         width: 'auto', 
                         filter: `url(#s)` 
                     }}/>
                 </div>
-                <div style={{
-                    position: 'absolute',
-                    bottom: (configs.NUM_ROWS*configs.ROW_HEIGHT - 200)/2,
-                    display: 'flex',
-                    alignItems: 'center',
-                    color: 'rgba(0,0,0,.7)'
-                }}>
-                    Drag to upload or&nbsp;
-                    <label htmlFor="upload-more">
-                        <div className="button">click here</div>
-                    </label>
                 </div>
+                    <span className="note" style={{
+                    bottom: (configs.NUM_ROWS*configs.ROW_HEIGHT - 200)/2,
+                }}>
+                        Drag to upload or&nbsp;
+                        <label htmlFor="upload-more">
+                            <div className="button">click here</div>
+                        </label>
+                    </span>
             </div>
         )
     }
