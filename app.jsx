@@ -14,7 +14,6 @@ class Container extends React.Component {
         super(props);
         this.counter = 0;
         this.state = {
-            status: 'inactive',
             incoming: {}
         }
     }
@@ -129,7 +128,7 @@ class Container extends React.Component {
                     </div>
 
 
-                    <Overlay status={this.state.status}/>
+                    <Overlay status={this.state.status === 'hover' ? 'hover' : this.props.incoming.status}/>
                 </div>
                 </div>
                 <div style={{display: 'flex', paddingTop: 8}}>

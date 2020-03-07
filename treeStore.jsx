@@ -18,7 +18,7 @@ class FakeXMLHttpRequest{
     onreadyStateChange(){}
     send(body){
         this.readyState = 2;
-        const total = body.bytes;
+        const total = body.size;
         let loaded = 0;
         const _step = () => {
             if (loaded === total){
@@ -71,6 +71,9 @@ function createStore(){
     }
 
     async function initialize(items){
+        containerCB({
+            status: 'loading'
+        })
         state = await Promise.all(items.map((item,i)=>getTree(item,[i])));
         state.forEach((item,i) => {item.rootHeight = i});
         setTotalHeight(state.length);
@@ -78,6 +81,9 @@ function createStore(){
 
 
     function initFromInput(items){
+        containerCB({
+            status: 'loading'
+        })
         const directories = {};
         Array.from(items).forEach(i => {
             const path = i.webkitRelativePath.split('/');
@@ -99,11 +105,13 @@ function createStore(){
             },directories);
         })
         function arrify(obj, finalIdxs=[]){
-            return Object.keys(obj).map((key) => {
-                const nextIdxs = finalIdxs.concat([Object.keys(obj).length-1]);
+            return Object.keys(obj).map((key,i) => {
+                const nextIdxs = finalIdxs.concat([i === Object.keys(obj).length-1]);
                 return {
                     item: {
                         name: key,
+                        isFile: !Object.keys(obj[key].children).length,
+                        isDirectory: !!Object.keys(obj[key].children).length
                     },
                     numFiles: obj[key].numFiles,
                     bytes: obj[key].bytes,
@@ -117,18 +125,23 @@ function createStore(){
                     loadStarted: obj[key].numFiles === 0,
                     loaded: obj[key].numFiles === 0,
                     idxs: obj[key].idxs,
-                    finalIdxs: nextIdxs,
+                    finalIdxs: nextIdxs.slice(1),
                 }
             }).sort((a,b) => {
                 return a.idxs[a.idxs.length-1] - b.idxs[b.idxs.length-1]
             })
         }
-        console.log(arrify(directories))
+        state = arrify(directories);
+        state.forEach((item,i) => {item.rootHeight = i});
+        setTotalHeight(state.length);
     } 
 
     function setTotalHeight(height){
         totalHeight = height;
-        containerCB({ loadState, height });  
+        containerCB({
+            status: 'loaded',
+            height,
+        });  
     }
 
     function getState(){
@@ -293,7 +306,7 @@ function createStore(){
                     })
                     _load(); //move to next
                 })
-                req.send(entry);
+                req.send(entry.file);
             }
 
             for (let i=0; i<maxParallel; i++) _load();
