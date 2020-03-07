@@ -118,7 +118,6 @@ function createStore(){
                     loaded: obj[key].numFiles === 0,
                     idxs: obj[key].idxs,
                     finalIdxs: nextIdxs,
-                    // item,
                 }
             }).sort((a,b) => {
                 return a.idxs[a.idxs.length-1] - b.idxs[b.idxs.length-1]
@@ -302,34 +301,39 @@ function createStore(){
     } 
 
     function getTree(item, idxs=[], finalIdxs=[]){
-        const metadata = new Promise(r => {
-            item.getMetadata(
-                m => { r(m) }, 
-                _err => { 
-                    r({})
-                }
-            );
-        })
-    
         let treeData;
         if (item.isFile) {
-            flatList.push({
-                item,
-                idxs
+            return new Promise(res => {
+                const data = {
+                    item: null,
+                    idxs,
+                    visibleRows: 1,
+                    rootHeight: -1,
+                    finalIdxs,
+                    numFiles: 1,
+                    loadAmt: 0,
+                    loadStarted: false,
+                    loadedFiles: 0,
+                    loaded: false,
+                    loadError: false,
+                    bytes: 0,
+                    modified: 0,
+                }
+                
+                item.file(file => {
+                   flatList.push({
+                       item: file,
+                       idxs,
+                   })
+                   res({
+                       ...data,
+                       modificationTime: file.lastModified,
+                       item,
+                       file,
+                       bytes: file.size,
+                   }) 
+                }, _err => res(data))
             })
-            treeData = Promise.resolve({
-                item,
-                idxs,
-                visibleRows: 1,
-                rootHeight: -1,
-                finalIdxs,
-                numFiles: 1,
-                loadAmt: 0,
-                loadStarted: false,
-                loadedFiles: 0,
-                loaded: false,
-                loadError: false,
-            });
         } else {
             treeData = new Promise(resolve => {
                 const r = item.createReader();
@@ -346,6 +350,7 @@ function createStore(){
                         const numFiles = result.reduce((acc,el) => acc + el.numFiles,0)
                         resolve({
                             item,
+                            file: null,
                             children: result,
                             idxs,
                             expanded: false,
@@ -359,6 +364,7 @@ function createStore(){
                             loadStarted: numFiles === 0,
                             loaded: numFiles === 0,
                             loadError: false,
+                            modificationTime: result.reduce((acc,el) => Math.max(acc, el.modificationTime),0)
                         })
                     })
                 }, () => {
@@ -368,13 +374,9 @@ function createStore(){
         }
         
         const animationDelay = new Promise(r => {setTimeout(r,configs.OVERLAY_ANIMATION_DURATION*3)})
-        return Promise.all([metadata, treeData, animationDelay])
-            .then(([metadata, treeData]) => (
-                Promise.resolve ({
-                    modificationTime: metadata.modificationTime,
-                    bytes: metadata.size,
-                    ...treeData
-                })
+        return Promise.all([treeData, animationDelay])
+            .then(([treeData]) => (
+                Promise.resolve (treeData)
             )
         )
     }
