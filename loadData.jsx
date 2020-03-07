@@ -39,9 +39,11 @@ export default class LoadData extends React.Component {
         return (
             <div 
                 className={`entry load-data ${this.state.rootHeight%2 ? 'even' : 'odd'}`}
-                style={{height: configs.ROW_HEIGHT }}
+                style={{
+                    height: configs.ROW_HEIGHT,
+                }}
             >
-                <div className="load-container">
+                <div className="load-progress-cell">
                     { this.state.loadStarted && (
                         <div className={`load-track ${this.state.loaded ? 'loaded' : ''} ${this.state.loadError ? 'error' : ''}`} style={this.state.loaded || this.state.loadError ? {
                             width: 8,
@@ -84,23 +86,10 @@ export default class LoadData extends React.Component {
                         </div>
                     )}
                 </div>
-                <div style={{ 
-                    width: 40, 
-                    textAlign: 'right', 
-                    color: '#888',
-                    textShadow: '-1px -1px rgba(0,0,0,.3)',
-                    fontSize: 12,
-                }}>
+                <div className="load-pct-cell">
                     { (this.state.loadAmt/this.state.bytes * 100).toFixed(1) }%
                 </div>
-                <div style={{ 
-                    width: 100, 
-                    textAlign: 'right', 
-                    color: '#888',
-                    textShadow: '0 -1px rgba(0,0,0,.3)',
-                    fontSize: 12,
-                    paddingRight: 12
-                }}>
+                <div className="load-files-cell">
                     { this.entry.item.isFile ? 
                         null : 
                         <>{ this.state.loadedFiles }/{ this.state.numFiles }</>

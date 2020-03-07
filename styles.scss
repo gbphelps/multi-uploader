@@ -1,4 +1,8 @@
 
+$load-pct-width: 40px;
+$load-files-width: 100px;
+$load-progress-width: 200px;
+
 
 * {
     box-sizing: border-box;
@@ -20,36 +24,41 @@ html, body {
 
 .uploader-and-header{
     width: 100%;
-    border-radius: 3px;
+    overflow: hidden;
+}
+
+
+.header-container {
+    display: flex;
+    position: relative;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 8px 0 rgba(0,0,0,.08);
+    z-index: 10;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    width: calc(100% - 2px);
+    box-sizing: content-box;
     overflow: hidden;
 }
 
 .header {
-    box-sizing: content-box;
-    // background: linear-gradient(to bottom, #fafafa, #eee);
-    background: #fafafa;
-    width: calc(100% - 2px);
+    background: #fafafa; 
     display: flex;
-    align-items: center;
-    border: 1px solid #ccc;
+    align-items: center;   
     font-weight: 300;
     color: rgba(0,0,0,.7);
     font-size: 14px;
-    box-shadow: 0 2px 8px 0 rgba(0,0,0,.08);
-    position: relative;
-    z-index: 10;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-    
     & > * { 
         padding: 0 12px; 
-    }
-    & > *:not(:nth-child(1)) {
         border-left: 1px solid rgba(0,0,0,.08);
     }
     & > .name { flex-grow: 1; }
     & > .size { width: 100px; text-align: center; }
     & > .modified { width: 200px; text-align: center; }
+}
+
+.header:first-child > :nth-child(1) {
+    border-left: none;
 }
 
 .uploader {
@@ -105,6 +114,15 @@ html, body {
     }
 }
 
+
+.sidecar, .header {
+    transition: .2s;
+}
+.sidecar.retracted, .header.retracted {
+    transform: translateX(100%);
+}
+
+
 * {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
@@ -122,7 +140,7 @@ html, body {
 
 .sidecar{
  flex-shrink: 0;
- position: sticky;
+ position: absolute;
  right: 0;
  z-index: 1;
  *  {  
@@ -160,8 +178,14 @@ html, body {
     border-bottom: 1px solid rgba(255,255,255,.1);
     box-shadow: inset 0 -1px 0 0 rgba(0,0,0,.2);
 }
-.load-container {
-    width: 200px;
+
+
+.load-progress-header {
+    width: $load-progress-width + $load-pct-width;
+}
+
+.load-progress-cell {
+    width: $load-progress-width;
     padding: 0 24px;
     position: relative;
     height: 100%;
@@ -190,6 +214,29 @@ html, body {
     align-items: center;
     justify-content: center;
 }
+
+.load-pct-cell {
+    width: $load-pct-width;
+    text-align: right;
+    color: #888;
+    text-shadow: -1px -1px rgba(0,0,0,.3);
+    font-size: 12px;
+}
+
+.load-files-header {
+    width: $load-files-width;
+    text-align: right;
+}
+.load-files-cell {
+    width: $load-files-width;
+    text-align: right;
+    color: #888;
+    text-shadow: 0 -1px rgba(0,0,0,.3);
+    font-size: 12px;
+    padding-right: 12px;
+}
+
+
 
 @keyframes check-grow {
     100%{

@@ -16,8 +16,10 @@ export default function withDiff(Component) {
             super(props)
             this.state = {
                 height: 0,
+                loadState: 'not-loading',
                 incoming: {
                     height: 0,
+                    loadState: 'not-loading',
                 },
             } 
             store.registerContainer((incoming)=>{

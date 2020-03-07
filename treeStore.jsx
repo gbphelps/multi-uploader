@@ -61,6 +61,7 @@ function createStore(){
     let flatList = [];
 
     let totalHeight = 0;
+    let loadState = 'not-loading';
 
     let subscriptions = [];
     let containerCB = null;
@@ -77,9 +78,7 @@ function createStore(){
 
     function setTotalHeight(height){
         totalHeight = height;
-        containerCB({
-            height
-        });  
+        containerCB({ loadState, height });  
     }
 
     function getState(){
@@ -189,6 +188,8 @@ function createStore(){
     }
 
     function beginLoad(maxParallel = 10){
+        loadState = 'loading';
+        containerCB({ loadState, height: totalHeight });
         return new Promise(r => {
             let nextIdx = 0;
             function _load(){

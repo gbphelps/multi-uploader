@@ -65,14 +65,21 @@ class Container extends React.Component {
 
 
     render(){
+        console.log(this.props)
         return (
             <div className="site-container">
                 <div className="uploader-and-header">
-                <div className="header" style={{height: configs.ROW_HEIGHT}}>
-                    <div className="name">Name</div>
-                    <div className="size">Size</div>
-                    <div className="modified">Last Modified</div>
-                </div>
+                    <div className="header-container">
+                        <div className="header" style={{height: configs.ROW_HEIGHT, width: '100%'}}>
+                            <div className="name">Name</div>
+                            <div className="size">Size</div>
+                            <div className="modified">Last Modified</div>
+                        </div>
+                        <div className={`header ${this.props.incoming.loadState !== 'loading' ? 'retracted' : ''}`} style={{height: configs.ROW_HEIGHT, position: 'absolute', right: 0, width: 'unset'}}>
+                            <div className="load-progress-header">Data Loaded</div>
+                            <div className="load-files-header"># Files</div>
+                        </div>
+                    </div>
                 <div 
                     className={`uploader ${this.state.status}`}
                     style={{ height: configs.ROW_HEIGHT * configs.NUM_ROWS }}
@@ -111,12 +118,12 @@ class Container extends React.Component {
                         { this.renderFiller() }    
                     </div>
                     
-                    {/* <div className="sidecar">
+                    <div className="sidecar">
                         { this.renderSidePanel() }   
                         { this.renderFiller() }
-                    </div> */}
+                    </div>
 
-                    <div className="sidecar">
+                    <div className={`sidecar ${this.props.incoming.loadState !== 'loading' ? 'retracted' : ''}`}>
                         { this.renderLoadData() }   
                         { this.renderFiller('load-data') }
                     </div>
