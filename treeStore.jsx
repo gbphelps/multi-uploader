@@ -88,7 +88,7 @@ function createStore(){
         Array.from(items).forEach(i => {
             const path = i.webkitRelativePath.split('/');
             let idxs = [];
-            path.reduce((acc,el) => {
+            path.reduce((acc,el, idx) => {
                 if (!acc[el]){
                     idxs.push(Object.keys(acc).length);
                     acc[el] = {
@@ -96,6 +96,7 @@ function createStore(){
                         bytes: 0,
                         children: {},
                         idxs,
+                        file: idx === path.length - 1 ? i : null,
                     };
                 } 
                 acc[el].numFiles++;
@@ -107,15 +108,16 @@ function createStore(){
         function arrify(obj, finalIdxs=[]){
             return Object.keys(obj).map((key,i) => {
                 const nextIdxs = finalIdxs.concat([i === Object.keys(obj).length-1]);
+                const children = arrify(obj[key].children, nextIdxs);
                 return {
                     item: {
                         name: key,
-                        isFile: !Object.keys(obj[key].children).length,
-                        isDirectory: !!Object.keys(obj[key].children).length
+                        isFile: !!obj[key].file,
+                        isDirectory: !obj[key].file
                     },
                     numFiles: obj[key].numFiles,
                     bytes: obj[key].bytes,
-                    children: arrify(obj[key].children, nextIdxs),
+                    children,
                     rootHeight: -1,
                     visibleRows: 1,
                     expanded: false,
@@ -126,6 +128,8 @@ function createStore(){
                     loaded: obj[key].numFiles === 0,
                     idxs: obj[key].idxs,
                     finalIdxs: nextIdxs.slice(1),
+                    file: obj[key].file,
+                    modificationTime: obj[key].file ? obj[key].file.lastModified : children.reduce((acc,el) => Math.max(acc, el.modificationTime),0)
                 }
             }).sort((a,b) => {
                 return a.idxs[a.idxs.length-1] - b.idxs[b.idxs.length-1]
