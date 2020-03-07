@@ -81,20 +81,45 @@ function createStore(){
         const directories = {};
         Array.from(items).forEach(i => {
             const path = i.webkitRelativePath.split('/');
+            let idxs = [];
             path.reduce((acc,el) => {
-                if (!acc[el]) acc[el] = {};
-                return acc[el];
+                if (!acc[el]){
+                    idxs.push(Object.keys(acc).length)
+                    acc[el] = {
+                        numFiles: 0,
+                        bytes: 0,
+                        children: {},
+                        idxs,
+                    };
+                } 
+                acc[el].numFiles++;
+                acc[el].bytes += i.size;
+                idxs = acc[el].idxs.slice();
+                return acc[el].children;
             },directories);
         })
         function arrify(obj){
-            const result = [];
-            Object.keys(obj).forEach(key => {
-                result.push({
+            return Object.keys(obj).map((key,i) => {
+                return {
                     name: key,
-                    children: arrify(obj[key])
-                })
+                    numFiles: obj[key].numFiles,
+                    bytes: obj[key].bytes,
+                    children: arrify(obj[key].children),
+                    rootHeight: -1,
+                    visibleRows: 1,
+                    expanded: false,
+                    loadAmt: 0,
+                    loadedFiles: 0,
+                    loadError: false,
+                    loadStarted: obj[key].numFiles === 0,
+                    loaded: obj[key].numFiles === 0,
+                    idxs: obj[key].idxs,
+                    // item,
+                    // finalIdxs,
+                }
+            }).sort((a,b) => {
+                a.idxs
             })
-            return result;
         }
         console.log(arrify(directories))
     } 
