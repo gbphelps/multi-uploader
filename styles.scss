@@ -25,24 +25,24 @@ html, body {
 .uploader-and-header{
     width: 100%;
     overflow: hidden;
+    padding: 0 12px;
+    background: #eee;
+    border: 1px solid #ccc;
+    border-radius: 3px;
 }
 
 
 .header-container {
     display: flex;
     position: relative;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 8px 0 rgba(0,0,0,.08);
     z-index: 10;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
     width: calc(100% - 2px);
     box-sizing: content-box;
     overflow: hidden;
 }
 
 .header {
-    background: #fafafa; 
+    background: #eee; 
     display: flex;
     align-items: center;   
     font-weight: 300;
@@ -69,8 +69,9 @@ html, body {
     display: flex;
     z-index: 0;
     border: 1px solid #ccc;
-    border-top: none;
-    perspective: 80px;
+    overflow-x: hidden;
+    perspective: 120px;
+    border-radius: 3px;
 }
 
 .entry {
@@ -259,8 +260,71 @@ html, body {
 }
 
 .bottom-bar{
+    padding: 8px 0;
     transition: .2s;
     &.retracted {
         transform: translateX(-100%);
     }
 }
+
+
+button, .button {
+    border: 1px solid transparent;
+    // margin: 12px 0;
+    background: transparent;
+    margin-right: -1px;
+    outline: none;
+    color: #555;
+    padding: 8px 12px;
+    font-size: 14px;
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    transition: .2s;
+    * { transition: .2s }
+    * { background: #a4a4a4 }
+    border-radius: 5px;
+    cursor: pointer;
+    &::after {
+        content: '';
+        display: block;
+        height: 20px;
+        width: 1px;
+        position: absolute;
+        right: -1px;
+        border-right: 1px solid #ccc;
+    }
+    &:hover{
+        &::after{
+            border: none;
+        }
+        box-shadow: 0 0 10px 0 rgba(0,0,0,.1);
+        background: white;
+        color: black;
+        // border: 1px solid #ccc;
+        // color: rgb(0, 153, 255);
+        * { background: rgb(0, 153, 255); }
+
+        &.green {
+            * { background: mediumseagreen; }
+        }
+        &.red {
+            * { background: tomato; }
+        } 
+    }
+}
+
+.button-cta {
+    transition: .2s;
+    color: #3eadf7;
+    border: 1px solid #3eadf7;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 6px 8px;
+    font-weight: 300;
+    &:hover {
+        background: rgba(62, 173, 247, .1);
+    }
+}
+

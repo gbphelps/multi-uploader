@@ -130,14 +130,7 @@ class Container extends React.Component {
                     <Overlay status={this.state.status}/>
                 </div>
 
-                <div style={{
-                
-                    background: '#fafafa',
-                    borderBottomLeftRadius: 3,
-                    borderBottomRightRadius: 3,
-                    border: '1px solid #ccc',
-                    borderTop: 'none'
-                }}>
+                <div>
                     <div className={this.state.status === 'uploadStarted' ? 'retracted bottom-bar' : 'bottom-bar'} style={{
                             display: 'flex',
                     }}>

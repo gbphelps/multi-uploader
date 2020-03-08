@@ -104,7 +104,7 @@ export default class Overlay extends React.Component {
                     bottom: (configs.NUM_ROWS*configs.ROW_HEIGHT - 200)/2,
                 }}>
                         Drag to upload or&nbsp;
-                        <label htmlFor="upload-more" style={{color: '#3eadf7', border: '1px solid #3eadf7', borderRadius: 5, padding: '6px 8px', fontWeight: 300}}>
+                        <label htmlFor="upload-more" className="button-cta">
                             click here
                         </label>
                     </span>
