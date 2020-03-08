@@ -141,22 +141,11 @@ class Container extends React.Component {
                     borderTop: 'none'
                 }}>
                     
-                    <label htmlFor="upload-more" style={{display: 'flex', alignItems: 'center' }}>
-                        <div style={{
-                            marginLeft: 6,
-                            background: '#555',
-                            color: 'white',
-                            display: 'inline-flex',
-                            height: 17,
-                            width: 17,
-                            fontSize: 16,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderRadius: '50%',
-                            fontFamily: 'monospace',
-                            fontWeight: 300,
-                        }}>+</div>
-                        <div className="button">Add files</div>
+                    <label htmlFor="upload-more">
+                        <div className="button">
+                            <div className="little-icon" style={{fontFamily: 'monospace'}}>+</div>
+                            Add files
+                        </div>
                         <input 
                             id="upload-more"
                             name="upload-more"
@@ -180,7 +169,8 @@ class Container extends React.Component {
                         <button className="accent" onClick={()=>{
                             store.beginLoad()
                         }}>
-                            Finish
+                        <div className="little-icon" style={{fontSize: 14, fontWeight: 500}}>&uarr;</div>
+                            Finish &amp; upload
                         </button>
                     </div>
 

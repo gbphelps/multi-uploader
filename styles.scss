@@ -242,3 +242,20 @@ html, body {
         width: 24px;
     }
 }
+
+
+
+.little-icon {
+    margin-left: 6px;
+    background: #555;
+    color: white;
+    display: inline-flex;
+    height: 17px;
+    width: 17px;
+    font-size: 16px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: 300;
+    margin-right: 6px;
+}
