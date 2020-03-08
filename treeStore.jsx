@@ -70,6 +70,13 @@ function createStore(){
         containerCB = me
     }
 
+    function clearAll(){
+        flatList = [];
+        state = [];
+        subscriptions = [];
+        setTotalHeight(0);
+    }
+
     async function initialize(items){
         containerCB({
             status: 'loading'
@@ -402,7 +409,7 @@ function createStore(){
         return treeData
     }
     
-    return { getState, initialize, initFromInput, toggle, registerNode, registerContainer, beginLoad }
+    return { clearAll, getState, initialize, initFromInput, toggle, registerNode, registerContainer, beginLoad }
 }
 
 

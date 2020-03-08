@@ -17,7 +17,7 @@ class Container extends React.Component {
             incoming: {}
         }
     }
-    
+
     disable(e){
         e.preventDefault();
         e.stopPropagation();
@@ -141,7 +141,7 @@ class Container extends React.Component {
                     borderTop: 'none'
                 }}>
                     <button className="red" onClick={()=>{
-                        store.beginLoad()
+                        store.clearAll()
                     }}>
                     <div className="little-icon" style={{fontFamily: 'monospace'}}>&times;</div>
                         Clear all
@@ -172,7 +172,7 @@ class Container extends React.Component {
                         />
                     </label>
                         
-                        <button className="green" onClick={()=>{
+                        <button onClick={()=>{
                             store.beginLoad()
                         }}>
                         <div className="little-icon" style={{fontSize: 14, fontWeight: 500}}>&uarr;</div>
