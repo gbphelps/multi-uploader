@@ -211,6 +211,7 @@ button, .button {
     justify-content: center;
     transition: .2s;
     * { transition: .2s }
+    * { background: #a4a4a4 }
     &:hover{
         color: rgb(0, 153, 255);
         * { background: rgb(0, 153, 255); }

@@ -148,7 +148,7 @@ class Container extends React.Component {
                     </button>
 
                     <label htmlFor="upload-more">
-                        <div className="button">
+                        <div className="button green">
                             <div className="little-icon" style={{fontFamily: 'monospace'}}>+</div>
                             Add files
                         </div>
