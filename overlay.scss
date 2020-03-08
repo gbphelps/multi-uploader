@@ -198,21 +198,37 @@
 }
 
 button, .button {
-    border: 0;
-    margin: 12px 0;
-    border-right: 1px solid #ccc;
+    border: 1px solid transparent;
+    // margin: 12px 0;
     background: transparent;
+    margin-right: -1px;
     outline: none;
     color: #555;
-    padding: 0 12px;
+    padding: 12px;
     font-size: 14px;
     display: flex;
+    position: relative;
     align-items: center;
     justify-content: center;
     transition: .2s;
     * { transition: .2s }
     * { background: #a4a4a4 }
+    &::after {
+        content: '';
+        display: block;
+        height: 20px;
+        width: 1px;
+        position: absolute;
+        right: -1px;
+        border-right: 1px solid #ccc;
+    }
     &:hover{
+        &::after{
+            border: none;
+        }
+        background: white;
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
         color: rgb(0, 153, 255);
         * { background: rgb(0, 153, 255); }
 

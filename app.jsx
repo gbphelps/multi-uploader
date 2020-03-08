@@ -14,7 +14,7 @@ class Container extends React.Component {
         super(props);
         this.counter = 0;
         this.state = {
-            incoming: {}
+            status: 'inactive'
         }
     }
 
@@ -64,7 +64,6 @@ class Container extends React.Component {
 
 
     render(){
-        console.log(this.props)
         return (
             <div className="site-container">
                 <div className="uploader-and-header">
@@ -128,7 +127,7 @@ class Container extends React.Component {
                     </div>
 
 
-                    <Overlay status={this.state.status === 'hover' ? 'hover' : this.props.incoming.status}/>
+                    <Overlay status={this.state.status}/>
                 </div>
 
                 <div style={{
@@ -166,8 +165,14 @@ class Container extends React.Component {
                             mozdirectory="true"
                             msdirectory="true"
                             odirectory="true"
-                            onChange={e => {
-                                store.initFromInput(e.target.files)
+                            onChange={async e => {
+                                this.setState({
+                                    status: "loading"
+                                });
+                                await store.initFromInput(e.target.files);
+                                this.setState({
+                                    status: 'loaded'
+                                })
                             }}
                         />
                     </label>

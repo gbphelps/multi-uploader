@@ -78,21 +78,17 @@ function createStore(){
     }
 
     async function initialize(items){
-        containerCB({
-            status: 'loading'
-        })
         await new Promise(r => setTimeout(r, configs.OVERLAY_ANIMATION_DURATION));
         const newEntries = await Promise.all(items.map((item,i)=>getTree(item,[i + state.length])));
         state = state.concat(newEntries);
         state.forEach((item,i) => {item.rootHeight = i});
         setTotalHeight(state.length);
+        return Promise.resolve();
     }
 
 
-    function initFromInput(items){
-        containerCB({
-            status: 'loading'
-        })
+    async function initFromInput(items){
+        await new Promise(r => setTimeout(r, configs.OVERLAY_ANIMATION_DURATION*2));
         const directories = {};
         Array.from(items).forEach(i => {
             const path = i.webkitRelativePath.split('/');
@@ -154,12 +150,12 @@ function createStore(){
         state = state.concat(newEntries);
         state.forEach((item,i) => {item.rootHeight = i});
         setTotalHeight(state.length);
+        return Promise.resolve();
     } 
 
     function setTotalHeight(height){
         totalHeight = height;
         containerCB({
-            status: 'loaded',
             height,
         });  
     }
