@@ -130,37 +130,62 @@ class Container extends React.Component {
 
                     <Overlay status={this.state.status === 'hover' ? 'hover' : this.props.incoming.status}/>
                 </div>
-                </div>
-                <div style={{display: 'flex', paddingTop: 8}}>
+
+                <div style={{
+                    display: 'flex', 
+                    // padding: 4, 
+                    background: '#fafafa',
+                    borderBottomLeftRadius: 3,
+                    borderBottomRightRadius: 3,
+                    border: '1px solid #ccc',
+                    borderTop: 'none'
+                }}>
                     
-                <label htmlFor="upload-more">
-                    <div className="button">click here</div>
-                    <input 
-                        id="upload-more"
-                        name="upload-more"
-                        style={{
-                            position: 'absolute',
-                            visibility: 'hidden'
-                        }}
-                        type="file" 
-                        multiple 
-                        directory="true"
-                        webkitdirectory="true"
-                        mozdirectory="true"
-                        msdirectory="true"
-                        odirectory="true"
-                        onChange={e => {
-                            store.initFromInput(e.target.files)
-                        }}
-                    />
-                </label>
-                    
-                    <button onClick={()=>{
-                        store.beginLoad()
-                    }}>
-                        Upload files
-                    </button>
+                    <label htmlFor="upload-more" style={{display: 'flex', alignItems: 'center' }}>
+                        <div style={{
+                            marginLeft: 6,
+                            background: '#555',
+                            color: 'white',
+                            display: 'inline-flex',
+                            height: 17,
+                            width: 17,
+                            fontSize: 16,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: '50%',
+                            fontFamily: 'monospace',
+                            fontWeight: 300,
+                        }}>+</div>
+                        <div className="button">Add files</div>
+                        <input 
+                            id="upload-more"
+                            name="upload-more"
+                            style={{
+                                position: 'absolute',
+                                visibility: 'hidden'
+                            }}
+                            type="file" 
+                            multiple 
+                            directory="true"
+                            webkitdirectory="true"
+                            mozdirectory="true"
+                            msdirectory="true"
+                            odirectory="true"
+                            onChange={e => {
+                                store.initFromInput(e.target.files)
+                            }}
+                        />
+                    </label>
+                        
+                        <button className="accent" onClick={()=>{
+                            store.beginLoad()
+                        }}>
+                            Finish
+                        </button>
+                    </div>
+
                 </div>
+                
                 <svg height="0" width="0">
                     <defs>
                     <filter id="s">
