@@ -140,7 +140,13 @@ class Container extends React.Component {
                     border: '1px solid #ccc',
                     borderTop: 'none'
                 }}>
-                    
+                    <button className="red" onClick={()=>{
+                        store.beginLoad()
+                    }}>
+                    <div className="little-icon" style={{fontFamily: 'monospace'}}>&times;</div>
+                        Clear all
+                    </button>
+
                     <label htmlFor="upload-more">
                         <div className="button">
                             <div className="little-icon" style={{fontFamily: 'monospace'}}>+</div>
@@ -166,7 +172,7 @@ class Container extends React.Component {
                         />
                     </label>
                         
-                        <button className="accent" onClick={()=>{
+                        <button className="green" onClick={()=>{
                             store.beginLoad()
                         }}>
                         <div className="little-icon" style={{fontSize: 14, fontWeight: 500}}>&uarr;</div>
