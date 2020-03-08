@@ -257,3 +257,10 @@ html, body {
     font-weight: 300;
     margin-right: 6px;
 }
+
+.bottom-bar{
+    transition: .2s;
+    &.retracted {
+        transform: translateX(-100%);
+    }
+}

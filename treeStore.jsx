@@ -102,6 +102,7 @@ function createStore(){
                         children: {},
                         idxs,
                         file: idx === path.length - 1 ? i : null,
+                        type: idx === path.length - 1 ? i.type : null,
                     };
                 } 
                 if (idx === path.length - 1) {
@@ -140,6 +141,7 @@ function createStore(){
                     idxs: obj[key].idxs,
                     finalIdxs: nextIdxs.slice(1),
                     file: obj[key].file,
+                    type: obj[key].type,
                     modificationTime: obj[key].file ? obj[key].file.lastModified : children.reduce((acc,el) => Math.max(acc, el.modificationTime),0)
                 }
             }).sort((a,b) => {
@@ -271,12 +273,14 @@ function createStore(){
         containerCB({ loadState, height: totalHeight });
         return new Promise(r => {
             let nextIdx = 0;
+            let loaded = 0;
             function _load(){
-                if (nextIdx > flatList.length - 1){
+                if ( loaded === flatList.length ){
                     r();
                     return;
                 }
-
+                if (nextIdx > flatList.length - 1) return;
+                
                 const idx = nextIdx++;
                 const { idxs } = flatList[idx];
                 const ancestors = [];
@@ -311,6 +315,7 @@ function createStore(){
                             loaded: ancestor.loadedFiles + 1 === ancestor.numFiles,
                         })
                     })
+                    loaded++;
                     _load(); //move to next
                 });
 
@@ -320,6 +325,7 @@ function createStore(){
                             loadError: true,
                         })
                     })
+                    loaded++;
                     _load(); //move to next
                 })
                 req.send(entry.file);
@@ -347,6 +353,7 @@ function createStore(){
                     loadError: false,
                     bytes: 0,
                     modified: 0,
+                    type: null,
                 }
                 
                 item.file(file => {
@@ -360,6 +367,7 @@ function createStore(){
                        item,
                        file,
                        bytes: file.size,
+                       type: file.type,
                    }) 
                 }, _err => res(data))
             })
@@ -393,6 +401,7 @@ function createStore(){
                             loadStarted: numFiles === 0,
                             loaded: numFiles === 0,
                             loadError: false,
+                            type: 'folder',
                             modificationTime: result.reduce((acc,el) => Math.max(acc, el.modificationTime),0)
                         })
                     })

@@ -4,9 +4,9 @@ import configs from './styleConfigs';
 import { Transition } from 'react-transition-group';
 import Folder from './icons/folder';
 import FolderOpen from './icons/folderOpen';
-import File from './icons/imgDoc';
 import Doc from './icons/doc';
 import Pic from './icons/picture';
+import ImgDoc from './icons/imgDoc';
 
 import Branches from './branches';
 
@@ -47,6 +47,12 @@ export default class Entry extends React.Component {
         )
     }
 
+    renderFileType(){
+        if (this.entry.type.indexOf('image') !== -1) return <Pic style={{height: configs.ICON_SIZE}}/>
+        if (this.entry.type === 'application/pdf') return <ImgDoc style={{height: configs.ICON_SIZE}}/>
+        return <Doc style={{height: configs.ICON_SIZE}} /> 
+    }
+
     renderSelf(){
         const padding = configs.LEFT_MARGIN + (this.props.idxs.length-1) * configs.INDENT;
         
@@ -60,7 +66,7 @@ export default class Entry extends React.Component {
                     finalIdxs={this.entry.finalIdxs} 
                     expanded={this.state.expanded}
                     anyChildren={false}
-                /><Doc style={{height: configs.ICON_SIZE}} /> {this.entry.item.name}
+        /> {this.renderFileType()} {this.entry.item.name}
             </div>)
         return (
             <div 

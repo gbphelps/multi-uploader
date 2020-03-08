@@ -131,14 +131,16 @@ class Container extends React.Component {
                 </div>
 
                 <div style={{
-                    display: 'flex', 
-                    // padding: 4, 
+                
                     background: '#fafafa',
                     borderBottomLeftRadius: 3,
                     borderBottomRightRadius: 3,
                     border: '1px solid #ccc',
                     borderTop: 'none'
                 }}>
+                    <div className={this.state.status === 'uploadStarted' ? 'retracted bottom-bar' : 'bottom-bar'} style={{
+                            display: 'flex',
+                    }}>
                     <button className="red" onClick={()=>{
                         store.clearAll()
                     }}>
@@ -169,21 +171,33 @@ class Container extends React.Component {
                                 this.setState({
                                     status: "loading"
                                 });
-                                await store.initFromInput(e.target.files);
+                                const files = Array.from(e.target.files);
+                                e.target.value = null;
+                                await store.initFromInput(files);
                                 this.setState({
                                     status: 'loaded'
                                 })
                             }}
                         />
                     </label>
-                        
-                        <button onClick={()=>{
-                            store.beginLoad()
-                        }}>
-                        <div className="little-icon" style={{fontSize: 14, fontWeight: 500}}>&uarr;</div>
-                            Finish &amp; upload
-                        </button>
+                        { !!store.getState().length &&
+                            <button onClick={async ()=>{
+                                this.setState({
+                                    status: 'uploadStarted'
+                                })
+                                await store.beginLoad();
+                                console.log('oh hi')
+                                this.setState({
+                                    status: 'uploadComplete'
+                                })
+                            }}>
+                                <div className="little-icon" style={{fontSize: 14, fontWeight: 500}}>&uarr;</div>
+                                Finish &amp; upload
+                            </button>
+                        }    
                     </div>
+                
+                </div>
 
                 </div>
                 

@@ -34,6 +34,7 @@ export default class SideCar extends React.Component {
                 style={{height: configs.ROW_HEIGHT }}
             >
               <div className="static-col size">{f(this.entry.bytes)}</div>
+              {/* <div className="static-col size">{this.entry.type}</div> */}
               <div className="static-col modified">{ DateTime.fromMillis(+this.entry.modificationTime).toFormat(`MMM dd, yyyy  hh:mm a`) }</div>
 
             </div>
