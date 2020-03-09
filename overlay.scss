@@ -98,7 +98,7 @@
     font-family: sans-serif;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
-    animation-duration: 1.2s;
+    animation-duration: 1s;
     box-shadow: 0 0 8px rgba(0,0,0,.1), inset  0 -5px 10px 0 rgba(0,0,0,.1);
 }
 
@@ -193,8 +193,11 @@
 }
 
 @keyframes pitter-patter {
-    50%{
-        transform: scale(1.08);
+    25%{
+        transform: scale(1.04);
+    }
+    75%{
+        transform: scale(.96);
     }
 }
 

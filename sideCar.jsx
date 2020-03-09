@@ -10,9 +10,9 @@ export default class SideCar extends React.Component {
         super(props);
 
         const { idxs } = props;
-        this.entry = store.getState()[idxs[0]];
+        this.entry = store.getState();
 
-        for (let i=1; i<props.idxs.length; i++){
+        for (let i=0; i<props.idxs.length; i++){
             this.entry = this.entry.children[idxs[i]]
         }
 

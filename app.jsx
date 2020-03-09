@@ -24,7 +24,7 @@ class Container extends React.Component {
     }
 
     renderTree(){
-        return store.getState().map((_,idx) => <Entry key={idx} idxs={[idx]}/>)
+        return store.getState().children.map((_,idx) => <Entry key={idx} idxs={[idx]}/>)
     }
 
     renderFiller(className){
@@ -43,12 +43,12 @@ class Container extends React.Component {
     }
 
     renderSidePanel(){
-        return store.getState().map((_,idx) => <SideCar key={idx} idxs={[idx]}/>)
+        return store.getState().children.map((_,idx) => <SideCar key={idx} idxs={[idx]}/>)
     }
 
 
     renderLoadData(){
-        return store.getState().map((_,idx) => <LoadData key={idx} idxs={[idx]}/>)
+        return store.getState().children.map((_,idx) => <LoadData key={idx} idxs={[idx]}/>)
     }
 
     setWithDiff(obj){
@@ -131,7 +131,7 @@ class Container extends React.Component {
                 </div>
 
                 <div>
-                    <div className={this.state.status === 'uploadStarted' ? 'retracted bottom-bar' : 'bottom-bar'} style={{
+                    <div className={this.state.status === 'uploadStarted' || this.state.status === "uploadComplete" ? 'retracted bottom-bar' : 'bottom-bar'} style={{
                             display: 'flex',
                     }}>
                     <button className="red" onClick={()=>{
@@ -173,7 +173,7 @@ class Container extends React.Component {
                             }}
                         />
                     </label>
-                        { !!store.getState().length &&
+                        { !!store.getState().children.length &&
                             <button onClick={async ()=>{
                                 this.setState({
                                     status: 'uploadStarted'

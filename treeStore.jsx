@@ -56,9 +56,17 @@ class FakeXMLHttpRequest{
 
 
 function createStore(){
-    let state = [];
-
     let flatList = [];
+
+    let state = {
+        children: [],
+        visibleRows: 0,
+        rootHeight: 0,
+        loadAmt: 0,
+        loadedFiles: 0,
+        loadStarted: false,
+        loaded: false,
+    }
 
     let totalHeight = 0;
     let loadState = 'not-loading';
@@ -79,10 +87,12 @@ function createStore(){
 
     async function initialize(items){
         await new Promise(r => setTimeout(r, configs.OVERLAY_ANIMATION_DURATION));
-        const newEntries = await Promise.all(items.map((item,i)=>getTree(item,[i + state.length])));
-        state = state.concat(newEntries);
-        state.forEach((item,i) => {item.rootHeight = i});
-        setTotalHeight(state.length);
+        const newEntries = await Promise.all(items.map((item,i)=>getTree(item,[i + state.children.length])));
+        state.children = state.children.concat(newEntries);
+        state.children.forEach((item,i) => {item.rootHeight = i});
+        state.visibleRows = state.children.length;
+
+        setTotalHeight(state.children.length);
         return Promise.resolve();
     }
 
@@ -95,7 +105,7 @@ function createStore(){
             let idxs = [];
             path.reduce((acc, el, idx) => {
                 if (!acc[el]){
-                    idxs.push(Object.keys(acc).length + (idx === 0 ? state.length : 0));
+                    idxs.push(Object.keys(acc).length + (idx === 0 ? state.children.length : 0));
                     acc[el] = {
                         numFiles: 0,
                         bytes: 0,
@@ -149,9 +159,11 @@ function createStore(){
             })
         }
         const newEntries = arrify(directories);
-        state = state.concat(newEntries);
-        state.forEach((item,i) => {item.rootHeight = i});
-        setTotalHeight(state.length);
+        state.children = state.children.concat(newEntries);
+        state.children.forEach((item,i) => {item.rootHeight = i});
+
+        state.visibleRows = state.children.length;
+        setTotalHeight(state.children.length);
         return Promise.resolve();
     } 
 
@@ -190,7 +202,7 @@ function createStore(){
     function setAllChildrenBelow(idxs,delta){
         //Set heights for visible nodes OUTSIDE OF (i.e. BELOW) the expansion event.
         let collector = [];
-        let entryChildren = state;
+        let entryChildren = state.children;
         for (let i=0; i<idxs.length; i++){
             const idx = idxs[i];
             collector = collector.concat(entryChildren.slice(idx+1)) //get every node at this level that comes after the expanded element
@@ -211,13 +223,15 @@ function createStore(){
 
     function toggle(idxs){
         //TODO - tell first parent that it's the one that needs to transition.
-        let entry = state[idxs[0]];
+        let entry = state;
         const parents = [];
 
-        for (let i=1; i<idxs.length; i++){
+        for (let i=0; i<idxs.length; i++){
             parents.unshift(entry);
             entry = entry.children[idxs[i]];
         }
+
+        console.log(entry)
 
         const expandedSize = getExpandedSize(entry);
         const newSize = entry.expanded ? 1 : expandedSize;
@@ -284,9 +298,9 @@ function createStore(){
                 const idx = nextIdx++;
                 const { idxs } = flatList[idx];
                 const ancestors = [];
-                let entry = state[idxs[0]];
+                let entry = state;
                 ancestors.push(entry);
-                for (let i=1; i<idxs.length; i++){
+                for (let i=0; i<idxs.length; i++){
                     entry = entry.children[idxs[i]];
                     ancestors.push(entry);
                 } 
