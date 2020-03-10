@@ -24,7 +24,7 @@ export default class SideCar extends React.Component {
         const keys = ['expanded', 'rootHeight'];
         if (!configs.DISABLE_ANIMATION) keys.push('visibleRows');
 
-        store.registerNode(this, props.idxs, keys);
+        store.registerNode(this.setState.bind(this), props.idxs, keys);
     }
 
     renderSelf(){

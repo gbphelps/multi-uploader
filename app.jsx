@@ -29,7 +29,9 @@ class Container extends React.Component {
 
     renderFiller(className){
         const { incoming, height } = this.props;
+        console.log({iheight: incoming.height, height});
         const numRows = configs.NUM_ROWS - Math.min(incoming.height, height);
+        console.log(numRows)
 
         const rows = [];
         for (let i=0; i<numRows; i++) rows.push(

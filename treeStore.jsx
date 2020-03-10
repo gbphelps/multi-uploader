@@ -64,6 +64,8 @@ function createStore(){
         rootHeight: 0,
         loadAmt: 0,
         loadedFiles: 0,
+        numFiles: 0,
+        bytes: 0,
         loadStarted: false,
         loaded: false,
     }
@@ -80,19 +82,34 @@ function createStore(){
 
     function clearAll(){
         flatList = [];
-        state = [];
+        Object.assign(state, {
+            children: [],
+            visibleRows: 0,
+            bytes: 0,
+            numFiles: 0,
+        })
         subscriptions = [];
         setTotalHeight(0);
+    }
+
+
+    function append(newEntries){
+
+        newEntries.forEach((e,i) => {
+            e.rootHeight = state.visibleRows + i
+        })
+        state.children = state.children.concat(newEntries);
+        state.visibleRows += newEntries.length;
+        state.bytes += newEntries.reduce((acc,el) => acc + el.bytes, 0);
+        state.numFiles += newEntries.reduce((acc,el) => acc + el.numFiles, 0);
+
+        setTotalHeight(state.visibleRows);
     }
 
     async function initialize(items){
         await new Promise(r => setTimeout(r, configs.OVERLAY_ANIMATION_DURATION));
         const newEntries = await Promise.all(items.map((item,i)=>getTree(item,[i + state.children.length])));
-        state.children = state.children.concat(newEntries);
-        state.children.forEach((item,i) => {item.rootHeight = i});
-        state.visibleRows = state.children.length;
-
-        setTotalHeight(state.children.length);
+        append(newEntries)
         return Promise.resolve();
     }
 
@@ -159,11 +176,7 @@ function createStore(){
             })
         }
         const newEntries = arrify(directories);
-        state.children = state.children.concat(newEntries);
-        state.children.forEach((item,i) => {item.rootHeight = i});
-
-        state.visibleRows = state.children.length;
-        setTotalHeight(state.children.length);
+        append(newEntries);
         return Promise.resolve();
     } 
 
@@ -263,7 +276,7 @@ function createStore(){
         setTotalHeight(totalHeight + delta);
     }
 
-    function registerNode(self, idxs, keys){
+    function registerNode(cb, idxs, keys){
         const key = JSON.stringify(idxs);
         if (!subscriptions[key]) subscriptions[key] = [];
         subscriptions[key].push((newState, prevState)=>{
@@ -277,7 +290,7 @@ function createStore(){
                 }
             }
             if (execute) {
-                self.setState(_.pick(newState, keys))
+                cb(_.pick(newState, keys))
             }
         });
     }

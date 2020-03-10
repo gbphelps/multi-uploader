@@ -32,7 +32,7 @@ export default class LoadData extends React.Component {
         ];
         if (!configs.DISABLE_ANIMATION) keys.push('visibleRows');
 
-        store.registerNode(this, props.idxs, keys);
+        store.registerNode(this.setState.bind(this), props.idxs, keys);
     }
 
     renderSelf(){
