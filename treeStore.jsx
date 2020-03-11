@@ -26,7 +26,7 @@ class FakeXMLHttpRequest{
                 this.listeners.loadend.forEach(l => l());
                 return;
             }
-            if (Math.random() < configs.FAIL_RATE){
+            if (Math.random() < .5){
                 this.listeners.error.forEach(l => l())
                 return;
             }
@@ -68,17 +68,10 @@ function createStore(){
         bytes: 0,
         loadStarted: false,
         loaded: false,
+        idxs: [],
     }
-
-    let totalHeight = 0;
-    let loadState = 'not-loading';
 
     let subscriptions = [];
-    let containerCB = null;
-
-    function registerContainer(me){
-        containerCB = me
-    }
 
     function clearAll(){
         flatList = [];
@@ -89,21 +82,21 @@ function createStore(){
             numFiles: 0,
         })
         subscriptions = [];
-        setTotalHeight(0);
+        setStore(state, { visibleRows: 0 })
     }
 
 
     function append(newEntries){
-
         newEntries.forEach((e,i) => {
             e.rootHeight = state.visibleRows + i
         })
-        state.children = state.children.concat(newEntries);
-        state.visibleRows += newEntries.length;
-        state.bytes += newEntries.reduce((acc,el) => acc + el.bytes, 0);
-        state.numFiles += newEntries.reduce((acc,el) => acc + el.numFiles, 0);
+        setStore(state, {
+            children: state.children.concat(newEntries),
+            visibleRows: state.visibleRows + newEntries.length,
+            bytes: state.bytes + newEntries.reduce((acc,el) => acc + el.bytes, 0),
+            numFiles: state.numFiles + newEntries.reduce((acc,el) => acc + el.numFiles, 0),
 
-        setTotalHeight(state.visibleRows);
+        })
     }
 
     async function initialize(items){
@@ -180,13 +173,6 @@ function createStore(){
         return Promise.resolve();
     } 
 
-    function setTotalHeight(height){
-        totalHeight = height;
-        containerCB({
-            height,
-        });  
-    }
-
     function getState(){
         return state;
     }
@@ -244,8 +230,6 @@ function createStore(){
             entry = entry.children[idxs[i]];
         }
 
-        console.log(entry)
-
         const expandedSize = getExpandedSize(entry);
         const newSize = entry.expanded ? 1 : expandedSize;
         const delta = entry.expanded ? 1 - expandedSize : expandedSize - 1;
@@ -273,7 +257,6 @@ function createStore(){
         }
 
         setAllChildrenBelow(idxs, delta);
-        setTotalHeight(totalHeight + delta);
     }
 
     function registerNode(cb, idxs, keys){
@@ -296,8 +279,6 @@ function createStore(){
     }
 
     function beginLoad(maxParallel = 10){
-        loadState = 'loading';
-        containerCB({ loadState, height: totalHeight });
         return new Promise(r => {
             let nextIdx = 0;
             let loaded = 0;
@@ -347,9 +328,13 @@ function createStore(){
                 });
 
                 req.addEventListener('error', ()=>{
+                    const rest = entry.bytes - entry.loadAmt;
+
                     ancestors.forEach(ancestor => {
                         setStore(ancestor, {
                             loadError: true,
+                            loadAmt: ancestor.loadAmt + rest, //note - disable if you want %actuallyLoaded rather than %processed (%processed counts errors as load progress)
+                            // loadedFiles: ancestor.loadedFiles++
                         })
                     })
                     loaded++;
@@ -441,7 +426,7 @@ function createStore(){
         return treeData
     }
     
-    return { clearAll, getState, initialize, initFromInput, toggle, registerNode, registerContainer, beginLoad }
+    return { clearAll, getState, initialize, initFromInput, toggle, registerNode, beginLoad }
 }
 
 

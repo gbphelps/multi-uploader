@@ -28,16 +28,14 @@ class Container extends React.Component {
     }
 
     renderFiller(className){
-        const { incoming, height } = this.props;
-        console.log({iheight: incoming.height, height});
-        const numRows = configs.NUM_ROWS - Math.min(incoming.height, height);
-        console.log(numRows)
+        const { incoming, visibleRows } = this.props;
+        const numRows = configs.NUM_ROWS - Math.min(incoming.visibleRows, visibleRows);
 
         const rows = [];
         for (let i=0; i<numRows; i++) rows.push(
             <div 
                 key={i}
-                className={`entry ${(incoming.height+i)%2 ? 'even' : 'odd'} ${className || ''}`}
+                className={`entry ${(incoming.visibleRows+i)%2 ? 'even' : 'odd'} ${className || ''}`}
                 style={{ height: configs.ROW_HEIGHT }}
             />
         );
@@ -75,7 +73,7 @@ class Container extends React.Component {
                             <div className="size">Size</div>
                             <div className="modified">Last Modified</div>
                         </div>
-                        <div className={`header ${this.props.incoming.loadState !== 'loading' ? 'retracted' : ''}`} style={{height: configs.ROW_HEIGHT, position: 'absolute', right: 0, width: 'unset'}}>
+                        <div className={`header ${this.props.incoming.loadStarted ? '' : 'retracted'}`} style={{height: configs.ROW_HEIGHT, position: 'absolute', right: 0, width: 'unset'}}>
                             <div className="load-progress-header">Data Loaded</div>
                             <div className="load-files-header"># Files</div>
                         </div>
@@ -123,7 +121,7 @@ class Container extends React.Component {
                         { this.renderFiller() }
                     </div>
 
-                    <div className={`sidecar ${this.props.incoming.loadState !== 'loading' ? 'retracted' : ''}`}>
+                    <div className={`sidecar ${this.props.incoming.loadStarted ? '' : 'retracted'}`}>
                         { this.renderLoadData() }   
                         { this.renderFiller('load-data') }
                     </div>
@@ -132,7 +130,7 @@ class Container extends React.Component {
                     <Overlay status={this.state.status}/>
                 </div>
 
-                <div>
+                <div className="bottom-bar-container">
                     <div className={this.state.status === 'uploadStarted' || this.state.status === "uploadComplete" ? 'retracted bottom-bar' : 'bottom-bar'} style={{
                             display: 'flex',
                     }}>
@@ -181,7 +179,6 @@ class Container extends React.Component {
                                     status: 'uploadStarted'
                                 })
                                 await store.beginLoad();
-                                console.log('oh hi')
                                 this.setState({
                                     status: 'uploadComplete'
                                 })
@@ -190,6 +187,16 @@ class Container extends React.Component {
                                 Finish &amp; upload
                             </button>
                         }    
+                    </div>
+
+                    <div className={`all-progress ${this.props.incoming.loadStarted ? '' : 'retracted'}`}>
+                        <div style={{
+                            height: '100%', 
+                            width: this.props.incoming.loadAmt/this.props.incoming.bytes*100+"%", 
+                            background: 'mediumseagreen',
+                            boxShadow: '0 1px 0 0 rgba(0,0,0,.2)',
+                            borderRadius: 1000,
+                        }}/>
                     </div>
                 
                 </div>

@@ -15,16 +15,24 @@ export default function withDiff(Component) {
         constructor(props){
             super(props)
             this.state = {
-                height: 0,
-                loadState: 'not-loading',
-                status: 'inactive',
+                visibleRows: 0,
+                loadStarted: false,
+                bytes: 0,
+                loadAmt: 0,
+                numFiles: 0,
+                loadedFiles: 0,
+                loaded: false,
                 incoming: {
-                    height: 0,
-                    loadState: 'not-loading',
-                    status: 'inactive',
+                    visibleRows: 0,
+                    loadStarted: false,
+                    bytes: 0,
+                    loadAmt: 0,
+                    numFiles: 0,
+                    loadedFiles: 0,
+                    loaded: false,
                 },
             } 
-            store.registerContainer((incoming)=>{
+            store.registerNode((incoming)=>{
                 this.setState(s => {
                     const newIncoming = JSON.parse(JSON.stringify(s.incoming));
                     Object.assign(newIncoming, incoming);
@@ -33,7 +41,7 @@ export default function withDiff(Component) {
                 setTimeout(()=>{
                     this.setState(incoming)
                 }, configs.ANIMATION_DURATION)
-            });
+            },[], ['visibleRows', 'loadStarted', 'bytes', 'loadAmt', 'numFiles', 'loadedFiles', 'loaded']);
         }
         render(){
             return <Component {...this.props} {...this.state}/>

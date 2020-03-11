@@ -29,6 +29,7 @@ html, body {
     background: #eee;
     border: 1px solid #ccc;
     border-radius: 3px;
+    position: relative;
 }
 
 
@@ -264,6 +265,11 @@ html, body {
     transition: .2s;
     &.retracted {
         transform: translateX(-100%);
+        button, .button {
+            &::after {
+                border-color: transparent;
+            }
+        }
     }
 }
 
