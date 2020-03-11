@@ -26,7 +26,7 @@ class FakeXMLHttpRequest{
                 this.listeners.loadend.forEach(l => l());
                 return;
             }
-            if (Math.random() < .5){
+            if (Math.random() < configs.FAIL_RATE){
                 this.listeners.error.forEach(l => l())
                 return;
             }
