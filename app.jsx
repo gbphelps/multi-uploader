@@ -112,7 +112,7 @@ class Container extends React.Component {
                     }}
                 >
                 <div 
-                    className={`uploader ${this.state.status}`}
+                    className={`file-data ${this.state.status}`}
                     style={{ height: configs.ROW_HEIGHT * configs.NUM_ROWS }}
                 >
 
