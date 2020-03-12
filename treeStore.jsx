@@ -75,14 +75,13 @@ function createStore(){
 
     function clearAll(){
         flatList = [];
-        Object.assign(state, {
-            children: [],
+        setStore(state, { 
             visibleRows: 0,
+            children: [],
             bytes: 0,
             numFiles: 0,
         })
-        subscriptions = [];
-        setStore(state, { visibleRows: 0 })
+        subscriptions=[];
     }
 
 
@@ -95,7 +94,6 @@ function createStore(){
             visibleRows: state.visibleRows + newEntries.length,
             bytes: state.bytes + newEntries.reduce((acc,el) => acc + el.bytes, 0),
             numFiles: state.numFiles + newEntries.reduce((acc,el) => acc + el.numFiles, 0),
-
         })
     }
 

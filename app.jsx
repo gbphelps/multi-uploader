@@ -66,7 +66,7 @@ class Container extends React.Component {
     render(){
         return (
             <div className="site-container">
-                <div className="uploader-and-header">
+                <div className={`uploader-and-header ${this.state.status}`}>
                     <div className="header-container">
                         <div className="header" style={{height: configs.ROW_HEIGHT, width: '100%'}}>
                             <div className="name">Name</div>
@@ -78,9 +78,9 @@ class Container extends React.Component {
                             <div className="load-files-header"># Files</div>
                         </div>
                     </div>
-                <div 
-                    className={`uploader ${this.state.status}`}
-                    style={{ height: configs.ROW_HEIGHT * configs.NUM_ROWS }}
+                
+                <div className="drop-zone"
+                    style={{position: 'relative'}}
                     onDrag={this.disable}
                     onDragStart={this.disable}
                     onDragOver={this.disable}
@@ -111,23 +111,30 @@ class Container extends React.Component {
                         this.setState({ status: 'loaded' });
                     }}
                 >
-                    <div className="file-tree">
-                        { this.renderTree() }  
-                        { this.renderFiller() }    
-                    </div>
+                <div 
+                    className={`uploader ${this.state.status}`}
+                    style={{ height: configs.ROW_HEIGHT * configs.NUM_ROWS }}
+                >
+
+                        <div className="file-tree">
+                            { this.renderTree() }  
+                            { this.renderFiller() }    
+                        </div>
+                        
+                        <div className="sidecar">
+                            { this.renderSidePanel() }   
+                            { this.renderFiller() }
+                        </div>
+
+                        <div className={`sidecar ${this.props.incoming.loadStarted ? '' : 'retracted'}`}>
+                            { this.renderLoadData() }   
+                            { this.renderFiller('load-data') }
+                        </div>
+  
+
                     
-                    <div className="sidecar">
-                        { this.renderSidePanel() }   
-                        { this.renderFiller() }
-                    </div>
-
-                    <div className={`sidecar ${this.props.incoming.loadStarted ? '' : 'retracted'}`}>
-                        { this.renderLoadData() }   
-                        { this.renderFiller('load-data') }
-                    </div>
-
-
-                    <Overlay status={this.state.status}/>
+                </div>
+                <Overlay status={this.props.incoming.loaded ? 'done' : this.state.status}/>
                 </div>
 
                 <div className="bottom-bar-container">
@@ -198,9 +205,7 @@ class Container extends React.Component {
                             borderRadius: 1000,
                         }}/>
                     </div>
-                
                 </div>
-
                 </div>
                 
                 <svg height="0" width="0">

@@ -62,17 +62,22 @@ html, body {
     border-left: none;
 }
 
-.uploader {
+
+
+.drop-zone {
     width: calc(100% - 2px);
-    position: relative;
-    overflow-y: scroll;
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid #ccc;
     box-sizing: content-box;
+}
+
+.file-data {  
+    position: relative; 
     display: flex;
     z-index: 0;
-    border: 1px solid #ccc;
-    overflow-x: hidden;
     perspective: 120px;
-    border-radius: 3px;
+    overflow-y: scroll;
 }
 
 .entry {

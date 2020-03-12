@@ -21,14 +21,7 @@ export default class Overlay extends React.Component {
 
     renderLoading(){
         return (
-            <div style={{
-                height: '100%',
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'absolute',
-            }}>
+            <div className="over-container">
                 <div className="dot-dot"> 
                     <div className="overlay-bg">
                         <div className="loader">
@@ -49,14 +42,7 @@ export default class Overlay extends React.Component {
 
     renderHover(){
         return (
-            <div style={{
-                height: '100%',
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'absolute'
-            }}>
+            <div className="over-container">
                 <div className={`plus ${this.props.status}`}> 
                     <div className="overlay-bg">
                         <svg 
@@ -83,14 +69,32 @@ export default class Overlay extends React.Component {
 
     renderInactive(){
         return (
-            <div className='no-folder-container' style={{
-                height: '100%',
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'absolute',
-            }}>
+            <div className='over-container'>
+                <div className={`no-folder ${this.props.status}`}> 
+                <div className="overlay-bg">
+                    <Folder style={{ 
+                        height: '50%', 
+                        width: 'auto', 
+                        filter: `url(#s)` 
+                    }}/>
+                </div>
+                </div>
+                    <span className="note" style={{
+                    bottom: (configs.NUM_ROWS*configs.ROW_HEIGHT - 200)/2,
+                }}>
+                        Drag to upload or&nbsp;
+                        <label htmlFor="upload-more" className="button-cta">
+                            click here
+                        </label>
+                    </span>
+            </div>
+        )
+    }
+
+
+    renderDone(){
+        return (
+            <div className='over-container'>
                 <div className={`no-folder ${this.props.status}`}> 
                 <div className="overlay-bg">
                     <Folder style={{ 
@@ -120,8 +124,6 @@ export default class Overlay extends React.Component {
                     pulseNum={2}
                 /> */}
 
-
-
                 <CSSTransition 
                     timeout={200}
                     mountOnEnter
@@ -147,6 +149,15 @@ export default class Overlay extends React.Component {
                     in={ this.props.status === "loading" }
                 >
                     {this.renderLoading()}
+                </CSSTransition>
+
+                <CSSTransition 
+                    timeout={200}
+                    mountOnEnter
+                    unmountOnExit
+                    in={ this.props.status === "done" }
+                >
+                    <div>HELLO</div>
                 </CSSTransition>
             </>
         )
