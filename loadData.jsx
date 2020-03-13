@@ -35,6 +35,10 @@ export default class LoadData extends React.Component {
         store.registerNode(this.setState.bind(this), props.idxs, keys);
     }
 
+    componentWillUnmount(){
+        store.unregisterNode(this.props.idxs);
+    }
+
     renderSelf(){
         let loadPct;
         if (this.state.bytes === 0){

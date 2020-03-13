@@ -32,6 +32,10 @@ export default class Entry extends React.Component {
         store.registerNode(this.setState.bind(this), props.idxs, keys);
     }
 
+    componentWillUnmount(){
+        store.unregisterNode(this.props.idxs);
+    }
+
     renderFolderState(){
         return (
             <Transition 

@@ -27,6 +27,10 @@ export default class SideCar extends React.Component {
         store.registerNode(this.setState.bind(this), props.idxs, keys);
     }
 
+    componentWillUnmount(){
+        store.unregisterNode(this.props.idxs);
+    }
+
     renderSelf(){
         return (
             <div 

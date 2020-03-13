@@ -157,7 +157,7 @@ export default class Overlay extends React.Component {
                     unmountOnExit
                     in={ this.props.status === "done" }
                 >
-                    <div>HELLO</div>
+                    {this.renderDone()}
                 </CSSTransition>
             </>
         )

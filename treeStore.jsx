@@ -81,7 +81,6 @@ function createStore(){
             bytes: 0,
             numFiles: 0,
         })
-        subscriptions=[];
     }
 
 
@@ -276,6 +275,11 @@ function createStore(){
         });
     }
 
+
+    function unregisterNode(idxs){
+        delete subscriptions[JSON.stringify(idxs)]
+    }
+
     function beginLoad(maxParallel = 10){
         return new Promise(r => {
             let nextIdx = 0;
@@ -424,7 +428,7 @@ function createStore(){
         return treeData
     }
     
-    return { clearAll, getState, initialize, initFromInput, toggle, registerNode, beginLoad }
+    return { clearAll, getState, initialize, initFromInput, toggle, registerNode, unregisterNode, beginLoad }
 }
 
 
