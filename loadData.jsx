@@ -76,7 +76,7 @@ export default class LoadData extends React.Component {
                                     transitionDelay: '.4s',
                                     filter: "url(#s2)"
                                 }}>
-                                    <path d="M 0 20 L 15 40 L 45 0" strokeLinecap="round" strokeWidth="5" stroke="white" fill="transparent"/>
+                                    <path d="M 0 20 L 15 40 L 45 0" strokeLinecap="round" strokeLinejoin="round" strokeWidth="5" stroke="white" fill="transparent"/>
                                 </svg>
 
                                 <span viewBox="-5 -5 55 50" style={{

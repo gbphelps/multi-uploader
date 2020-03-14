@@ -92,25 +92,60 @@ export default class Overlay extends React.Component {
     }
 
 
-    renderDone(){
+    renderDoneSuccess(){
         return (
             <div className='over-container'>
-                <div className={`no-folder ${this.props.status}`}> 
+                <div className={`done-success ${this.props.status}`}> 
                 <div className="overlay-bg">
-                    <Folder style={{ 
-                        height: '50%', 
+                    <svg viewBox="-5 -5 55 50" style={{
+                        height: 45, 
+                        flexShrink: 0,
+                        position: 'absolute',
                         width: 'auto', 
-                        filter: `url(#s)` 
-                    }}/>
+                        display: 'block', 
+                        margin: 0,
+                        transition: '.2s',
+                        transitionDelay: '.4s',
+                        filter: "url(#s2)"
+                    }}>
+                        <path d="M 0 20 L 15 40 L 45 0" strokeLinecap="round" strokeLinejoin="round" strokeWidth="5" stroke="white" fill="transparent"/>
+                    </svg>
                 </div>
                 </div>
                     <span className="note" style={{
                     bottom: (configs.NUM_ROWS*configs.ROW_HEIGHT - 200)/2,
                 }}>
-                        Drag to upload or&nbsp;
-                        <label htmlFor="upload-more" className="button-cta">
-                            click here
-                        </label>
+                        All set!
+                    </span>
+            </div>
+        )
+    }
+
+
+    renderDoneError(){
+        return (
+            <div className='over-container'>
+                <div className={`done-error ${this.props.status}`}> 
+                <div className="overlay-bg">
+                    <svg viewBox="-5 -5 55 50" style={{
+                        height: 45, 
+                        flexShrink: 0,
+                        position: 'absolute',
+                        width: 'auto', 
+                        display: 'block', 
+                        margin: 0,
+                        transition: '.2s',
+                        transitionDelay: '.4s',
+                        filter: "url(#s2)"
+                    }}>
+                        <path d="M 0 20 L 15 40 L 45 0" strokeLinecap="round" strokeLinejoin="round" strokeWidth="5" stroke="white" fill="transparent"/>
+                    </svg>
+                </div>
+                </div>
+                    <span className="note" style={{
+                    bottom: (configs.NUM_ROWS*configs.ROW_HEIGHT - 200)/2,
+                }}>
+                        Oops
                     </span>
             </div>
         )
@@ -128,7 +163,7 @@ export default class Overlay extends React.Component {
                     timeout={200}
                     mountOnEnter
                     unmountOnExit
-                    in={this.props.status === "inactive"}
+                    in={this.props.status === "empty"}
                 >
                     {this.renderInactive()}
                 </CSSTransition>
@@ -155,9 +190,18 @@ export default class Overlay extends React.Component {
                     timeout={200}
                     mountOnEnter
                     unmountOnExit
-                    in={ this.props.status === "done" }
+                    in={ this.props.status === "done-success" }
                 >
-                    {this.renderDone()}
+                    {this.renderDoneSuccess()}
+                </CSSTransition>
+
+                <CSSTransition 
+                    timeout={200}
+                    mountOnEnter
+                    unmountOnExit
+                    in={ this.props.status === "done-error" }
+                >
+                    {this.renderDoneError()}
                 </CSSTransition>
             </>
         )

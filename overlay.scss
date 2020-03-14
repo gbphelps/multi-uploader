@@ -1,4 +1,4 @@
-.plus, .dot-dot, .no-folder{
+.plus, .dot-dot, .no-folder, .done-success, .done-error {
     height: 200px;
     width: 200px;
 
@@ -31,7 +31,7 @@
 
 
 .enter-active {
-    .plus, .dot-dot, .no-folder {
+    .plus, .dot-dot, .no-folder, .done-success {
         animation-name: rot;
     }
 }
@@ -58,6 +58,8 @@
 .dot-dot .overlay-bg { background: rgb(177, 154, 140); }
 .no-folder .overlay-bg { background: tomato; }
 .plus .overlay-bg { background: mediumseagreen; } 
+.done-success .overlay-bg { background: mediumseagreen; }
+.done-error .overlay-bg { background: tomato }
 
 
 .note {

@@ -72,9 +72,11 @@ function createStore(){
     }
 
     let subscriptions = [];
+    let errorFiles = [];
 
     function clearAll(){
         flatList = [];
+        errorFiles = [];
         setStore(state, { 
             visibleRows: 0,
             children: [],
@@ -172,6 +174,10 @@ function createStore(){
 
     function getState(){
         return state;
+    }
+
+    function getErrors(){
+        return errorFiles
     }
     
     function getExpandedSize(entry){
@@ -339,6 +345,7 @@ function createStore(){
                             // loadedFiles: ancestor.loadedFiles++
                         })
                     })
+                    errorFiles.push(entry)
                     loaded++;
                     _load(); //move to next
                 })
@@ -428,7 +435,7 @@ function createStore(){
         return treeData
     }
     
-    return { clearAll, getState, initialize, initFromInput, toggle, registerNode, unregisterNode, beginLoad }
+    return { clearAll, getState, initialize, initFromInput, toggle, registerNode, unregisterNode, beginLoad, getErrors }
 }
 
 

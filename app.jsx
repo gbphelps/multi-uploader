@@ -14,7 +14,7 @@ class Container extends React.Component {
         super(props);
         this.counter = 0;
         this.state = {
-            status: 'inactive'
+            status: 'empty'
         }
     }
 
@@ -51,17 +51,12 @@ class Container extends React.Component {
         return store.getState().children.map((_,idx) => <LoadData key={idx} idxs={[idx]}/>)
     }
 
-    setWithDiff(obj){
-        this.setState(s => {
-            const incoming = JSON.parse(JSON.stringify(s.incoming));
-            Object.assign(incoming,obj);
-            return { incoming }
-        })
-        setTimeout(()=>{
-            this.setState(obj)
-        },configs.OVERLAY_ANIMATION_DURATION)
+    getOverlayStatus(){
+        if (this.state.status === 'uploadComplete'){
+            return store.getErrors().length ? 'done-error' : 'done-success'
+        }
+        return this.state.status
     }
-
 
     render(){
         return (
@@ -98,7 +93,7 @@ class Container extends React.Component {
                         e.preventDefault();
                         this.counter--;
                         if (!this.counter) this.setState({
-                            status: 'inactive'
+                            status: store.getState().children.length ? 'inactive' : 'empty'
                         })
                     }}
                     onDrop={async (e)=>{
@@ -134,7 +129,7 @@ class Container extends React.Component {
 
                     
                 </div>
-                <Overlay status={this.props.incoming.loaded ? 'done' : this.state.status}/>
+                <Overlay status={this.getOverlayStatus()}/>
                 </div>
 
                 <div className="bottom-bar-container">
