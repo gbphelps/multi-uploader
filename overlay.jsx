@@ -52,6 +52,7 @@ export default class Overlay extends React.Component {
                             stroke="white" 
                             strokeWidth="12"
                             filter="url(#s)"
+                            strokeLinecap="round"
                         >
                             <line y1="-25" y2="25"/>
                             <line x1="-25" x2="25"/>
@@ -124,8 +125,18 @@ export default class Overlay extends React.Component {
 
     renderDoneError(){
         return (
-            <div className='over-container'>
-                <div className={`done-error ${this.props.status}`}> 
+            <div className='over-container' style={{padding: 16}}>
+                <div 
+                    className={`done-error ${this.props.status}`}
+                    style={{
+                        background: 'white',
+                        borderRadius: 3,
+                        boxShadow: '0 2px 5px 0 rgba(0,0,0,.2)',
+                        width: 400,
+                        height: 300,
+                        maxWidth: '100%'
+                    }}
+                >
                 <div className="overlay-bg">
                     <svg viewBox="-5 -5 55 50" style={{
                         height: 45, 
