@@ -125,14 +125,14 @@ export default class Overlay extends React.Component {
 
     renderDoneError(){
         const emptyArr = [];
-        for (let i=0; i<6; i++) emptyArr.push(null);
+        for (let i=0; i<configs.ERROR_MODAL_HEIGHT; i++) emptyArr.push(null);
 
         return (
             <div className='over-container' style={{padding: 16}}>
                 <div 
                     style={{
                         background: 'white',
-                        boxShadow: '0 2px 5px 0 rgba(0,0,0,.2)',
+                        boxShadow: '0 10px 15px 0px rgba(0,0,0,.2)',
                         width: 600,
                         maxWidth: '100%',
                         display: 'flex',
@@ -145,8 +145,8 @@ export default class Overlay extends React.Component {
                         padding: 12, 
                         background: 'tomato', 
                         border: '1px solid rgba(0,0,0,.2)',
-                        borderTopRightRadius: 3,
-                        borderTopLeftRadius: 3,
+                        borderTopRightRadius: 2,
+                        borderTopLeftRadius: 2,
                         color: 'white', 
                         textShadow: '0-1px 2px rgba(0,0,0,.2), 0 2px 1px rgba(255,255,255,.2)',
                     }}>
@@ -162,21 +162,21 @@ export default class Overlay extends React.Component {
                        position:'relative',
                        flexShrink: 1,
                        flexGrow: 1,
-                       borderBottomRightRadius: 3,
-                       borderBottomLeftRadius: 3,
+                       borderBottomRightRadius: 2,
+                       borderBottomLeftRadius: 2,
                        border: '1px solid #ccc',
                        borderTop: 'none',
                        overflow: 'hidden'
                     }}>                       
                     <div style={{
-                        height: configs.ERROR_MODAL_HEIGHT, 
+                        height: configs.ERROR_MODAL_HEIGHT * configs.ROW_HEIGHT + 2, 
                         border: '1px solid #ccc', 
                         borderRadius: 3,
                         width: '100%', 
                         position: 'relative',
                         display: 'flex',
                         overflow: 'scroll',
-                        overflowY: store.getErrors().length < 6 ? 'hidden' : 'scroll',
+                        overflowY: store.getErrors().length < configs.ERROR_MODAL_HEIGHT ? 'hidden' : 'scroll',
                     }}>
                         <div style={{height: '100%', flexGrow: 1, zIndex: 0}}>
                             { 
