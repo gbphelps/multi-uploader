@@ -124,40 +124,78 @@ export default class Overlay extends React.Component {
 
 
     renderDoneError(){
+        const emptyArr = [];
+        for (let i=0; i<6; i++) emptyArr.push(null);
+
         return (
             <div className='over-container' style={{padding: 16}}>
                 <div 
-                    className={`done-error ${this.props.status}`}
                     style={{
                         background: 'white',
-                        borderRadius: 3,
                         boxShadow: '0 2px 5px 0 rgba(0,0,0,.2)',
-                        width: 400,
-                        height: 300,
-                        maxWidth: '100%'
+                        width: 600,
+                        maxWidth: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        position: 'relative',
+                        borderRadius: 3,
                     }}
                 >
-                <div className="overlay-bg">
-                    <svg viewBox="-5 -5 55 50" style={{
-                        height: 45, 
-                        flexShrink: 0,
-                        position: 'absolute',
-                        width: 'auto', 
-                        display: 'block', 
-                        margin: 0,
-                        transition: '.2s',
-                        transitionDelay: '.4s',
-                        filter: "url(#s2)"
+                    <div style={{
+                        padding: 12, 
+                        background: 'tomato', 
+                        border: '1px solid rgba(0,0,0,.2)',
+                        borderTopRightRadius: 3,
+                        borderTopLeftRadius: 3,
+                        color: 'white', 
+                        textShadow: '0-1px 2px rgba(0,0,0,.2), 0 2px 1px rgba(255,255,255,.2)',
                     }}>
-                        <path d="M 0 20 L 15 40 L 45 0" strokeLinecap="round" strokeLinejoin="round" strokeWidth="5" stroke="white" fill="transparent"/>
-                    </svg>
-                </div>
-                </div>
-                    <span className="note" style={{
-                    bottom: (configs.NUM_ROWS*configs.ROW_HEIGHT - 200)/2,
-                }}>
-                        Oops
-                    </span>
+                        The following files failed to load
+                   </div>
+
+                   <div style={{
+                       background: '#f0f0f0', 
+                       padding: 16, 
+                       display: 'flex',
+                       flexDirection: 'column',
+                       width: '100%',
+                       position:'relative',
+                       flexShrink: 1,
+                       flexGrow: 1,
+                       borderBottomRightRadius: 3,
+                       borderBottomLeftRadius: 3,
+                       border: '1px solid #ccc',
+                       borderTop: 'none',
+                       overflow: 'hidden'
+                    }}>                       
+                    <div style={{
+                        height: configs.ERROR_MODAL_HEIGHT, 
+                        border: '1px solid #ccc', 
+                        borderRadius: 3,
+                        width: '100%', 
+                        position: 'relative',
+                        display: 'flex',
+                        overflow: 'scroll',
+                        overflowY: store.getErrors().length < 6 ? 'hidden' : 'scroll',
+                    }}>
+                        <div style={{height: '100%', flexGrow: 1, zIndex: 0}}>
+                            { 
+                                store.getErrors().map((e,i)=> <div 
+                                    className={`entry ${i%2 ? 'even' : 'odd'}`} 
+                                    style={{
+                                        height: configs.ROW_HEIGHT, 
+                                        paddingLeft: configs.LEFT_MARGIN, 
+                                        paddingRight: configs.LEFT_MARGIN}}
+                                    >
+                                        {e.fullPath}
+                                    </div>) 
+                            }{
+                                emptyArr.map((_,i)=><div style={{height: configs.ROW_HEIGHT}} className={`entry ${(i+store.getErrors().length)%2 ? 'even' : 'odd'}`}/>)
+                            }
+                        </div>
+                    </div>
+                   </div>
+                </div>  
             </div>
         )
     }

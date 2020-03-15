@@ -8,5 +8,6 @@ export default {
     TREE_LINES: '1px solid rgba(0,0,0,.07)',
     DISABLE_ANIMATION: false,
     OVERLAY_ANIMATION_DURATION: 300,
-    FAIL_RATE: 1,
+    FAIL_RATE: .3,
+    ERROR_MODAL_HEIGHT: 250,
 }

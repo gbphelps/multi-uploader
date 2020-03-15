@@ -161,6 +161,7 @@ function createStore(){
                     finalIdxs: nextIdxs.slice(1),
                     file: obj[key].file,
                     type: obj[key].type,
+                    fullPath: obj[key].file ? obj[key].file.webkitRelativePath : '',
                     modificationTime: obj[key].file ? obj[key].file.lastModified : children.reduce((acc,el) => Math.max(acc, el.modificationTime),0)
                 }
             }).sort((a,b) => {
@@ -389,6 +390,7 @@ function createStore(){
                        file,
                        bytes: file.size,
                        type: file.type,
+                       fullPath: item.fullPath.startsWith('/') ? item.fullPath.slice(1) : item.fullPath
                    }) 
                 }, _err => res(data))
             })
