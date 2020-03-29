@@ -9,6 +9,8 @@ import SideCar from './sideCar';
 import withHeightDiff from './withHeightDiff';
 import LoadData from './loadData';
 
+import Bar from './bars';
+
 class Container extends React.Component {
     constructor(props){
         super(props);
@@ -44,6 +46,10 @@ class Container extends React.Component {
 
     renderSidePanel(){
         return store.getState().children.map((_,idx) => <SideCar key={idx} idxs={[idx]}/>)
+    }
+
+    renderBars(){
+        return store.getState().children.map((_,idx) => <Bar key={idx} idxs={[idx]}/>)
     }
 
 
@@ -108,10 +114,20 @@ class Container extends React.Component {
                 >
                 <div 
                     className={`file-data ${this.state.status}`}
-                    style={{ height: configs.ROW_HEIGHT * configs.NUM_ROWS }}
+                    style={{ height: configs.ROW_HEIGHT * configs.NUM_ROWS, overflowX: 'hidden' }}
                 >
+                        <div style={{
+                            position: 'absolute',
+                            width: '100%',
+                        }}>
+                            { this.renderBars() }  
+                            { this.renderFiller() }    
+                        </div>
 
-                        <div className="file-tree">
+                        <div className="file-tree" style={{
+                            width: `calc(100% - ${this.props.incoming.loadStarted ? '340px' : '300px' })`,
+                            overflowX: 'scroll'
+                        }}>
                             { this.renderTree() }  
                             { this.renderFiller() }    
                         </div>
