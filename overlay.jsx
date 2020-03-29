@@ -125,13 +125,14 @@ export default class Overlay extends React.Component {
 
     renderDoneError(){
         const emptyArr = [];
-        for (let i=0; i<configs.ERROR_MODAL_HEIGHT; i++) emptyArr.push(null);
+        for (let i=0; i<configs.ERROR_MODAL_HEIGHT - store.getErrors().length; i++) emptyArr.push(null);
+        console.log(emptyArr)
 
         return (
             <div className='over-container' style={{padding: 16}}>
                 <div 
                     style={{
-                        background: 'white',
+                        background: '#f0f0f0',
                         boxShadow: '0 10px 15px 0px rgba(0,0,0,.2)',
                         width: 600,
                         maxWidth: '100%',
@@ -139,17 +140,31 @@ export default class Overlay extends React.Component {
                         flexDirection: 'column',
                         position: 'relative',
                         borderRadius: 3,
+                        border: '1px solid #ccc',
                     }}
                 >
                     <div style={{
-                        padding: 12, 
-                        background: 'tomato', 
-                        border: '1px solid rgba(0,0,0,.2)',
+                        padding: 12,
                         borderTopRightRadius: 2,
                         borderTopLeftRadius: 2,
-                        color: 'white', 
-                        textShadow: '0-1px 2px rgba(0,0,0,.2), 0 2px 1px rgba(255,255,255,.2)',
+                        color: '#777', 
                     }}>
+                        <div style={{
+                            fontSize: 14,
+                            fontWeight: 500,
+                            marginRight: 8,
+                            width: 'auto', 
+                            display: 'inline-flex', 
+                            height: 20,
+                            width: 20,
+                            borderRadius: '50%',
+                            color: 'white',
+                            textShadow: `0 -1px rgba(0,0,0,.4)`,
+                            background: 'tomato',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            boxShadow: '0 1px 2px 0 rgba(0,0,0,.3)'
+                        }}>!</div>
                         The following files failed to load
                    </div>
 
@@ -164,8 +179,6 @@ export default class Overlay extends React.Component {
                        flexGrow: 1,
                        borderBottomRightRadius: 2,
                        borderBottomLeftRadius: 2,
-                       border: '1px solid #ccc',
-                       borderTop: 'none',
                        overflow: 'hidden'
                     }}>                       
                     <div style={{

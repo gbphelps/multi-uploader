@@ -29,7 +29,7 @@
 .dropper, .loader { display: flex; }
 
 
-
+//TODO Can/should you change these to transitions as per reactcommunity.org/react-transition-group/css-transition? See for example of where to put styles.
 .enter-active {
     .plus, .dot-dot, .no-folder, .done-success {
         animation-name: rot;
