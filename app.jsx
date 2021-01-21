@@ -126,7 +126,7 @@ class Container extends React.Component {
 
                         <div className="file-tree" style={{
                             width: `calc(100% - ${this.props.incoming.loadStarted ? '340px' : '300px' })`,
-                            overflowX: 'scroll'
+                            overflowX: 'auto'
                         }}>
                             { this.renderTree() }  
                             { this.renderFiller() }    

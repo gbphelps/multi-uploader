@@ -188,7 +188,7 @@ export default class Overlay extends React.Component {
                         width: '100%', 
                         position: 'relative',
                         display: 'flex',
-                        overflow: 'scroll',
+                        overflow: 'auto',
                         overflowY: store.getErrors().length < configs.ERROR_MODAL_HEIGHT ? 'hidden' : 'scroll',
                     }}>
                         <div style={{height: '100%', flexGrow: 1, zIndex: 0}}>
