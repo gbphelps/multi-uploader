@@ -212,7 +212,6 @@ class Container extends React.Component {
                             height: '100%', 
                             width: this.props.incoming.loadAmt/this.props.incoming.bytes*100+"%", 
                             background: 'mediumseagreen',
-                            boxShadow: '0 1px 0 0 rgba(0,0,0,.2)',
                             borderRadius: 1000,
                         }}/>
                     </div>

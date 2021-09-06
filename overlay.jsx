@@ -151,7 +151,7 @@ export default class Overlay extends React.Component {
                             background: 'tomato',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            boxShadow: '0 1px 2px 0 rgba(0,0,0,.3)'
+                            boxShadow: '0 1px 2px 0 rgba(0,0,0,.1)'
                         }}>!</div>
                         The following files failed to load
                    </div>
