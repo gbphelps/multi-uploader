@@ -130,19 +130,7 @@ export default class Overlay extends React.Component {
 
         return (
             <div className='over-container' style={{padding: 16}}>
-                <div 
-                    style={{
-                        background: '#f0f0f0',
-                        boxShadow: '0 10px 15px 0px rgba(0,0,0,.2)',
-                        width: 600,
-                        maxWidth: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        position: 'relative',
-                        borderRadius: 3,
-                        border: '1px solid #ccc',
-                    }}
-                >
+                <div className="modal">
                     <div style={{
                         padding: 12,
                         borderTopRightRadius: 2,
@@ -169,7 +157,6 @@ export default class Overlay extends React.Component {
                    </div>
 
                    <div style={{
-                       background: '#f0f0f0', 
                        padding: 16, 
                        display: 'flex',
                        flexDirection: 'column',
@@ -183,7 +170,6 @@ export default class Overlay extends React.Component {
                     }}>                       
                     <div style={{
                         height: configs.ERROR_MODAL_HEIGHT * configs.ROW_HEIGHT + 2, 
-                        border: '1px solid #ccc', 
                         borderRadius: 3,
                         width: '100%', 
                         position: 'relative',
